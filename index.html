@@ -1,45 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>enter the void</title>
-  <meta name="description" content="quiet. electric. a single door into the channel." />
-  <meta property="og:title" content="enter the void" />
-  <meta property="og:description" content="quiet. electric. a single door into the channel." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/city.jpg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <main class="wrap">
-    <div class="hud">
-      <span class="mark">lc</span>
-      <span class="dot"></span>
-      <span class="crumb">online</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Labyrinth Terminal</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <span class="status">lc <span class="dot"></span> online</span>
+    </header>
+
+    <main class="monitor-grid">
+      <div class="monitor monitor--large">
+        <img src="assets/IMG_8081.jpg" alt="Room View 1" />
+        <span class="cam-label">cam01</span>
+      </div>
+      <div class="monitor">
+        <img src="assets/IMG_8082.jpg" alt="Room View 2" />
+        <span class="cam-label">cam02</span>
+      </div>
+      <div class="monitor">
+        <img src="assets/IMG_8083.jpg" alt="Room View 3" />
+        <span class="cam-label">cam03</span>
+      </div>
+      <div class="monitor monitor--large">
+        <img src="assets/IMG_8084.jpg" alt="Room View 4" />
+        <span class="cam-label">cam04</span>
+      </div>
+    </main>
+
+    <div class="overlay">
+      <h1>enter the void</h1>
+      <p class="binary">01100111 01101111 01100100</p>
+      <a href="https://www.youtube.com/@LabyrinthCitizen" class="transmit-button">transmit</a>
     </div>
 
-    <section class="hero">
-      <h1>enter the void </h1>
-      <p class="tag"> 01100111 01101111 01100100 </p>
-      <!-- Replace the href with your channel URL, e.g., https://www.youtube.com/@LabyrinthCitizen -->
-     <a class="btn" href="https://www.youtube.com/@LabyrinthCitizen" target="_blank" rel="noopener"> transmit </a>
-    </section>
-
-    <footer class="foot">
-      <small>© <span id="y"></span> labyrinth citizen</small>
+    <footer>
+      <p>© 2025 labyrinth citizen</p>
     </footer>
-  </main>
-
-  <div class="bg"></div>
-  <div class="grain"></div>
-
-  <script>
-    // year stamp
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
-</body>
+  </body>
 </html>

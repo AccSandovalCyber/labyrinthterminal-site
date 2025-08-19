@@ -1,204 +1,121 @@
-/* minimal cyberpunk landing — quiet, small type */
-:root{
-  --ink: #e6e6e6;
-  --dim: #9aa0a6;
-  --accent: #9efcff;
-  --bg: #0a0f14;
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-*{ box-sizing: border-box; }
-html,body{ height:100%; background: var(--bg); }
-body{
-  margin:0;
-  color:var(--ink);
-  font-family: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  letter-spacing: .1px;
+body {
+  font-family: "Courier New", monospace;
+  background: #0a0a0a;
+  color: #d1d1d1;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-.wrap {
-  position: relative;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  isolation: isolate;
-
-  /* Add background directly */
-  background: 
-    linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.65)),
-    url("assets/city.jpg") center/cover no-repeat;
-  background-attachment: fixed;
-  filter: saturate(1.1) contrast(1.1) brightness(.9);
-}
-.bg {
-  position: fixed;
-  inset: 0;
-  z-index: -3;
-
-  /* layers: neon glow / night gradient / city image */
-  background: 
-    radial-gradient(circle at 70% 20%, rgba(0,255,255,0.08), transparent 60%),
-    linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.65)),
-    url("assets/city.jpg") center/cover no-repeat fixed;
-
-  filter: saturate(1.1) contrast(1.1) brightness(0.9);
-
-  /* multiple animations */
-  animation: cityPulse 12s ease-in-out infinite,
-             glowShift 20s ease-in-out infinite,
-             neonFlicker 1.8s infinite;
+/* Header */
+.site-header {
+  padding: 1rem;
+  font-size: 0.85rem;
+  color: #9fd79f;
 }
 
-/* slow breathing pulse */
-@keyframes cityPulse {
-  0%, 100% {
-    filter: saturate(1.05) contrast(1.05) brightness(0.9);
-  }
-  50% {
-    filter: saturate(1.2) contrast(1.15) brightness(1.05);
-  }
-}
-
-/* subtle radial glow movement */
-@keyframes glowShift {
-  0%   { background-position: 70% 20%, center, center; }
-  50%  { background-position: 72% 22%, center, center; }
-  100% { background-position: 70% 20%, center, center; }
-}
-
-/* tiny neon flicker */
-@keyframes neonFlicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { filter: saturate(1.1) contrast(1.1) brightness(0.9); }
-  20%, 24%, 55% { filter: saturate(1.3) contrast(1.2) brightness(1.15); }
-}
-
-/* .bg{
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(1200px 800px at 70% 20%, rgba(0,255,255,.08), transparent 60%),
-    linear-gradient(180deg, rgba(0,0,0,.4), rgba(0,0,0,.78)),
-    url("assets/city.jpg") center/cover no-repeat fixed;
-  filter: saturate(0.9) contrast(1.05) brightness(.78);
-  z-index:-3;
-} */
-
-/* soft noise for life */
-.grain{
-  content:"";
-  position: fixed;
-  inset: 0;
-  pointer-events:none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect filter='url(%23n)' width='100%' height='100%'/></svg>");
-  opacity:.06;
-  mix-blend-mode: overlay;
-  animation: pulse 8s infinite cubic-bezier(.6,.05,.3,.95);
-  z-index:-2;
-}
-@keyframes pulse{
-  0%,100%{opacity:.05}
-  50%{opacity:.09}
-}
-
-.hud{
-  position: absolute;
-  top:18px; left:18px;
-  display:flex; align-items:center; gap:10px;
-  font: 300 11px/1 "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  color: var(--dim);
-  letter-spacing:.4px;
-  text-transform: lowercase;
-  user-select:none;
-  opacity:.9;
-}
-.hud .mark{ color:var(--ink); font-weight:400; letter-spacing:.8px }
-.hud .dot{
-  width:6px; height:6px; border-radius:50%;
-  background: var(--accent);
-  box-shadow: 0 0 12px var(--accent);
-  opacity:.8;
-}
-
-.hero{
-  text-align:center;
-  backdrop-filter: blur(2px);
-}
-h1{
-  margin:0 0 8px 0;
-  font-size: clamp(28px, 8vw, 64px);
-  font-weight:400;
-  line-height:1;
-  text-transform: lowercase;
-}
-.tag{
-  margin: 0 0 22px 0;
-  font-weight:300;
-  font-size: clamp(12px, 2.2vw, 14px);
-  color: var(--dim);
-  text-transform: lowercase;
-}
-
-/* .btn {
+.status .dot {
   display: inline-block;
-  padding: 1rem 2rem;
-  color: #e0e0e0;
-  background: #111;
-  border: 2px solid #0f0;
-  font-family: 'Courier New', monospace;
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  text-decoration: none;
+  width: 8px;
+  height: 8px;
+  background: #9fd79f;
+  border-radius: 50%;
+  margin: 0 4px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0.2; }
+}
+
+/* Monitor grid */
+.monitor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.monitor {
   position: relative;
-  box-shadow: 0 0 10px #0f0, 0 0 20px #0f0 inset;
-  transition: 0.3s all ease-in-out;
+  background: #111;
+  overflow: hidden;
 }
-.btn:hover {
-  color: #0f0;
-  box-shadow: 0 0 20px #0f0, 0 0 30px #0f0 inset;
-  transform: scale(1.05);
+
+.monitor img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  filter: contrast(1.05) saturate(0.8);
 }
-.btn::after {
-  content: '';
+
+.monitor--large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.cam-label {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  border: 1px dashed #0f0;
-  animation: flicker 1.5s infinite;
+  bottom: 6px;
+  left: 6px;
+  font-size: 0.75rem;
+  color: #ff4444;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 6px;
+  letter-spacing: 1px;
 }
 
-@keyframes flicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-  20%, 22%, 24%, 55% { opacity: 0.3; }
-} */
-.btn{
-  display:inline-block;
-  font: 400 12px/1 "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  letter-spacing:.8px;
-  text-decoration:none;
-  text-transform: lowercase;
-  padding: 12px 16px;
-  border: 1px solid rgba(158,252,255,.35);
-  border-radius: 999px;
-  color: var(--ink);
-  background: linear-gradient(180deg, rgba(158,252,255,.12), rgba(158,252,255,.06));
-  box-shadow: inset 0 0 0 1px rgba(158,252,255,.18), 0 0 24px rgba(158,252,255,.06);
-  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
-}
-.btn:hover{
-  transform: translateY(-1px);
-  border-color: rgba(158,252,255,.6);
-  background: linear-gradient(180deg, rgba(158,252,255,.18), rgba(158,252,255,.08));
-  box-shadow: inset 0 0 0 1px rgba(158,252,255,.25), 0 0 28px rgba(158,252,255,.09);
+/* Overlay text */
+.overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 
-.foot{
-  position:absolute; bottom:16px; left:0; right:0;
-  display:flex; align-items:center; justify-content:center;
-  color:var(--dim);
-  font: 300 11px/1 "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  text-transform: lowercase;
-  opacity:.85;
+.overlay h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #eaeaea;
+}
+
+.overlay .binary {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 1rem;
+}
+
+.transmit-button {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  border: 1px solid #eaeaea;
+  text-decoration: none;
+  color: #eaeaea;
+  border-radius: 3px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.transmit-button:hover {
+  background: #eaeaea;
+  color: #0a0a0a;
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  padding: 0.5rem;
+  color: #444;
 }
