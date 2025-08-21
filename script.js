@@ -1,14 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
     // ----- HEADER: short boot flicker then month/year lock-in -----
     const statusWord = document.querySelector(".status-word");
-    const flicker = ["receiving", "r3c6ivin9","receiving", "earth", "sync", "sync..." ]; // brief, machine-like
-    const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const flicker = [
+      "milkway",
+      "m1lkw4y",
+      "...",
+      "",
+      "...",
+      "e4rth",
+      "earth",
+      "earth"
+]; // brief, machine-like
+    const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "aug", "SEP", "OCT", "NOV", "DEC"];
     let i = 0;
     (function cycle() {
         if (!statusWord) return; // safety if the element isn't on this page
         if (i < flicker.length) {
             statusWord.textContent = flicker[i++];
-            setTimeout(cycle, 275); // quick flicker
+            setTimeout(cycle, 265); // quick flicker
         } else {
             const now = new Date();
             const label = `// ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
@@ -27,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
             clockEl.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
         };
         tick();
-        setInterval(tick, 1000 * 30); // update every 30s
+        setInterval(tick, 500 * 30); // update every 30s   
     }
 
     // ----- BOOT LOG: seed + live ticker (adds seasonal lines in December) -----
@@ -37,20 +46,26 @@ document.addEventListener("DOMContentLoaded", () => {
         const isDecember = now.getMonth() === 11; // 0-based months, 11 = DEC
 
         const seedLines = [
+            "grid",
             "01000101 01000011 01001000 01001111",
-            "synthetic memory … attached",
             "01000111 01001111 01000100",
-            "human guest … granted",
-            "system ready … stand by"
+            "initializing connection …",
+            "synthetic memory … attached",
+            "system ready … stand by",
         ];
    
         const basePool = [
             "lost signal … tolerated",
             "idle dream … looping",
             "memory sector … fragmented",
-            "you are under no obligation … to remain the same",
+            "reality patch … applied",
+            "universe … expanding",
             "dream data … incomplete",
-            "time loop … stable"
+            "time loop … stable",
+            "entropy … increasing",
+            "void … staring back",
+            "universe … accessed",    
+            "existence … simulated",
         ];
 
         const decemberPool = [
