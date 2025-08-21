@@ -2,14 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----- HEADER: short boot flicker then month/year lock-in -----
     const statusWord = document.querySelector(".status-word");
   const flicker = [
-      "milkway",
-      "m1lkw4y",
-      "...",
+      "// milkway",
+      "// milkway",
       "",
-      "...",
-      "e4rth",
-      "earth",
-      "earth"
+      "// earth",
+      "// earth",
+      "// earth",
+        
 ]; // brief, machine-like
     const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "aug", "SEP", "OCT", "NOV", "DEC"];
     let i = 0;
@@ -46,8 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const isDecember = now.getMonth() === 11; // 0-based months, 11 = DEC
 
         const seedLines = [
-            "grid",
+            "--. --- -..",
             "01000101 01000011 01001000 01001111",
+            "grid",
             "01000111 01001111 01000100",
             "initializing connection …",
             "synthetic memory … attached",
