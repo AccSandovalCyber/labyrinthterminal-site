@@ -2,70 +2,72 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Labyrinth Terminal </title>
-    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Labyrinth Terminal</title>
+
+    <!-- Fonts + CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Grotesk:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- Favicon (optional) -->
     <link rel="icon" type="image/png" href="assets/favicon.png" />
   </head>
   <body>
-<header class="site-header">
-  <span class="status">
-    <span class="status-word"></span> <span class="dot"></span> online
-  </span>
-</header>
+    <!-- Header / status -->
+    <header class="site-header">
+      <span class="status">
+  <span class="status-word"></span> 
+</span>
 
-    <main class="monitor-grid">
-      <div class="monitor monitor--large">
-        <img src="assets/IMG_8081.jpg" alt="Room View 1" />
+    </header>
+
+    <!-- SIGNAL DECK -->
+    <main class="deck">
+      <!-- Title + CTA -->
+      <section class="panel panel--title">
+        <h1>  User Console </h1>
+        <p class="subtitle"> // Log: content data incoming
+ </p>
+ <p class="subtitle"> // Log: september pending </p>
+        <a href="https://www.youtube.com/@LabyrinthCitizen" class="transmit-button"> button </a>
+      </section>
+  
+    
+      <!-- Cam thumbnails (static, fixed aspect) -->
+      <section class="panel panel--cam">
+        <img src="assets/IMG_8083.jpg" alt="cam01 still">
         <span class="cam-label">cam01</span>
-      </div>
-      <div class="monitor">
-        <img src="assets/IMG_8082.jpg" alt="Room View 2" />
+      </section>
+      <section class="panel panel--cam">
+        <img src="assets/IMG_8084.jpg" alt="cam04 still">
         <span class="cam-label">cam02</span>
-      </div>
-      <div class="monitor monitor--focus-top">
-        <img src="assets/IMG_8083.jpg" alt="Room View 3" />
+      </section>
+           <section class="panel panel--cam">
+        <img src="assets/IMG_8082.jpg" alt="cam04 still">
         <span class="cam-label">cam03</span>
-     </div> 
-      <!-- <div class="monitor">
-        <img src="assets/IMG_8083.jpg" alt="Room View 3" />
-        <span class="cam-label">cam03</span>
-      </div> -->
-      <div class="monitor monitor--large">
-        <img src="assets/IMG_8084.jpg" alt="Room View 4" />
+      </section>
+             <section class="panel panel--cam">
+        <img src="assets/IMG_8081.jpg" alt="cam04 still">
         <span class="cam-label">cam04</span>
-      </div>
+      </section>
+
+
+      <!-- Clock / location -->
+      <section class="panel panel--clock" aria-live="polite">
+        <div class="clock-time" id="clock">00:00</div>
+        <div class="clock-sub">los angeles, ca</div> 
+      </section>
+
+      <!-- Boot log -->
+      <section class="panel panel--log">
+        <ul id="bootlog" class="log"></ul>
+      </section>
     </main>
 
-    <div class="overlay">
-      <h1>enter the void</h1>
-      <p class="binary">01100111 01101111 01100100</p>
-      <a href="https://www.youtube.com/@LabyrinthCitizen" class="transmit-button">transmit</a>
-    </div>
-
-    <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const words = ["001", "002", "err", "000", "err"]; // cycle options
-    const statusWord = document.querySelector(".status-word");
-    let index = 0;
-
-    function cycle() {
-      if (index < words.length) {
-        statusWord.textContent = words[index];
-        index++;
-        setTimeout(cycle, 400); // speed of flicker
-      } else {
-        statusWord.textContent = "signal"; // final word you want
-      }
-    }
-
-    cycle();
-  });
-</script>
-
     <footer>
-      <p>© Labyrinth Terminal </p>
+      <p>© Labyrinth Terminal</p>
     </footer>
+
+    <script src="script.js" defer></script>
   </body>
 </html>
