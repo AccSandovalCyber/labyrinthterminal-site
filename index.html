@@ -15,57 +15,83 @@
   <body>
     <!-- Header / status -->
     <header class="site-header">
-      <span class="status">
-  <span class="status-word"></span> 
-</span>
-
+      <span class="status" aria-live="polite" aria-atomic="true">
+        <span class="status-word"></span>
+      </span>
+      <div role="tablist" class="nav" aria-label="Pip navigation">
+        <button id="tab-stat" role="tab" aria-controls="panel-stat" aria-selected="true">STATS</button>
+        <button id="tab-inv" role="tab" aria-controls="panel-inv" aria-selected="false">MONITORS</button>
+        <button id="tab-data" role="tab" aria-controls="panel-data" aria-selected="false">ARCHIVE</button>
+        <button id="tab-map" role="tab" aria-controls="panel-map" aria-selected="false">GRID</button>
+      </div>
     </header>
 
-    <!-- SIGNAL DECK -->
     <main class="deck">
-      <!-- Title + CTA -->
-      <section class="panel panel--title">
-        <h1>  User Console </h1>
-        <p class="subtitle">// console.log: expansion in progress</p>
+      <!-- STAT: Title + CTA + Clock + Ambient Scope -->
+      <section id="panel-stat" role="tabpanel">
+        <section class="panel panel--title">
+          <h1>User Console</h1>
+          <p class="subtitle">// console.log: data expansion pending</p>
+          <p class="subtitle"> [alert] 3I/ATLAS arrival imminent, ETA October</p>          <a href="https://www.youtube.com/@LabyrinthCitizen" class="transmit-button">.btn</a>
+        </section>
 
-        <a href="https://www.youtube.com/@LabyrinthCitizen" class="transmit-button"> .btn </a>
-      </section>
-  
-    
-      <!-- Cam thumbnails (static, fixed aspect) -->
-      <section class="panel panel--cam">
-        <img src="assets/IMG_8083.jpg" alt="cam01 still">
-        <span class="cam-label">cam01</span>
-      </section>
-      <section class="panel panel--cam">
-        <img src="assets/IMG_8084.jpg" alt="cam04 still">
-        <span class="cam-label">cam02</span>
-      </section>
-           <section class="panel panel--cam">
-        <img src="assets/city.jpg" alt="cam04 still">
-        <span class="cam-label">cam03</span>
-      </section>
+        <!-- STAT: clock -->
+        <section class="panel panel--clock" aria-live="polite">
+          <div class="clock-time" id="clock">00:00</div>
+          <div class="clock-sub">los angeles, ca</div>
+        </section>
+        
+        <!-- Ambient holographic scope (same size as clock) -->
+         <section class="panel panel--scope" aria-hidden="true">
+           <div class="scope-warp" aria-hidden="true"></div>
+          </section>
 
-             <section class="panel panel--cam">
-        <img src="assets/IMG_8081.jpg" alt="cam04 still">
-        <span class="cam-label">cam04</span>
+        <!-- STAT boot log under row -->
+        <section class="panel panel--log">
+          <ul id="bootlog" class="log"></ul>
+        </section>
       </section>
 
-              <section class="panel panel--cam">
-        <img src="assets/IMG_8082.jpg" alt="cam04 still">
-        <span class="cam-label">cam05</span>
+      <!-- INV (now CACHE): Cam thumbnails -->
+      <section id="panel-inv" role="tabpanel" hidden>
+        <section class="panel panel--cam">
+          <img data-src="assets/IMG_8083.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam01 still">
+          <span class="cam-label">cam01</span>
+        </section>
+        <section class="panel panel--cam">
+          <img data-src="assets/IMG_8084.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam02 still">
+          <span class="cam-label">cam02</span>
+        </section>
+        <section class="panel panel--cam">
+          <img data-src="assets/city.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam03 still">
+          <span class="cam-label">cam03</span>
+        </section>
+        <section class="panel panel--cam">
+          <img data-src="assets/IMG_8081.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam04 still">
+          <span class="cam-label">cam04</span>
+        </section>
+        <section class="panel panel--cam">
+          <img data-src="assets/IMG_8082.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam05 still">
+          <span class="cam-label">cam05</span>
+        </section>
       </section>
 
-              <!-- Clock / location -->
-      <section class="panel panel--clock" aria-live="polite">
-        <div class="clock-time" id="clock">00:00</div>
-        <div class="clock-sub">los angeles, ca</div> 
+      <!-- DATA (now ARCHIVE): Boot log -->
+      <section id="panel-data" role="tabpanel" hidden>
+        <section class="panel panel--title">
+          <h2>Archive</h2>
+          <p class="subtitle"> </p> 
+          <p class="subtitle">// awaiting data</p>
+        </section>
       </section>
 
-
-      <!-- Boot log -->
-      <section class="panel panel--log">
-        <ul id="bootlog" class="log"></ul>
+      <!-- MAP (now GRID): Placeholder -->
+      <section id="panel-map" role="tabpanel" hidden>
+        <section class="panel panel--title">
+          <h2>Grid</h2>
+          <p class="subtitle"> </p>
+          <p class="subtitle">// awaiting coordinates</p>
+        </section>
       </section>
     </main>
 
