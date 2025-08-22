@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const isDecember = now.getMonth() === 11; // 0-based months, 11 = DEC
 
     const seedLines = [
-      "user console: initializing boot sequence",
-      "*************** OS V1.0.0 ***************",
+      "********** OS V1.0.0 **********",
       "01000101 01000011 01001000 01001111",
+      "grid",
       "01000111 01001111 01000100",
       "initializing connection...",
       "system memory attached",
@@ -57,11 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const basePool = [
       "memory sector fragmented...",
       "reality patch applied",
-      "universe expanding...",
-      "idle dream looping",
-      "time loop stable...",
+      "universe ... expanding",
+      "idle dream ... looping",
+      "time loop stable ",
       "void staring back",
-      "where does the universe end... unknown",
+      "where does the universe end ... unknown",
 
     ];
 
@@ -77,9 +77,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const li = document.createElement("li");
       li.textContent = text;
       logEl.appendChild(li);
-      // keep last 10 lines
-      while (logEl.children.length > 10) logEl.removeChild(logEl.firstChild);
-    }
+      
+      // dynamic max lines based on viewport
+      const maxLines = window.innerWidth <= 600 ? 9 : 7;
+      
+      while (logEl.children.length > maxLines) {
+        logEl.removeChild(logEl.firstChild);
+  }
+}
 
     // seed quickly
     let s = 0;

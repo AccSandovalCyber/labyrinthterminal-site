@@ -1,119 +1,301 @@
 /* ===== Base ===== */
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--ink:#eaeaea;--muted:#9fb3c8;--bg:#0a0a0a;--panel:#0e0e0e;--hairline:rgba(255,255,255,.06);--innerline:rgba(255,255,255,.04)}
-html,body{height:100%}
-body{background:var(--bg);color:var(--ink);font-family:"Courier New",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --ink:#eaeaea;
+  --muted:#9fb3c8;
+  --bg:#0a0a0a;
+  --panel:#0e0e0e;
+  --hairline:rgba(255,255,255,.06);
+  --innerline:rgba(255,255,255,.04);
+}
+html,body { height:100%; }
+body {
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Courier New",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
 
 /* ===== Header / Status + Tabs ===== */
-.site-header{padding:1rem;font-size:.9rem;color:var(--muted);display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
-.status{display:flex;align-items:center;gap:.4rem}
-.status-word{color:var(--muted)}
-.site-header .nav{margin-left:auto}
-[role=tablist]{display:flex;gap:1rem}
-[role=tab]{font:inherit;letter-spacing:.08em;padding:0;border:0;background:transparent;color:var(--muted);cursor:pointer;opacity:1;box-shadow:none;transition:color .15s ease,opacity .15s ease}
-[role=tab][aria-selected=true]{color:var(--ink)}
-[role=tab]:focus-visible{outline:none;text-shadow:0 0 6px rgba(159,179,200,.35)}
-[role=tabpanel]{display:contents}
-[role=tabpanel][hidden]{display:none}
+.site-header{
+  padding:1rem; font-size:.9rem; color:var(--muted);
+  display:flex; align-items:center; gap:.75rem; flex-wrap:wrap;
+}
+.status{ display:flex; align-items:center; gap:.4rem; }
+.status-word{ color:var(--muted); }
+.site-header .nav{ margin-left:auto; }
 
+[role=tablist]{ display:flex; gap:1rem; }
+[role=tab]{
+  font:inherit; letter-spacing:.08em; padding:0; border:0; background:transparent;
+  color:var(--muted); cursor:pointer; opacity:1; box-shadow:none;
+  transition:color .15s ease, opacity .15s ease;
+}
+[role=tab][aria-selected=true]{ color:var(--ink); }
+[role=tab]:focus-visible{ outline:none; text-shadow:0 0 6px rgba(159,179,200,.35); }
+
+[role=tabpanel]{ display:contents; }
+[role=tabpanel][hidden]{ display:none; }
 
 /* ===== Deck Grid ===== */
-.deck{--gap:clamp(10px,2vw,18px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gap);max-width:1200px;margin:0 auto;padding:var(--gap)}
-.panel{position:relative;background:var(--panel);border:1px solid var(--hairline);box-shadow:inset 0 0 0 1px var(--innerline);overflow:hidden;border-radius:10px}
+.deck{
+  --gap:clamp(10px,2vw,18px);
+  display:grid; grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:var(--gap); max-width:1200px; margin:0 auto; padding:var(--gap);
+}
+.panel{
+  position:relative; background:var(--panel);
+  border:1px solid var(--hairline);
+  box-shadow:inset 0 0 0 1px var(--innerline);
+  overflow:hidden; border-radius:10px;
+}
 
 /* ===== Layout ===== */
-.panel--title{grid-column:span 12;min-height:260px;display:grid;place-content:center;text-align:center}
-/* VITALS row: two half-width squares side-by-side */
-.panel--clock{grid-column:span 6;aspect-ratio:4/3;min-height:160px;display:grid;place-content:center}
-.panel--scope{grid-column:span 6;aspect-ratio:4/3;min-height:160px;position:relative}
-/* Boot log full width */
-.panel--log{grid-column:span 12;min-height:220px}
-/* CACHE cams */
-.panel--cam{grid-column:span 4;aspect-ratio:4/3}
+.panel--title{ grid-column:span 12; min-height:260px; display:grid; place-content:center; text-align:center; }
 
-@media (max-width:900px){
-  .panel--clock,.panel--scope{grid-column:span 6} /* keep side-by-side on mobile */
-  .panel--cam{grid-column:span 6}
-  .panel--title,.panel--log{grid-column:span 12}
+/* VITALS row: two half-width squares side-by-side */
+.panel--clock{ grid-column:span 6; aspect-ratio:4/3; min-height:160px; display:grid; place-content:center; }
+
+/* Boot log (fixed height; no growth) */
+.panel--log{
+  grid-column:span 12;
+  position:relative;
+  height:clamp(180px, 22vh, 260px);
+  min-height:0;
 }
-@media (max-width:520px){.panel--cam{grid-column:span 12}}
+
+/* CACHE cams */
+.panel--cam{ grid-column:span 4; aspect-ratio:4/3; }
+
+/* === Side-by-side on small screens, compact size === */
+@media (max-width:600px){
+  .panel--clock{
+    grid-column:span 6;       /* keep side-by-side */
+    min-height:130px;
+    aspect-ratio:4/3;
+  }
+  .deck{ --gap:16px; }        /* clearer gutter between tiles */
+  .clock-time{ font-size:clamp(1.2rem,5vw,1.6rem); }
+  .clock-sub{ font-size:.75rem; opacity:.85; }
+}
+@media (max-width:360px){
+  .panel--clock{ grid-column:span 12; } /* emergency stack */
+  .panel--clock{ margin-bottom:12px; }
+}
+@media (max-width:520px){ .panel--cam{ grid-column:span 12; } }
 
 /* ===== Title Typography ===== */
-.panel--title h1{font-family:'Space Grotesk','Inter',ui-sans-serif,system-ui,sans-serif;font-weight:300;letter-spacing:.02em;font-size:clamp(1.8rem,5vw,3rem);color:var(--ink);margin-bottom:.35rem}
-.panel--title .subtitle{color:var(--muted);opacity:.9;font-size:.9rem;margin-bottom:1rem}
+.panel--title h1{
+  font-family:'Space Grotesk','Inter',ui-sans-serif,system-ui,sans-serif;
+  font-weight:300; letter-spacing:.02em;
+  font-size:clamp(1.8rem,5vw,3rem); color:var(--ink);
+  margin-bottom:1rem;
+}
+@media (max-width: 600px) {
+  .panel--title h1 {
+    font-size: clamp(1.4rem, 6vw, 2.2rem); /* smaller range for phones */
+    margin-bottom: 1rem; /* tighter spacing */
+  }
+}
+
+.panel--title .subtitle{ color:var(--muted); opacity:.9; font-size:.9rem; margin-bottom:1rem; }
+
+@media (max-width: 600px) {
+  .panel--title .subtitle {
+    font-size: 0.7rem; /* smaller on mobile */
+  }
+}
 
 /* ===== Clock ===== */
-.clock-time{font-size:clamp(1.6rem,4.2vw,2.6rem);letter-spacing:.06em;text-align:center;color:var(--ink)}
-.clock-sub{color:var(--muted);font-size:.85rem;text-align:center;margin-top:.35rem;opacity:.9}
+.clock-time{ font-size:clamp(1.6rem,4.2vw,2.6rem); letter-spacing:.06em; text-align:center; color:var(--ink); }
+.clock-sub{ color:var(--muted); font-size:.85rem; text-align:center; margin-top:.35rem; opacity:.9; }
 
 /* ===== Boot Log ===== */
-.log{list-style:none;padding:12px;font-size:.9rem;color:#9aa3ab;line-height:1.35;height:100%;overflow:hidden}
-.log li+li{margin-top:.25rem}
+.log{
+  list-style:none; padding:10px; font-size:.8rem; color:#9aa3ab; line-height:1.45;
+  height:100%; overflow:auto;
+}
+.log li+li{ margin-top:0.25rem; }
 
-/* ===== CACHE Cams ===== */
-.panel--cam img{width:100%;height:100%;display:block;object-fit:cover}
-.cam-label{position:absolute;bottom:6px;left:6px;font-size:.75rem;letter-spacing:1px;color:#ff0000;background:rgba(0,0,0,.45);padding:2px 6px;border-radius:4px;border:1px solid rgba(143,170,192,.25)}
-
-/* ===== Ambient Scope: wireframe tunnel illusion ===== */
-.scope-illusion{position:absolute;inset:0;overflow:hidden;mix-blend-mode:screen;background:
-  repeating-linear-gradient(90deg,rgba(160,190,255,.25) 0 1px,transparent 1px 22px),
-  repeating-linear-gradient(0deg, rgba(160,190,255,.25) 0 1px,transparent 1px 22px);
-  background-size:22px 22px,22px 22px; /* explicit start size for smooth animation */
-  transform:perspective(700px) rotateX(55deg) translateY(-6%);
-  transform-origin:50% 120%;
-  animation:tunnelZoom 6s linear infinite,tunnelFlicker 4.2s ease-in-out infinite;
-  will-change:background-size,opacity,filter,transform}
-.scope-illusion::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 45%,rgba(0,0,0,.7) 92%)}
-@keyframes tunnelZoom{0%{background-size:22px 22px,22px 22px;filter:brightness(.9)}100%{background-size:6px 6px,6px 6px;filter:brightness(1.05)}}
-@keyframes tunnelFlicker{0%,12%,100%{opacity:.95}13%{opacity:.6}47%{opacity:1}66%{opacity:.7}}
-
-/* ===== Ambient Scope (ALT): infinite warp grid ===== */
-.scope-warp{
-  position:absolute; inset:0; overflow:hidden; mix-blend-mode:screen;
-  /* dual grid */
-  background:
-    repeating-linear-gradient(90deg, rgba(160,190,255,.25) 0 1px, transparent 1px 22px),
-    repeating-linear-gradient(0deg,  rgba(160,190,255,.25) 0 1px, transparent 1px 22px);
-  background-size: 26px 26px, 26px 26px; /* start slightly larger */
-  transform: perspective(800px) rotateX(58deg) translateY(-8%);
-  transform-origin: 50% 120%;
-  animation: warpZoom 4s linear infinite, warpFlicker 5.6s ease-in-out infinite;
-  will-change: background-size, opacity, filter, transform;
-}
-/* subtle horizon glow */
-.scope-warp::before{
-  content:""; position:absolute; inset:0; pointer-events:none;
-  background: linear-gradient(to top, rgba(160,190,255,.05), rgba(160,190,255,.0) 55%);
-}
-/* vignette */
-.scope-warp::after{
-  content:""; position:absolute; inset:0; pointer-events:none;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0) 45%, rgba(0,0,0,.75) 92%);
-}
-@keyframes warpZoom{
-  0%   { background-size: 26px 26px, 26px 26px; filter: brightness(.9) contrast(1); }
-  100% { background-size: 4px 4px,   4px 4px;   filter: brightness(1.1) contrast(1.05); }
-}
-@keyframes warpFlicker{
-  0%, 12%, 100% { opacity: .95; }
-  13% { opacity: .65; }
-  48% { opacity: 1; }
-  66% { opacity: .75; }
+/* Anchor the list inside the fixed-height panel + soft fade at bottom */
+.panel--log .log{
+  position:absolute; inset:5px;
+  overflow:auto;
+  -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0));
+  mask-image:linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0));
 }
 
-/* Reduced motion: slow the warp rather than stop */
-@media (prefers-reduced-motion: reduce){
-  .scope-warp{ animation: warpZoom 14s linear infinite, warpFlicker 12s ease-in-out infinite; }
+/* Mobile: shorter bootlog for more compact view */
+@media (max-width:600px){
+  .panel--log{ height:clamp(150px, 19vh, 200px); }
+}
+
+.panel--link a {
+  display:block;
+  width:100%; height:100%;
+  text-decoration:none;
+  color:inherit;
+}
+.panel--link img { transition: transform .25s ease; }
+.panel--link:hover img { transform: scale(1.02); }
+.panel--link:hover .cam-label { background:rgba(255,0,0,.6); }
+
+/* ===== MONITORS Cams ===== */
+.panel--cam img{ width:100%; height:100%; display:block; object-fit:cover; }
+.cam-label{
+  position:absolute; bottom:6px; left:6px;
+  font-size:.75rem; letter-spacing:1px; color:#ff0000;
+  background:rgba(0,0,0,.45); padding:2px 6px; border-radius:4px;
+  border:1px solid rgba(143,170,192,.25);
 }
 
 /* ===== CTA ===== */
-.transmit-button{display:inline-block;padding:.2rem 1rem;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(10,10,10,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#fff;letter-spacing:.2em;text-decoration:none;transition:transform .15s ease,background .2s ease,border-color .2s ease;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 0 0 1px rgba(255,255,255,.04)}
-.transmit-button:hover{background:rgba(234,234,234,.9);color:#0b0b0b;border-color:rgba(255,255,255,.4);transform:translateY(-1px)}
-.transmit-button:active{transform:translateY(0)}
+.transmit-button{
+  display:inline-block; padding:.2rem 1rem; border-radius:999px;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(10,10,10,.35);
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  color:#fff; letter-spacing:.2em; text-decoration:none;
+  transition:transform .15s ease, background .2s ease, border-color .2s ease;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06), 0 0 0 1px rgba(255,255,255,.04);
+}
+.transmit-button:hover{ background:rgba(234,234,234,.9); color:#0b0b0b; border-color:rgba(255,255,255,.4); transform:translateY(-1px); }
+.transmit-button:active{ transform:translateY(0); }
 
-footer{text-align:center;font-size:.75rem;padding:.75rem;color:#444}
+footer{ text-align:center; font-size:.75rem; padding:.2rem .4rem; color:#444; }
 
-/* ===== Reduced Motion ===== */
-@media (prefers-reduced-motion: reduce){
-  .scope-illusion{animation:tunnelZoom 18s linear infinite,tunnelFlicker 10s ease-in-out infinite}
+/* === Cam preview next to clock: match size exactly === */
+.panel--cam--preview {
+  grid-column: span 6;      /* align with .panel--clock */
+  display: grid;            /* ensures sizing parity */
+  place-content: center;
+  aspect-ratio: 4 / 3;      /* same ratio */
+  min-height: 160px;        /* match .panel--clock */
+}
+
+/* Keep side-by-side on small screens and compact like the clock */
+@media (max-width: 600px) {
+  .panel--cam--preview {
+    grid-column: span 6;
+    aspect-ratio: 4 / 3;
+    min-height: 130px;        /* match .panel--clock on mobile */
+  }
+}
+
+/* Emergency stack under ultra-tiny screens */
+@media (max-width: 360px) {
+  .panel--cam--preview { grid-column: span 12; }
+}
+
+/* Slimmer transmit button */
+.transmit-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .25rem .85rem;      /* balanced size */
+  letter-spacing: .05em;       /* less spaced out */
+  font-size: 0.95rem;
+  width: fit-content;        /* shrink to content */
+  max-width: 200px;          /* prevent overly wide buttons */
+  min-width: 0;
+  white-space: nowrap;       /* keep text on one line */
+}
+@media (max-width: 600px) {
+  .transmit-button { 
+    padding: .2rem .75rem; 
+    font-size: 0.9rem; 
+    width: fit-content;
+    max-width: 160px;
+  }
+}
+
+/* Keep a clear gutter so corners never “merge” */
+@media (max-width: 600px) {
+  .deck { --gap: 16px; }
+}
+
+/* Tuck the footer closer to the content */
+.deck { padding-bottom: 0; }
+
+/* Mobile: even tighter bottom padding + log sits a touch lower */
+@media (max-width: 600px) {
+  .deck { padding-bottom: 0; }
+  .panel--log .log { inset: 10px 10px 8px 10px; } /* top right bottom left */
+}
+
+/* Ensure no accidental margin pushes between last panel and footer */
+.panel--log { margin-bottom: 0; }
+footer { margin-top: 0; }
+
+/* ===== Mobile balance: match desktop feel ===== */
+@media (max-width: 600px) {
+  /* Slightly tighter grid and page bottom */
+  .deck { --gap: 14px; padding-bottom: 6px; }
+
+  /* Title: shorter so content sits higher */
+  .panel--title { min-height: 180px; }
+
+  /* Tiles: keep them tidy, same size */
+  .panel--clock,
+  .panel--cam--preview { min-height: 120px; aspect-ratio: 4 / 3; }
+
+  /* Bootlog: fill the lower area but not too tall */
+  .panel--log { height: clamp(180px, 26vh, 240px); }
+
+  /* Footer: compact */
+  footer { padding: 0.75rem .10rem; } 
+}
+
+/* Ultra-small phones: nudge a touch tighter */
+@media (max-width: 360px) {
+  .deck { --gap: 12px; padding-bottom: 4px; }
+  .panel--title { min-height: 170px; }
+  .panel--log { height: clamp(170px, 24vh, 220px); }
+}
+
+/* ===== Mobile compact text & bootlog tightening ===== */
+@media (max-width: 600px) {
+  /* Title: slightly shorter and tighter subtitle spacing */
+  .panel--title { min-height: 160px; }
+  .panel--title .subtitle { margin-bottom: .5rem; }
+
+  /* Bootlog text spacing: tighter padding and line spacing */
+  .log { padding: 5px; line-height: 1.25; }
+  .log li + li { margin-top: .25rem; }
+  .panel--log .log { inset: 8px 8px 6px 8px; } /* top right bottom left */
+
+  /* Slightly reduce bootlog height so it doesn't feel empty */
+  .panel--log { height: clamp(200px, 24vh, 210px); }
+
+  /* Grid gap + bottom pad for a natural end */
+  .deck { --gap: 12px; padding-bottom: 4px; }
+}
+
+/* === Transmit button: centered + sensible width === */
+.panel--title .transmit-button {
+  display: inline-flex;            /* keep compact */
+  margin: 0.5rem auto 0;           /* center horizontally in title panel */
+}
+
+/* Global sizing tweaks so it doesn’t feel too short */
+.transmit-button {
+  padding: .28rem .9rem;           /* a touch larger */
+  letter-spacing: .06em;           /* slightly more breathing */
+  min-width: 120px;                /* keep a normal button length */
+}
+
+@media (max-width: 600px) {
+  .transmit-button { 
+    padding: .24rem .8rem;         /* compact but readable on mobile */
+    min-width: 110px;
+  }
+}
+
+/* Mobile: smaller tab labels + tighter spacing */
+@media (max-width: 600px) {
+  [role=tablist] { gap: .6rem; }
+  [role=tab] {
+    font-size: .8rem;       /* smaller label text */
+    letter-spacing: .06em;  /* slightly tighter tracking */
+    padding: 0;             /* no extra height */
+  }
 }
