@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ----- HEADER: Boot Flicker + Month Display -----
   const statusWord = document.querySelector(".status-word");
   const flicker = [
-    "// JAN ", "// FEB ", "// MAR ", "// APR ", "// MAY ", "// JUN ", "LOOK", "AGAIN",
+    "// JAN ", "// FEB ", "// MAR ", "// APR ", "// MAY ", "// JUN ", "// LOOK", "// LOOK", "// AGAIN", "// AGAIN",
     "// JUL ", "// AUG ", "// SEP ", "// OCT ", "// NOV ", "// DEC "
   ];
   const MONTHS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     const basePool = [
-      "memory sector fragmented ...",
+      "memory fragmented ...",
       "they left behind silence ... the machine filled it with dreams",
       "universe expanding ...",
       "wish you were here",
