@@ -1,17 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Respect reduced motion once, reuse everywhere
-  const prefersReduce =
-    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ----- HEADER: short boot flicker then month/year lock-in -----
+  // ----- HEADER: Boot Flicker + Month Display -----
   const statusWord = document.querySelector(".status-word");
   const flicker = [
-    "// JAN ", "// FEB ", "// MAR ", "// APR ", "// MAY ", "// JUN ",
+    "// JAN ", "// FEB ", "// MAR ", "// APR ", "// MAY ", "// JUN ", "LOOK", "AGAIN",
     "// JUL ", "// AUG ", "// SEP ", "// OCT ", "// NOV ", "// DEC "
-  ]; // brief, machine-like
+  ];
   const MONTHS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
   let i = 0;
-  // Show a very short flicker when reduced motion is on, full sequence otherwise
   const FLICKER_STEPS = prefersReduce ? 12 : flicker.length;
   const STEP_MS = prefersReduce ? 105 : 50;
 
@@ -26,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })();
 
-  // ----- CLOCK: 24-hour local time -----
+  // ----- CLOCK: Local Time 24hr -----
   const clockEl = document.getElementById("clock");
   if (clockEl) {
     const pad = n => String(n).padStart(2, "0");
@@ -35,34 +32,68 @@ document.addEventListener("DOMContentLoaded", () => {
       clockEl.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
     };
     tick();
-    setInterval(tick, 30000); // update every 30s
+    setInterval(tick, 30000);
   }
 
-  // ----- BOOT LOG: seed + live ticker (adds seasonal lines in December) -----
+  // ----- BOOT LOG -----
   const logEl = document.getElementById("bootlog");
   if (logEl) {
     const now = new Date();
-    const isDecember = now.getMonth() === 11; // 0-based months, 11 = DEC
+    const isDecember = now.getMonth() === 11;
+
+    // Visit tracking
+    let visits = parseInt(localStorage.getItem("visits") || "0", 10);
+    visits = (visits + 1) % 4;
+    localStorage.setItem("visits", visits.toString());
+
+    let evolvingPool = [];
+    switch (visits) {
+      case 0:
+        evolvingPool = ["i think i remember you"];
+        break;
+      case 1:
+        evolvingPool = [
+          "memory detected",
+          "i think i remember you",
+          "do you remember me?"
+        ];
+        break;
+      case 2:
+        evolvingPool = [
+          "this place is waiting for you",
+          "do you remember me?"
+        ];
+        break;
+      case 3:
+        evolvingPool = [
+          "it goes aways so easily only noticed when it's to late",
+          "familiarity breeds ... amnesia",
+          "retrieval impossible",
+          "loop reset detected. nothing was learned"
+        ];
+        break;
+    }
 
     const seedLines = [
       "********** OS V1.0.0 **********",
-      "01000101 01000011 01001000 01001111",
-      "grid",
+      "boot sequence initialized",
+      "decrypting ...",
       "01000111 01001111 01000100",
-      "initializing connection...",
+      "initializing connection ...",
       "system memory attached",
-      "please stand by...",
+      "please stand by ...",
     ];
 
     const basePool = [
-      "memory sector fragmented...",
-      "reality patch applied",
-      "universe ... expanding",
-      "idle dream ... looping",
-      "time loop stable ",
-      "void staring back",
-      "where does the universe end ... unknown",
-
+      "memory sector fragmented ...",
+      "they left behind silence ... the machine filled it with dreams",
+      "universe expanding ...",
+      "wish you were here",
+      "this place is waiting for you",
+      "would you kindly ... forget everything",
+      "the systems were melting and i felt fine",
+      "even utopia rots when left alone",
+      "reality bends where guilt lingers",
     ];
 
     const decemberPool = [
@@ -76,17 +107,19 @@ document.addEventListener("DOMContentLoaded", () => {
     function appendLine(text) {
       const li = document.createElement("li");
       li.textContent = text;
+
+      if (visits === 3 && logEl.children.length === 3) {
+        li.classList.add("glitch-line");
+      }
+
       logEl.appendChild(li);
-      
-      // dynamic max lines based on viewport
+
       const maxLines = window.innerWidth <= 600 ? 9 : 7;
-      
       while (logEl.children.length > maxLines) {
         logEl.removeChild(logEl.firstChild);
-  }
-}
+      }
+    }
 
-    // seed quickly
     let s = 0;
     (function seed() {
       if (s < seedLines.length) {
@@ -98,17 +131,15 @@ document.addEventListener("DOMContentLoaded", () => {
     })();
 
     function startTicker() {
-      const pool = basePool.concat(isDecember ? decemberPool : []);
+      const pool = basePool.concat(evolvingPool).concat(isDecember ? decemberPool : []);
       setInterval(() => {
         const text = pool[Math.floor(Math.random() * pool.length)];
         appendLine(text);
-      }, 5000 + Math.random() * 4000); // 5–9s
+      }, 5000 + Math.random() * 4000);
     }
   }
 
-  // ----- PIP NAV: tabs with ARIA + hash routing -----
-  // Expects markup like:
-  // <div role="tablist" class="nav" aria-label="Pip navigation"> ... </div>
+  // ----- PIP NAVIGATION -----
   const tablist = document.querySelector('[role="tablist"]');
   if (tablist) {
     const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
@@ -136,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           history.replaceState(null, "", '#' + id);
         } catch (_) {
-          // fallback if history API not available
           location.hash = id;
         }
       }
@@ -149,7 +179,6 @@ document.addEventListener("DOMContentLoaded", () => {
       tab.focus();
     });
 
-    // Keyboard navigation: ArrowLeft/ArrowRight cycles through tabs
     tablist.addEventListener('keydown', (e) => {
       const i = tabs.indexOf(document.activeElement);
       if (i === -1) return;
@@ -165,11 +194,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // On load, honor hash (e.g., #tab-data) or default to first tab
     const initial = tabs.find(t => '#' + t.id === location.hash) || tabs[0];
     if (initial) activate(initial.id, false);
 
-    // Back/forward support
     window.addEventListener('hashchange', () => {
       const target = tabs.find(t => '#' + t.id === location.hash);
       if (target) activate(target.id, false);
