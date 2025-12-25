@@ -19,28 +19,28 @@
         <span class="status-word"></span>
       </span>
       <div role="tablist" class="nav" aria-label="Pip navigation">
-        <button id="tab-stat" role="tab" aria-controls="panel-stat" aria-selected="true">STATS</button>
-        <button id="tab-inv" role="tab" aria-controls="panel-inv" aria-selected="false">MONITORS</button>
-        <button id="tab-data" role="tab" aria-controls="panel-data" aria-selected="false">ARCHIVE</button>
-        <button id="tab-map" role="tab" aria-controls="panel-map" aria-selected="false">GRID</button>
+        <button id="tab-stat" role="tab" aria-controls="panel-stat" aria-selected="true">console</button>
+        <button id="tab-inv" role="tab" aria-controls="panel-inv" aria-selected="false">camera</button>
+        <button id="tab-data" role="tab" aria-controls="panel-data" aria-selected="false">memory</button>
+        <button id="tab-map" role="tab" aria-controls="panel-map" aria-selected="false">grid</button>
       </div>
     </header>
 
     <main class="deck">
       <!-- STAT: Title + CTA + Clock + Ambient Scope -->
       <section id="panel-stat" role="tabpanel">
-        <section class="panel panel--title">
-          <h1>User Console</h1>
-          <p class="subtitle">// console.log: data expansion pending</p>
-          <p class="subtitle"> [alert] 3I/ATLAS arrival imminent, ETA October</p>
-          <a href="https://www.youtube.com/@labyrinthterminal" class="transmit-button">.btn</a>
+        <section class="panel panel--title panel--title--floating">
+          <h1>observation terminal</h1>
+          <p class="subtitle">// intervention not required</p>
+          <!-- <p class="subtitle">// within cells interlinked</p> -->
+          <a href="https://www.youtube.com/@labyrinthterminal" class="transmit-button"> interlinked </a>
         </section>
 
-             <!-- Cam preview beside clock (same size) -->
+        <!-- Cam preview beside clock (same size) -->
         <section class="panel panel--cam panel--cam--preview panel--link">
           <a href="#tab-inv">
-            <img src="assets/city.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam01 still">
-            <span class="cam-label">cam01</span>
+            <img src="assets/0000.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam01 still">
+            <span class="cam-label">camera</span>
           </a>
         </section>
 
@@ -56,35 +56,17 @@
         </section>
       </section>
 
-      <!-- INV (now CACHE): Cam thumbnails -->
+      <!-- CAMERA: image-only feed (no captions) -->
       <section id="panel-inv" role="tabpanel" hidden>
-        <section class="panel panel--cam">
-          <img data-src="assets/IMG_8083.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam01 still">
-          <span class="cam-label">cam01</span>
-        </section>
-        <section class="panel panel--cam">
-          <img data-src="assets/IMG_8084.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam02 still">
-          <span class="cam-label">cam02</span>
-        </section>
-        <section class="panel panel--cam">
-          <img data-src="assets/city.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam03 still">
-          <span class="cam-label">cam03</span>
-        </section>
-        <section class="panel panel--cam">
-          <img data-src="assets/IMG_8081.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam04 still">
-          <span class="cam-label">cam04</span>
-        </section>
-        <section class="panel panel--cam">
-          <img data-src="assets/IMG_8082.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam05 still">
-          <span class="cam-label">cam05</span>
+        <section class="panel panel--monitors">
+          <ul id="monitorsGrid" class="monitors-grid" aria-label="camera feed"></ul>
         </section>
       </section>
 
-      <!-- DATA (now ARCHIVE): Boot log -->
+      <!-- MEMORY -->
       <section id="panel-data" role="tabpanel" hidden>
         <section class="panel panel--title">
-          <h2>Archive</h2>
-          <p class="subtitle"> </p> 
+          <h2>memory</h2>
           <p class="subtitle">// awaiting data</p>
         </section>
       </section>
@@ -92,8 +74,7 @@
       <!-- MAP (now GRID): Placeholder -->
       <section id="panel-map" role="tabpanel" hidden>
         <section class="panel panel--title">
-          <h2>Grid</h2>
-          <p class="subtitle"> </p>
+          <h2>grid</h2>
           <p class="subtitle">// awaiting coordinates</p>
         </section>
       </section>
