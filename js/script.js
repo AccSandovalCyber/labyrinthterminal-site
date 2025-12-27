@@ -5,23 +5,38 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================
   // HEADER: boot flicker -> month/year
   // =========================
-  const statusWord = document.querySelector('.status-word');
-  const flicker = [
-    '// jan ', '// feb ', '// mar ', '// apr ', '// may ', '// jun ',
-    '// look', '// look', '// again', '// again',
-    '// jul ', '// aug ', '// sep ', '// oct ', '// nov ', '// dec ',
-  ];
-  const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+const statusWord = document.querySelector('.status-word');
 
+const flicker = [
+  '// sync ',
+  '// scan ',
+  '// align ',
+  '// jan ',
+  '// feb ',
+  '// mar ',
+  '// apr ',
+  '// may ',
+  '// jun ',
+  '// jul ',
+  '// aug ',
+  '// sep ',
+  '// oct ',
+  '// nov ',
+  '// dec ',
+];
+
+const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
   if (statusWord) {
     let i = 0;
     const FLICKER_STEPS = prefersReduce ? 12 : flicker.length;
-    const STEP_MS = prefersReduce ? 105 : 50;
+
+    // Header flicker speed
+    const FLICKER_STEP_MS = prefersReduce ? 120 : 85;
 
     (function cycle() {
       if (i < FLICKER_STEPS) {
         statusWord.textContent = flicker[i++] || flicker[flicker.length - 1];
-        setTimeout(cycle, STEP_MS);
+        setTimeout(cycle, FLICKER_STEP_MS);
         return;
       }
       const now = new Date();
@@ -46,7 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     tick();
-    window.setInterval(tick, 30_000);
+    const CLOCK_TICK_MS = 30_000;
+    window.setInterval(tick, CLOCK_TICK_MS);
   }
 
   // =========================
@@ -125,7 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function seed() {
       if (s < seedLines.length) {
         appendLine(seedLines[s++]);
-        window.setTimeout(seed, 150 + Math.random() * 650); // 150-800ms
+        // seed lines: fast, like a system coming online
+        const SEED_MIN_MS = 140;
+        const SEED_MAX_MS = 420;
+        window.setTimeout(seed, SEED_MIN_MS + Math.random() * (SEED_MAX_MS - SEED_MIN_MS));
         return; 
       }
 
@@ -137,11 +156,18 @@ document.addEventListener('DOMContentLoaded', () => {
         lastLine = first;
         appendLine(first);
         startTicker();
-      }, 6_500 + Math.random() * 3_000); // 6.5-9.5s 
+      }, (() => {
+        // post-boot settle: feels like the device “catches” the world
+        const SETTLE_MIN_MS = 3_800;
+        const SETTLE_MAX_MS = 6_000;
+        return SETTLE_MIN_MS + Math.random() * (SETTLE_MAX_MS - SETTLE_MIN_MS);
+      })());
     }
 
-    // pre-boot dead air: 250 ms + random up to 1s 
-    window.setTimeout(seed, 40 + Math.random() * 200); // 100-950ms 
+    // pre-boot dead air: brief silence before the first boot line
+    const PREBOOT_MIN_MS = 120;
+    const PREBOOT_MAX_MS = 650;
+    window.setTimeout(seed, PREBOOT_MIN_MS + Math.random() * (PREBOOT_MAX_MS - PREBOOT_MIN_MS));
 
     // true dynamic timing (setTimeout loop)
     function startTicker() {
