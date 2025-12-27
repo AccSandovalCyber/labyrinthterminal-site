@@ -5,38 +5,37 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================
   // HEADER: boot flicker -> month/year
   // =========================
-const statusWord = document.querySelector('.status-word');
+  const statusWord = document.querySelector('.status-word');
 
-const flicker = [
-  '// sync ',
-  '// scan ',
-  '// align ',
-  '// jan ',
-  '// feb ',
-  '// mar ',
-  '// apr ',
-  '// may ',
-  '// jun ',
-  '// jul ',
-  '// aug ',
-  '// sep ',
-  '// oct ',
-  '// nov ',
-  '// dec ',
-];
+  const FLICKER = [
+    '// sync ',
+    '// scan ',
+    '// align ',
+    '// jan ',
+    '// feb ',
+    '// mar ',
+    '// apr ',
+    '// may ',
+    '// jun ',
+    '// jul ',
+    '// aug ',
+    '// sep ',
+    '// oct ',
+    '// nov ',
+    '// dec ',
+  ];
 
-const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+  const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+
   if (statusWord) {
     let i = 0;
-    const FLICKER_STEPS = prefersReduce ? 12 : flicker.length;
-
-    // Header flicker speed
+    const FLICKER_STEPS = prefersReduce ? 12 : FLICKER.length;
     const FLICKER_STEP_MS = prefersReduce ? 120 : 85;
 
     (function cycle() {
       if (i < FLICKER_STEPS) {
-        statusWord.textContent = flicker[i++] || flicker[flicker.length - 1];
-        setTimeout(cycle, FLICKER_STEP_MS);
+        statusWord.textContent = FLICKER[i++] || FLICKER[FLICKER.length - 1];
+        window.setTimeout(cycle, FLICKER_STEP_MS);
         return;
       }
       const now = new Date();
@@ -81,12 +80,12 @@ const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov
       'stand by ...',
     ];
 
-   const signalPool = [
-  'cells',
-  'cells interlinked',
-  'within cells interlinked',
-     'interlinked',
-];
+    const signalPool = [
+      'cells',
+      'cells interlinked',
+      'within cells interlinked',
+      'interlinked',
+    ];
 
     const idlePool = [
       'thoughts loop without friction',
@@ -104,21 +103,19 @@ const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov
       'let it snow, let it snow',
     ];
 
-    // idle detection
+    // ---- idle detection ----
     let lastInteraction = Date.now();
     const IDLE_MS = 25_000;
 
-    const markInteraction = () => {
-      lastInteraction = Date.now();
-    };
-
-    ['mousemove', 'keydown', 'scroll', 'touchstart', 'pointerdown'].forEach((evt) => {
+    const markInteraction = () => { lastInteraction = Date.now(); };
+    ['mousemove','keydown','scroll','touchstart','pointerdown'].forEach((evt) => {
       window.addEventListener(evt, markInteraction, { passive: true });
     });
 
     const isIdle = () => Date.now() - lastInteraction > IDLE_MS;
 
-    const maxLines = () => (window.innerWidth <= 600 ? 9 : 7); 
+    // ---- log writer ----
+    const maxLines = () => (window.innerWidth <= 600 ? 9 : 7);
     let lastLine = '';
 
     function appendLine(text) {
@@ -129,11 +126,35 @@ const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov
       // li.classList.add('glitch-line');
 
       logEl.appendChild(li);
-
       while (logEl.children.length > maxLines()) {
         logEl.removeChild(logEl.firstChild);
       }
     }
+
+    const pickFrom = (pool) => pool[Math.floor(Math.random() * pool.length)];
+
+    function pickNonRepeat(pool) {
+      let next = pickFrom(pool);
+      let guard = 0;
+      while (next === lastLine && guard < 6) {
+        next = pickFrom(pool);
+        guard++;
+      }
+      lastLine = next;
+      return next;
+    }
+
+    // ---- boot timing ----
+    const PREBOOT_MIN_MS = 120;
+    const PREBOOT_MAX_MS = 650;
+
+    const SEED_MIN_MS = 140;
+    const SEED_MAX_MS = 420;
+
+    const SETTLE_MIN_MS = 3_800;
+    const SETTLE_MAX_MS = 6_000;
+
+    const rand = (min, max) => min + Math.random() * (max - min);
 
     // seed fast (after a little dead air)
     let s = 0;
@@ -141,81 +162,49 @@ const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov
     function seed() {
       if (s < seedLines.length) {
         appendLine(seedLines[s++]);
-        // seed lines: fast, like a system coming online
-        const SEED_MIN_MS = 140;
-        const SEED_MAX_MS = 420;
-        window.setTimeout(seed, SEED_MIN_MS + Math.random() * (SEED_MAX_MS - SEED_MIN_MS));
-        return; 
+        window.setTimeout(seed, rand(SEED_MIN_MS, SEED_MAX_MS));
+        return;
       }
 
       // settle after boot
       window.setTimeout(() => {
-        const firstPool = (isIdle() ? idlePool : signalPool)
-          .concat(isDecember ? decemberPool : []);
-        const first = firstPool[Math.floor(Math.random() * firstPool.length)];
-        lastLine = first;
+        const pool = (isIdle() ? idlePool : signalPool).concat(isDecember ? decemberPool : []);
+        const first = pickNonRepeat(pool);
         appendLine(first);
         startTicker();
-      }, (() => {
-        // post-boot settle: feels like the device “catches” the world
-        const SETTLE_MIN_MS = 3_800;
-        const SETTLE_MAX_MS = 6_000;
-        return SETTLE_MIN_MS + Math.random() * (SETTLE_MAX_MS - SETTLE_MIN_MS);
-      })());
+      }, rand(SETTLE_MIN_MS, SETTLE_MAX_MS));
     }
 
-    // pre-boot dead air: brief silence before the first boot line
-    const PREBOOT_MIN_MS = 120;
-    const PREBOOT_MAX_MS = 650;
-    window.setTimeout(seed, PREBOOT_MIN_MS + Math.random() * (PREBOOT_MAX_MS - PREBOOT_MIN_MS));
+    window.setTimeout(seed, rand(PREBOOT_MIN_MS, PREBOOT_MAX_MS));
 
-    // true dynamic timing (setTimeout loop)
+    // ---- antenna ticker (slow + irregular) ----
     function startTicker() {
-      const rand = (min, max) => min + Math.random() * (max - min);
-
       const nextDelay = () => {
-        // Three “moods” of timing + a rare flicker.
-        // Flicker: quick double-tap like interference.
-        // Drift: normal listening.
-        // Hold: long silence, then a line.
-
+        // Mostly long gaps (3–4/min), rare interference flicker.
         const idle = isIdle();
 
-        // rare flicker (more likely when active)
-        const flickerChance = idle ? 0.06 : 0.12;
+        const flickerChance = idle ? 0.02 : 0.04;
         if (Math.random() < flickerChance) return rand(900, 1800);
 
-        // weighted: drift most of the time, hold sometimes
         const roll = Math.random();
 
-        if (roll < 0.70) {
+        if (roll < 0.55) {
           // drift
-          return idle ? rand(7_000, 13_000) : rand(4_000, 9_000);
+          return idle ? rand(16_000, 24_000) : rand(14_000, 22_000);
         }
 
-        if (roll < 0.92) {
-          // longer hold
-          return idle ? rand(14_000, 22_000) : rand(10_000, 18_000);
+        if (roll < 0.88) {
+          // hold
+          return idle ? rand(26_000, 40_000) : rand(22_000, 34_000);
         }
 
-        // very long hold (streetlight stays on)
-        return idle ? rand(22_000, 34_000) : rand(18_000, 28_000);
+        // dead air
+        return idle ? rand(40_000, 70_000) : rand(34_000, 60_000);
       };
 
       const tick = () => {
-        const pool = (isIdle() ? idlePool : signalPool)
-          .concat(isDecember ? decemberPool : []);
-
-        // avoid back-to-back duplicates
-        let next = pool[Math.floor(Math.random() * pool.length)];
-        let guard = 0;
-        while (next === lastLine && guard < 6) {
-          next = pool[Math.floor(Math.random() * pool.length)];
-          guard++;
-        }
-        lastLine = next;
-        appendLine(next);
-
+        const pool = (isIdle() ? idlePool : signalPool).concat(isDecember ? decemberPool : []);
+        appendLine(pickNonRepeat(pool));
         window.setTimeout(tick, nextDelay());
       };
 
@@ -240,7 +229,6 @@ const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov
   const monitorsGrid = document.getElementById('monitorsGrid');
   let monitorsBuilt = false;
 
-  // Add files as you drop them into: /assets/camera/
   const MONITORS = [
     { src: 'assets/camera/001.jpg' },
     { src: 'assets/camera/002.jpg' },
@@ -272,7 +260,7 @@ const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov
       img.loading = 'lazy';
       img.decoding = 'async';
       img.alt = '';
-      img.src = item.src; // load immediately when the panel opens
+      img.src = item.src;
 
       img.addEventListener('error', () => li.remove());
 
@@ -294,9 +282,10 @@ const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov
       if (!panel) return;
 
       panel.hidden = !selected;
+
       if (selected && panel.id === 'panel-inv') buildMonitorsGrid();
 
-      // legacy lazy hydration if any remain
+      // legacy hydration if any remain
       if (selected) {
         panel.querySelectorAll('img[data-src]').forEach((img) => {
           img.src = img.getAttribute('data-src');
