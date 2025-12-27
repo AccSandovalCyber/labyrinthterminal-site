@@ -59,39 +59,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const seedLines = [
       '********** CORE ONLINE **********',
-      'power routed',
-      'cognitive matrix loading',
-      'memory sectors aligned',
-      'standby state entered',
+      'sleep cycle aborted',
+      'memory sectors responding',
+      'environment loading',
+      'stand by ...',
     ];
 
-    const signalPool = [
-      'signal received',
-      'within cells interlinked',
-      'carrier found',
-      'channel open',
-      'interference fading',
-      'voiceprint: unknown',
-      'transmission holds',
-    ];
+   const signalPool = [
+  'cells',
+  'cells interlinked',
+  'within cells interlinked',
+     'interlinked',
+];
 
     const idlePool = [
-      'it remains quiet',
-      'screen glow only',
-      'the air feels archived',
+      'thoughts loop without friction',
+      'memory travels faster when the world slows down',
       'i see that place in my restless dreams',
-      'it slips away so easily — only noticed once it’s out of reach',
-      'even utopia rots when left alone',
+      'the room forgets your weight',
+      'time stretches thin here',
     ];
 
     const decemberPool = [
-      'streets quieter than usual',
-      'windows glowing in the distance',
-      'memories surface this time of year',
-      'warmth simulated',
-      'chestnuts in the static',
-      'a carol stuck in the walls',
-      'winter frequency: low',
+      'station ID: winter',
+      'cold light on empty pavement',
+      'breath fogs the glass',
+      'the year exhales quietly',
       'let it snow, let it snow',
     ];
 
@@ -109,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const isIdle = () => Date.now() - lastInteraction > IDLE_MS;
 
-    const maxLines = () => (window.innerWidth <= 600 ? 9 : 7);
+    const maxLines = () => (window.innerWidth <= 600 ? 9 : 7); 
     let lastLine = '';
 
     function appendLine(text) {
@@ -126,16 +119,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // seed fast
+    // seed fast (after a little dead air)
     let s = 0;
-    (function seed() {
+
+    function seed() {
       if (s < seedLines.length) {
         appendLine(seedLines[s++]);
-        window.setTimeout(seed, 120 + Math.random() * 160);
-        return;
+        window.setTimeout(seed, 150 + Math.random() * 650); // 150-800ms
+        return; 
       }
 
-      // brief pause after boot (feels like a system settling)
+      // settle after boot
       window.setTimeout(() => {
         const firstPool = (isIdle() ? idlePool : signalPool)
           .concat(isDecember ? decemberPool : []);
@@ -143,14 +137,43 @@ document.addEventListener('DOMContentLoaded', () => {
         lastLine = first;
         appendLine(first);
         startTicker();
-      }, 3000);
-    })();
+      }, 6_500 + Math.random() * 3_000); // 6.5-9.5s 
+    }
+
+    // pre-boot dead air: 250 ms + random up to 1s 
+    window.setTimeout(seed, 40 + Math.random() * 200); // 100-950ms 
 
     // true dynamic timing (setTimeout loop)
     function startTicker() {
+      const rand = (min, max) => min + Math.random() * (max - min);
+
       const nextDelay = () => {
-        if (isIdle()) return 10_000 + Math.random() * 6_000; // 10–16s
-        return 7_000 + Math.random() * 4_000;                // 7–11s
+        // Three “moods” of timing + a rare flicker.
+        // Flicker: quick double-tap like interference.
+        // Drift: normal listening.
+        // Hold: long silence, then a line.
+
+        const idle = isIdle();
+
+        // rare flicker (more likely when active)
+        const flickerChance = idle ? 0.06 : 0.12;
+        if (Math.random() < flickerChance) return rand(900, 1800);
+
+        // weighted: drift most of the time, hold sometimes
+        const roll = Math.random();
+
+        if (roll < 0.70) {
+          // drift
+          return idle ? rand(7_000, 13_000) : rand(4_000, 9_000);
+        }
+
+        if (roll < 0.92) {
+          // longer hold
+          return idle ? rand(14_000, 22_000) : rand(10_000, 18_000);
+        }
+
+        // very long hold (streetlight stays on)
+        return idle ? rand(22_000, 34_000) : rand(18_000, 28_000);
       };
 
       const tick = () => {
