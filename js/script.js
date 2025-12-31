@@ -238,6 +238,18 @@ document.addEventListener('DOMContentLoaded', () => {
     { src: 'assets/camera/006.jpg' },
     { src: 'assets/camera/007.jpg' },
     { src: 'assets/camera/008.jpg' },
+    { src: 'assets/camera/009.jpg' },
+    { src: 'assets/camera/010.jpg' },
+    { src: 'assets/camera/011.jpg' },
+    { src: 'assets/camera/012.jpg' },
+    { src: 'assets/camera/013.jpg' },
+    { src: 'assets/camera/014.jpg' },
+    { src: 'assets/camera/015.jpg' },
+    { src: 'assets/camera/016.jpg' },
+    { src: 'assets/camera/017.jpg' },
+    { src: 'assets/camera/018.jpg' },
+    { src: 'assets/camera/019.jpg' },
+    { src: 'assets/camera/020.jpg' },
   ];
 
   function buildMonitorsGrid() {
