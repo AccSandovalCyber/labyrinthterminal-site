@@ -3,61 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
     <title>Labyrinth Terminal</title>
 
-    <!-- Fonts + CSS -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Grotesk:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/styles.css" />
 
-    <!-- Favicon (optional) -->
     <link rel="icon" type="image/png" href="assets/favicon.png" />
   </head>
+
   <body>
     <!-- Header / status -->
     <header class="site-header">
       <span class="status" aria-live="polite" aria-atomic="true">
         <span class="status-word"></span>
       </span>
-      <div role="tablist" class="nav" aria-label="Pip navigation">
-        <button id="tab-stat" role="tab" aria-controls="panel-stat" aria-selected="true">terminal</button>
-        <button id="tab-inv" role="tab" aria-controls="panel-inv" aria-selected="false">camera</button>
-        <button id="tab-data" role="tab" aria-controls="panel-data" aria-selected="false">memory</button>
-        <button id="tab-map" role="tab" aria-controls="panel-map" aria-selected="false">grid</button>
+
+      <div class="header-right">
+        <div role="tablist" class="nav" aria-label="terminal navigation">
+          <button id="tab-stat" role="tab" aria-controls="panel-stat" aria-selected="true">terminal</button>
+          <button id="tab-inv" role="tab" aria-controls="panel-inv" aria-selected="false">spectator</button>
+          <button id="tab-data" role="tab" aria-controls="panel-data" aria-selected="false">memory</button>
+          <button id="tab-map" role="tab" aria-controls="panel-map" aria-selected="false">grid</button>
+        </div>
       </div>
     </header>
 
     <main class="deck">
-      <!-- STAT: Title + CTA + Clock + Ambient Scope -->
+      <!-- TERMINAL: Title + Preview + Boot Log -->
       <section id="panel-stat" role="tabpanel">
-        <section class="panel panel--title panel--title--floating">
-       <h1>environment monitor</h1>
+        <section class="panel panel--title">
+          <div class="hud-clock" aria-live="polite">
+            <span class="hud-clock-time" id="clock">00:00</span>
+            <span class="hud-clock-sub">los angeles, ca</span>
+          </div>
+          <h1>environment monitor</h1>
           <p class="subtitle">// intervention not required</p>
-          <!-- <p class="subtitle">// within cells interlinked</p> -->
-          <a href="https://www.youtube.com/@labyrinthterminal" class="transmit-button"> enter </a>
+          <a href="https://www.youtube.com/@labyrinthterminal" class="transmit-button">enter</a>
         </section>
 
-        <!-- Cam preview beside clock (same size) -->
+        <!-- Cam preview (left) -->
         <section class="panel panel--cam panel--cam--preview panel--link">
           <a href="#tab-inv">
-            <img src="assets/camera/004.jpg" loading="lazy" decoding="async" width="800" height="600" alt="cam01 still">
-            <span class="cam-label">camera</span>
+            <img src="assets/camera/004.jpg" loading="lazy" decoding="async" width="800" height="600" alt="camera still" />
+            <span class="cam-label">spectator</span>
           </a>
         </section>
 
-        <!-- STAT: clock -->
-        <section class="panel panel--clock" aria-live="polite">
-          <div class="clock-time" id="clock">00:00</div>
-          <div class="clock-sub">los angeles, ca</div>
-        </section>
-
-        <!-- STAT boot log under row -->
+        <!-- Boot log (right) -->
         <section class="panel panel--log">
           <ul id="bootlog" class="log"></ul>
         </section>
       </section>
 
-      <!-- CAMERA: image-only feed (no captions) -->
+      <!-- CAMERA: image-only feed -->
       <section id="panel-inv" role="tabpanel" hidden>
         <section class="panel panel--monitors">
           <ul id="monitorsGrid" class="monitors-grid" aria-label="camera feed"></ul>
@@ -72,7 +70,7 @@
         </section>
       </section>
 
-      <!-- MAP (now GRID): Placeholder -->
+      <!-- GRID -->
       <section id="panel-map" role="tabpanel" hidden>
         <section class="panel panel--title">
           <h2>grid</h2>
@@ -81,9 +79,16 @@
       </section>
     </main>
 
-    <footer>
-      <p>© Labyrinth Terminal</p>
+        <footer>
+      <p>	// end transmission </p>
     </footer>
+
+    <!-- Image Viewer (global overlay) -->
+    <div id="imageViewer" class="image-viewer" hidden>
+      <div class="image-viewer-backdrop"></div>
+      <button class="image-viewer-close" aria-label="Close">×</button>
+      <img class="image-viewer-img" alt="" />
+    </div>
 
     <script src="js/script.js" defer></script>
   </body>

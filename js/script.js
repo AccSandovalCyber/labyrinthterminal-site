@@ -60,8 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     tick();
-    const CLOCK_TICK_MS = 30_000;
-    window.setInterval(tick, CLOCK_TICK_MS);
+    window.setInterval(tick, 30_000);
   }
 
   // =========================
@@ -72,8 +71,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const now = new Date();
     const isDecember = now.getMonth() === 11;
 
+    // These stay at the top, always.
+    const pinnedLines = [
+      '********** LABYRINTH TERMINAL **********',
+    ];
+
+    // These appear once during boot, then we start cycling.
     const seedLines = [
-      '********** CORE ONLINE **********',
       'sleep cycle aborted',
       'memory sectors responding',
       'environment loading',
@@ -115,19 +119,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const isIdle = () => Date.now() - lastInteraction > IDLE_MS;
 
     // ---- log writer ----
-    const maxLines = () => (window.innerWidth <= 600 ? 9 : 7);
+    // number of *cycling* lines to keep (pinned lines don’t count)
+    const maxDynamicLines = () => (window.innerWidth <= 600 ? 6 : 6);
     let lastLine = '';
 
     function appendLine(text) {
       const li = document.createElement('li');
       li.textContent = text;
-
-      // glitch disabled (keep the world calm)
-      // li.classList.add('glitch-line');
-
       logEl.appendChild(li);
-      while (logEl.children.length > maxLines()) {
-        logEl.removeChild(logEl.firstChild);
+
+      const pinnedCount = logEl.querySelectorAll('.log-pin').length;
+      const maxTotal = pinnedCount + maxDynamicLines();
+
+      while (logEl.children.length > maxTotal) {
+        // remove the oldest *non-pinned* line (directly after pinned block)
+        const candidate = logEl.children[pinnedCount];
+        if (!candidate) break;
+        logEl.removeChild(candidate);
       }
     }
 
@@ -145,42 +153,73 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ---- boot timing ----
-    const PREBOOT_MIN_MS = 120;
-    const PREBOOT_MAX_MS = 650;
-
-    const SEED_MIN_MS = 140;
-    const SEED_MAX_MS = 420;
-
-    const SETTLE_MIN_MS = 3_800;
-    const SETTLE_MAX_MS = 6_000;
-
     const rand = (min, max) => min + Math.random() * (max - min);
 
-    // seed fast (after a little dead air)
-    let s = 0;
+    let p = 0; // pinned line index
+    let s = 0; // seed line index
 
     function seed() {
-      if (s < seedLines.length) {
-        appendLine(seedLines[s++]);
-        window.setTimeout(seed, rand(SEED_MIN_MS, SEED_MAX_MS));
+      // 1) Pinned line(s): land with intent
+      if (p < pinnedLines.length) {
+        const li = document.createElement('li');
+        li.textContent = pinnedLines[p];
+        li.className = 'log-pin';
+        logEl.appendChild(li);
+
+        // banner: quick wake, not a typewriter
+        const delay = rand(260, 520);
+        p++;
+        window.setTimeout(seed, delay);
         return;
       }
 
-      // settle after boot
+      // 2) After banner, a short “system breath”
+      if (s === 0) {
+        window.setTimeout(() => seed(), rand(900, 1300));
+        s = -1; // sentinel so we only do this pause once
+        return;
+      }
+
+      // restore seed index after the one-time pause
+      if (s === -1) s = 0;
+
+      // 3) Boot sequence lines: rhythmic, slightly staggered
+      if (s < seedLines.length) {
+        const line = seedLines[s];
+        appendLine(line);
+        s++;
+
+        // base rhythm (slightly slower / heavier)
+        let delay = rand(320, 720);
+
+        // after the first two lines, add a cold-start pause
+        // (sleep cycle aborted -> memory sectors responding) ... breathe
+        if (s === 2) delay = rand(1300, 1750);
+
+        // after "environment loading" the system catches its footing faster
+        if (/environment loading/i.test(line)) delay = rand(420, 720);
+
+        // "stand by ..." should land with weight, but not drag
+        if (/stand by/i.test(line)) delay = rand(520, 860);
+
+        window.setTimeout(seed, delay);
+        return;
+      }
+
+      // 4) settle after boot (first live line shouldn't feel immediate)
       window.setTimeout(() => {
         const pool = (isIdle() ? idlePool : signalPool).concat(isDecember ? decemberPool : []);
-        const first = pickNonRepeat(pool);
-        appendLine(first);
+        appendLine(pickNonRepeat(pool));
         startTicker();
-      }, rand(SETTLE_MIN_MS, SETTLE_MAX_MS));
+      }, rand(2400, 3600));
     }
 
-    window.setTimeout(seed, rand(PREBOOT_MIN_MS, PREBOOT_MAX_MS));
+    // start almost immediately, like a system waking up
+    window.setTimeout(seed, rand(90, 220));
 
     // ---- antenna ticker (slow + irregular) ----
     function startTicker() {
       const nextDelay = () => {
-        // Mostly long gaps (3–4/min), rare interference flicker.
         const idle = isIdle();
 
         const flickerChance = idle ? 0.02 : 0.04;
@@ -188,17 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const roll = Math.random();
 
-        if (roll < 0.55) {
-          // drift
-          return idle ? rand(16_000, 24_000) : rand(14_000, 22_000);
-        }
-
-        if (roll < 0.88) {
-          // hold
-          return idle ? rand(26_000, 40_000) : rand(22_000, 34_000);
-        }
-
-        // dead air
+        if (roll < 0.55) return idle ? rand(16_000, 24_000) : rand(14_000, 22_000);
+        if (roll < 0.88) return idle ? rand(26_000, 40_000) : rand(22_000, 34_000);
         return idle ? rand(40_000, 70_000) : rand(34_000, 60_000);
       };
 
@@ -264,9 +294,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const a = document.createElement('a');
       a.href = item.src;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.setAttribute('aria-label', 'open image');
+      // IMPORTANT: no new tab (viewer handles it)
+      a.setAttribute('aria-label', 'view image');
 
       const img = document.createElement('img');
       img.loading = 'lazy';
@@ -282,6 +311,87 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     monitorsGrid.appendChild(frag);
+  }
+
+  // =========================
+  // SPECTATOR: ARCHIVE VIEWER
+  // =========================
+  const viewer = document.getElementById('imageViewer');
+  const viewerImg = viewer ? viewer.querySelector('.image-viewer-img') : null;
+  let lastActiveEl = null;
+
+  function openViewer(src, altText = '') {
+    if (!viewer || !viewerImg) return;
+
+    lastActiveEl = document.activeElement;
+
+    // set alt immediately (helps screen readers), then load
+    viewerImg.alt = altText;
+    viewerImg.src = src;
+
+    viewer.hidden = false;
+    viewer.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('is-viewer-open');
+
+    const closeBtn = viewer.querySelector('.image-viewer-close');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeViewer() {
+    if (!viewer || !viewerImg) return;
+
+    viewer.hidden = true;
+    viewer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('is-viewer-open');
+
+    // stop keeping the last image alive
+    viewerImg.removeAttribute('src');
+
+    if (lastActiveEl && typeof lastActiveEl.focus === 'function') {
+      lastActiveEl.focus();
+    }
+  }
+
+  // Close when clicking backdrop or X
+  if (viewer) {
+    const backdrop = viewer.querySelector('.image-viewer-backdrop');
+    const closeBtn = viewer.querySelector('.image-viewer-close');
+
+    if (backdrop && !backdrop.dataset.bound) {
+      backdrop.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeViewer();
+      });
+      backdrop.dataset.bound = 'true';
+    }
+
+    if (closeBtn && !closeBtn.dataset.bound) {
+      closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeViewer();
+      });
+      closeBtn.dataset.bound = 'true';
+    }
+  }
+
+  // ESC closes viewer
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && viewer && !viewer.hidden) closeViewer();
+  });
+
+  // Intercept clicks in the spectator grid
+  if (monitorsGrid) {
+    monitorsGrid.addEventListener('click', (e) => {
+      const link = e.target && e.target.closest ? e.target.closest('a') : null;
+      if (!link || !monitorsGrid.contains(link)) return;
+
+      const img = link.querySelector('img');
+      const src = (img && img.getAttribute('src')) || link.getAttribute('href');
+      if (!src) return;
+
+      e.preventDefault();
+      openViewer(src, (img && img.getAttribute('alt')) || '');
+    });
   }
 
   function activate(id, setHash = true) {
