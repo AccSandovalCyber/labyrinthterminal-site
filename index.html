@@ -22,7 +22,7 @@
         <div role="tablist" class="nav" aria-label="terminal navigation">
           <button id="tab-stat" role="tab" aria-controls="panel-stat" aria-selected="true">terminal</button>
           <button id="tab-inv" role="tab" aria-controls="panel-inv" aria-selected="false">spectator</button>
-          <button id="tab-data" role="tab" aria-controls="panel-data" aria-selected="false">memory</button>
+          <button id="tab-baseline" role="tab" aria-controls="panel-baseline" aria-selected="false">baseline</button>
           <button id="tab-map" role="tab" aria-controls="panel-map" aria-selected="false">grid</button>
         </div>
       </div>
@@ -38,7 +38,7 @@
           </div>
           <h1>environment monitor</h1>
           <p class="subtitle">// intervention not required</p>
-          <a href="https://www.youtube.com/@labyrinthterminal" class="transmit-button">enter</a>
+          <a href="https://www.youtube.com/@labyrinthterminal" class="transmit-button">observe</a>
         </section>
 
         <!-- Cam preview (left) -->
@@ -62,11 +62,26 @@
         </section>
       </section>
 
-      <!-- MEMORY -->
-      <section id="panel-data" role="tabpanel" hidden>
-        <section class="panel panel--title">
-          <h2>memory</h2>
-          <p class="subtitle">// awaiting data</p>
+      <!-- BASELINE (restricted access) -->
+      <section id="panel-baseline" role="tabpanel" hidden>
+        <section class="panel panel--title panel--baseline">
+          <h2> </h2>
+
+          <div class="baseline-gate" aria-hidden="true">
+            <input
+              type="password"
+              class="baseline-input"
+              placeholder=""
+              aria-label="baseline verification"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+            />
+            <button class="baseline-enter" tabindex="-1">verify</button>
+          </div>
+
+          <p class="baseline-status" hidden> // access denied </p>
         </section>
       </section>
 
@@ -80,7 +95,7 @@
     </main>
 
         <footer>
-      <p>	// end transmission </p>
+      <p>LT-Ø</p>
     </footer>
 
     <!-- Image Viewer (global overlay) -->

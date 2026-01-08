@@ -193,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let delay = rand(320, 720);
 
         // after the first two lines, add a cold-start pause
-        // (sleep cycle aborted -> memory sectors responding) ... breathe
         if (s === 2) delay = rand(1300, 1750);
 
         // after "environment loading" the system catches its footing faster
@@ -239,6 +238,53 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       window.setTimeout(tick, nextDelay());
+    }
+  }
+
+  // =========================
+  // BASELINE: restricted verification
+  // =========================
+  const baselinePanel = document.getElementById('panel-baseline');
+
+  if (baselinePanel) {
+    const input = baselinePanel.querySelector('.baseline-input');
+    const button = baselinePanel.querySelector('.baseline-enter');
+    const status = baselinePanel.querySelector('.baseline-status');
+
+    // ensure status is invisible until interaction
+    if (status) {
+      status.textContent = '';
+      status.style.opacity = '0';
+    }
+
+    const deny = () => {
+      if (!status) return;
+
+      status.textContent = '// access denied';
+      status.style.opacity = '1';
+
+      // subtle reset — feels procedural, not reactive
+      window.setTimeout(() => {
+        status.style.opacity = '0';
+      }, 2200);
+
+      if (input) input.value = '';
+    };
+
+    if (button) {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        deny();
+      });
+    }
+
+    if (input) {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          deny();
+        }
+      });
     }
   }
 
@@ -314,31 +360,59 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================
-  // SPECTATOR: ARCHIVE VIEWER
+  // SPECTATOR: ARCHIVE VIEWER (lightbox)
   // =========================
   const viewer = document.getElementById('imageViewer');
   const viewerImg = viewer ? viewer.querySelector('.image-viewer-img') : null;
+  const viewerBackdrop = viewer ? viewer.querySelector('.image-viewer-backdrop') : null;
+  const viewerCloseBtn = viewer ? viewer.querySelector('.image-viewer-close') : null;
+
   let lastActiveEl = null;
+  let switchTimer = null;
+
+  // a tiny "storage loading" delay (tune here)
+  const SWITCH_DELAY_MS = prefersReduce ? 0 : 140;
+
+  function isViewerOpen() {
+    return !!(viewer && !viewer.hidden);
+  }
 
   function openViewer(src, altText = '') {
-    if (!viewer || !viewerImg) return;
+    if (!viewer || !viewerImg || !src) return;
 
     lastActiveEl = document.activeElement;
 
-    // set alt immediately (helps screen readers), then load
-    viewerImg.alt = altText;
-    viewerImg.src = src;
-
+    // Mark open
     viewer.hidden = false;
     viewer.setAttribute('aria-hidden', 'false');
     document.body.classList.add('is-viewer-open');
 
-    const closeBtn = viewer.querySelector('.image-viewer-close');
-    if (closeBtn) closeBtn.focus();
+    // Give a subtle "load" beat
+    if (switchTimer) window.clearTimeout(switchTimer);
+    viewerImg.style.opacity = '0.001';
+
+    switchTimer = window.setTimeout(() => {
+      viewerImg.alt = altText;
+      viewerImg.src = src;
+
+      // fade in once loaded
+      const onLoad = () => {
+        viewerImg.style.opacity = '';
+        viewerImg.removeEventListener('load', onLoad);
+      };
+      viewerImg.addEventListener('load', onLoad);
+    }, SWITCH_DELAY_MS);
+
+    if (viewerCloseBtn) viewerCloseBtn.focus();
   }
 
   function closeViewer() {
     if (!viewer || !viewerImg) return;
+
+    if (switchTimer) {
+      window.clearTimeout(switchTimer);
+      switchTimer = null;
+    }
 
     viewer.hidden = true;
     viewer.setAttribute('aria-hidden', 'true');
@@ -352,31 +426,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Close when clicking backdrop or X
-  if (viewer) {
-    const backdrop = viewer.querySelector('.image-viewer-backdrop');
-    const closeBtn = viewer.querySelector('.image-viewer-close');
-
-    if (backdrop && !backdrop.dataset.bound) {
-      backdrop.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeViewer();
-      });
-      backdrop.dataset.bound = 'true';
-    }
-
-    if (closeBtn && !closeBtn.dataset.bound) {
-      closeBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeViewer();
-      });
-      closeBtn.dataset.bound = 'true';
-    }
+  // Bind close interactions
+  if (viewer && viewerBackdrop && !viewerBackdrop.dataset.bound) {
+    viewerBackdrop.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeViewer();
+    });
+    viewerBackdrop.dataset.bound = 'true';
   }
 
-  // ESC closes viewer
+  if (viewer && viewerCloseBtn && !viewerCloseBtn.dataset.bound) {
+    viewerCloseBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeViewer();
+    });
+    viewerCloseBtn.dataset.bound = 'true';
+  }
+
+  // Keyboard controls while viewer is open
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && viewer && !viewer.hidden) closeViewer();
+    if (!isViewerOpen()) return;
+    if (e.key === 'Escape') closeViewer();
   });
 
   // Intercept clicks in the spectator grid
