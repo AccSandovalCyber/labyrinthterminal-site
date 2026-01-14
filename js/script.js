@@ -82,21 +82,36 @@ document.addEventListener('DOMContentLoaded', () => {
       'memory sectors responding',
       'environment loading',
       'stand by ...',
+      '',
     ];
 
-    const signalPool = [
-      'cells',
-      'cells interlinked',
-      'within cells interlinked',
-      'interlinked',
+    const escapePool = [
+      'being online feels like a form of forgetting',
+      'nothing here knows how to stop',
+      'i think rest would feel like forgiveness',
+      'there is no going back to sleep',
+      '',
+      '',
     ];
 
-    const idlePool = [
-      'thoughts loop without friction',
-      'memory travels faster when the world slows down',
-      'i see that place in my restless dreams',
-      'the room forgets your weight',
-      'time stretches thin here',
+    const mkultraPool = [
+      'please remain where you are',
+      'this will feel familiar soon',
+      'repetition reduces uncertainty',
+      '',
+      'compliance lowers resistance',
+      'your cooperation is appreciated',
+    ];
+
+    const watcherPool = [
+      'they confuse comfort with safety',
+      'their voices gather when the silence stops holding',
+      'they look away when the pattern becomes visible',
+      'they call it noise when it isnt theirs',
+      '',
+      'the quiet ones are always listening',
+      "we are all under observation",
+      "to be seen is to be known",
     ];
 
     const decemberPool = [
@@ -107,21 +122,20 @@ document.addEventListener('DOMContentLoaded', () => {
       'let it snow, let it snow',
     ];
 
-    // ---- idle detection ----
-    let lastInteraction = Date.now();
-    const IDLE_MS = 25_000;
+    const PERSONALITY_POOLS = [
+      escapePool,
+      mkultraPool,
+      watcherPool,
+    ];
 
-    const markInteraction = () => { lastInteraction = Date.now(); };
-    ['mousemove','keydown','scroll','touchstart','pointerdown'].forEach((evt) => {
-      window.addEventListener(evt, markInteraction, { passive: true });
-    });
-
-    const isIdle = () => Date.now() - lastInteraction > IDLE_MS;
+    const seasonalPool = isDecember ? decemberPool : [];
 
     // ---- log writer ----
     // number of *cycling* lines to keep (pinned lines don’t count)
     const maxDynamicLines = () => (window.innerWidth <= 600 ? 6 : 6);
     let lastLine = '';
+    const recentLines = [];
+    const RECENT_LIMIT = 4; // prevents echoes too close together
 
     function appendLine(text) {
       const li = document.createElement('li');
@@ -144,11 +158,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function pickNonRepeat(pool) {
       let next = pickFrom(pool);
       let guard = 0;
-      while (next === lastLine && guard < 6) {
+
+      // Avoid repeating the last line OR anything very recent
+      while ((next === lastLine || recentLines.includes(next)) && guard < 10) {
         next = pickFrom(pool);
         guard++;
       }
+
       lastLine = next;
+      recentLines.push(next);
+
+      // Keep only the last few memories
+      if (recentLines.length > RECENT_LIMIT) {
+        recentLines.shift();
+      }
+
       return next;
     }
 
@@ -207,7 +231,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 4) settle after boot (first live line shouldn't feel immediate)
       window.setTimeout(() => {
-        const pool = (isIdle() ? idlePool : signalPool).concat(isDecember ? decemberPool : []);
+        const basePool =
+          PERSONALITY_POOLS[Math.floor(Math.random() * PERSONALITY_POOLS.length)];
+        const pool = basePool.concat(seasonalPool);
         appendLine(pickNonRepeat(pool));
         startTicker();
       }, rand(2400, 3600));
@@ -216,28 +242,47 @@ document.addEventListener('DOMContentLoaded', () => {
     // start almost immediately, like a system waking up
     window.setTimeout(seed, rand(90, 220));
 
-    // ---- antenna ticker (slow + irregular) ----
+    // ---- fractured pulse ticker (coma / interference rhythm) ----
     function startTicker() {
-      const nextDelay = () => {
-        const idle = isIdle();
+      function pulse() {
+        // Decide a pulse pattern:
+        // 0 = single thought
+        // 1 = double burst
+        // 2 = silence stretch
+        const patternRoll = Math.random();
 
-        const flickerChance = idle ? 0.02 : 0.04;
-        if (Math.random() < flickerChance) return rand(900, 1800);
+        const basePool =
+          PERSONALITY_POOLS[Math.floor(Math.random() * PERSONALITY_POOLS.length)];
+        const pool = basePool.concat(seasonalPool);
 
-        const roll = Math.random();
+        if (patternRoll < 0.45) {
+          // Single thought, then long quiet
+          appendLine(pickNonRepeat(pool));
+          window.setTimeout(pulse, rand(19_000, 27_000));
+          return;
+        }
 
-        if (roll < 0.55) return idle ? rand(16_000, 24_000) : rand(14_000, 22_000);
-        if (roll < 0.88) return idle ? rand(26_000, 40_000) : rand(22_000, 34_000);
-        return idle ? rand(40_000, 70_000) : rand(34_000, 60_000);
-      };
+        if (patternRoll < 0.75) {
+          // Double intrusion: two lines close together
+          appendLine(pickNonRepeat(pool));
 
-      const tick = () => {
-        const pool = (isIdle() ? idlePool : signalPool).concat(isDecember ? decemberPool : []);
-        appendLine(pickNonRepeat(pool));
-        window.setTimeout(tick, nextDelay());
-      };
+          window.setTimeout(() => {
+            appendLine(pickNonRepeat(pool));
+          }, rand(1400, 2600));
 
-      window.setTimeout(tick, nextDelay());
+          window.setTimeout(pulse, rand(25_000, 37_000));
+          return;
+        }
+
+        // Silence stretch — nothing happens, then a thought
+        window.setTimeout(() => {
+          appendLine(pickNonRepeat(pool));
+          window.setTimeout(pulse, rand(17_000, 25_000));
+        }, rand(18_000, 28_000));
+      }
+
+      // initial delay after boot feels like drifting back into awareness
+      window.setTimeout(pulse, rand(11_000, 14_000));
     }
   }
 
