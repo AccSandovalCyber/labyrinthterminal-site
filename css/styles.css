@@ -252,11 +252,35 @@ footer {
 }
 
 .panel--title .subtitle {
-  color: rgba(233,238,245,0.45);
+  color: rgba(233,238,245,0.30);
   font-size: 0.72rem;
   margin-bottom: 0.55rem;
   letter-spacing: 0.14em;
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* ===== Micro desync: subsystems waking ===== */
+.panel--title h1,
+.panel--title .subtitle,
+.hud-clock {
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.hud-clock {
+  animation: appear 0.01s linear 0.2s forwards;
+}
+
+.panel--title h1 {
+  animation: appear 0.01s linear 0.7s forwards;
+}
+
+.panel--title .subtitle {
+  animation: appear 0.01s linear 1.2s forwards;
+}
+
+@keyframes appear {
+  to { opacity: 1; }
 }
 
 /* ===== Section screens (Terminal / Grid) ===== */

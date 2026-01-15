@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>sentinel</title>
+  <!-- reuse existing site styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+      <link rel="icon" type="image/png" href="assets/circle.png" />
+
+
+  <style>
+    /* entry-only overrides */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at center, #0f1515 0%, #070a0a 70%);
+      color: rgba(220, 230, 230, 0.85);
+      font-family: inherit;
+      letter-spacing: 0.08em;
+    }
+
+    .entry {
+      text-align: left;
+      max-width: 420px;
+      padding: 24px;
+    }
+
+    .entry .title {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      font-size: 0.7rem;
+      opacity: 0.35;
+      letter-spacing: 0.12em;
+      pointer-events: none;
+    }
+
+    .entry .status {
+      font-size: 1rem;
+      line-height: 1.6;
+      opacity: 0.85;
+    }
+
+    .entry .status span {
+      display: block;
+      margin-bottom: 28px;
+      animation: breathe 8s ease-in-out infinite, glitch 60s linear infinite;
+    }
+
+    .entry .status span:nth-child(2) {
+      margin-top: 12px;
+      opacity: 0.6;
+      animation-delay: 2.5s;
+    }
+
+    @keyframes breathe {
+      0% {
+        opacity: 0.25;
+        text-shadow: none;
+      }
+      50% {
+        opacity: 0.85;
+        text-shadow: 0 0 6px rgba(120, 160, 160, 0.25);
+      }
+      100% {
+        opacity: 0.25;
+        text-shadow: none;
+      }
+    }
+    @keyframes glitch {
+      0% { transform: none; text-shadow: none; }
+      98.5% { transform: none; text-shadow: none; }
+      99% { transform: translateX(-0.5px); text-shadow: -1px 0 rgba(120,160,160,0.25); }
+      99.2% { transform: translateX(0.5px); text-shadow: 1px 0 rgba(120,160,160,0.25); }
+      100% { transform: none; text-shadow: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="entry">
+    <div class="title corner">sentinel</div>
+
+    <div class="status">
+      <span>presence registered</span>
+      <span>nothing required</span>
+
+
+    </div>
+
+  </div>
+
+  <script>
+    // delayed transition into the main site
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 6000);
+  </script>
+</body>
+</html>

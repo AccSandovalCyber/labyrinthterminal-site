@@ -7,40 +7,45 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================
   const statusWord = document.querySelector('.status-word');
 
-  const FLICKER = [
-    '// sync ',
-    '// scan ',
-    '// align ',
-    '// jan ',
-    '// feb ',
-    '// mar ',
-    '// apr ',
-    '// may ',
-    '// jun ',
-    '// jul ',
-    '// aug ',
-    '// sep ',
-    '// oct ',
-    '// nov ',
-    '// dec ',
-  ];
-
   const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
 
   if (statusWord) {
-    let i = 0;
-    const FLICKER_STEPS = prefersReduce ? 12 : FLICKER.length;
-    const FLICKER_STEP_MS = prefersReduce ? 120 : 85;
+    const now = new Date();
+    const currentMonth = MONTHS[now.getMonth()];
+    const currentYear = now.getFullYear();
 
-    (function cycle() {
-      if (i < FLICKER_STEPS) {
-        statusWord.textContent = FLICKER[i++] || FLICKER[FLICKER.length - 1];
-        window.setTimeout(cycle, FLICKER_STEP_MS);
+    const dripSequence = [
+      '// host active',
+      '// pattern intact',
+    ];
+    let i = 0;
+    function drip() {
+      if (i < dripSequence.length) {
+        statusWord.textContent = dripSequence[i];
+        i++;
+        window.setTimeout(drip, 420 + Math.random() * 260);
         return;
       }
-      const now = new Date();
-      statusWord.textContent = `// ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
-    })();
+
+      // short hesitation before release
+      window.setTimeout(release, 600);
+    }
+
+    // Phase 2: rapid month cascade
+    let m = 0;
+    function release() {
+      if (m < MONTHS.length) {
+        statusWord.textContent = `// ${MONTHS[m]}`;
+        m++;
+        window.setTimeout(release, 60 + Math.random() * 40);
+        return;
+      }
+
+      // Phase 3: settle on present
+      statusWord.textContent = `// ${currentMonth} ${currentYear}`;
+    }
+
+    drip();
   }
 
   // =========================
@@ -71,19 +76,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const now = new Date();
     const isDecember = now.getMonth() === 11;
 
-    // These stay at the top, always.
+  // These stay at the top, always.
     const pinnedLines = [
-      '********** LABYRINTH TERMINAL **********',
+      'labyrinth terminal / central',
     ];
 
     // These appear once during boot, then we start cycling.
-    const seedLines = [
-      'sleep cycle aborted',
-      'memory sectors responding',
-      'environment loading',
-      'stand by ...',
-      '',
-    ];
+const seedLines = [
+  'signal not localized',
+  'origin withheld',
+  'contact pending',
+  'stand by ...',
+  '',
+];
 
     const escapePool = [
       'being online feels like a form of forgetting',
@@ -215,6 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // base rhythm (slightly slower / heavier)
         let delay = rand(320, 720);
+        // give "stand by" a longer hold
+        if (line === 'stand by') delay = rand(1800, 2600);
 
         // after the first two lines, add a cold-start pause
         if (s === 2) delay = rand(1300, 1750);
@@ -229,14 +236,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // 4) settle after boot (first live line shouldn't feel immediate)
+      // 4) settle after boot (linger before first voice appears)
       window.setTimeout(() => {
         const basePool =
           PERSONALITY_POOLS[Math.floor(Math.random() * PERSONALITY_POOLS.length)];
         const pool = basePool.concat(seasonalPool);
         appendLine(pickNonRepeat(pool));
         startTicker();
-      }, rand(2400, 3600));
+      }, rand(4200, 6200));
     }
 
     // start almost immediately, like a system waking up
@@ -244,6 +251,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---- fractured pulse ticker (coma / interference rhythm) ----
     function startTicker() {
+      // rare early interference — feels like multiple signals brushing past
+      if (Math.random() < 0.25) {
+        window.setTimeout(() => {
+          const basePool =
+            PERSONALITY_POOLS[Math.floor(Math.random() * PERSONALITY_POOLS.length)];
+          const pool = basePool.concat(seasonalPool);
+          appendLine(pickNonRepeat(pool));
+        }, rand(7_000, 11_000));
+      }
       function pulse() {
         // Decide a pulse pattern:
         // 0 = single thought
@@ -258,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (patternRoll < 0.45) {
           // Single thought, then long quiet
           appendLine(pickNonRepeat(pool));
-          window.setTimeout(pulse, rand(19_000, 27_000));
+          window.setTimeout(pulse, rand(26_000, 38_000));
           return;
         }
 
@@ -270,19 +286,19 @@ document.addEventListener('DOMContentLoaded', () => {
             appendLine(pickNonRepeat(pool));
           }, rand(1400, 2600));
 
-          window.setTimeout(pulse, rand(25_000, 37_000));
+          window.setTimeout(pulse, rand(34_000, 48_000));
           return;
         }
 
         // Silence stretch — nothing happens, then a thought
         window.setTimeout(() => {
           appendLine(pickNonRepeat(pool));
-          window.setTimeout(pulse, rand(17_000, 25_000));
+          window.setTimeout(pulse, rand(28_000, 42_000));
         }, rand(18_000, 28_000));
       }
 
-      // initial delay after boot feels like drifting back into awareness
-      window.setTimeout(pulse, rand(11_000, 14_000));
+      // initial delay — quiet but not dead, like interference stabilizing
+      window.setTimeout(pulse, rand(15_000, 20_000));
     }
   }
 
