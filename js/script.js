@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================
   const statusWord = document.querySelector('.status-word');
 
-  const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
   if (statusWord) {
     const now = new Date();
@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentYear = now.getFullYear();
 
     const dripSequence = [
-      '// host active',
-      '// pattern intact',
+      '',
+      '//',
     ];
     let i = 0;
     function drip() {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // short hesitation before release
-      window.setTimeout(release, 600);
+      window.setTimeout(release, 200);
     }
 
     // Phase 2: rapid month cascade

@@ -87,18 +87,18 @@
 
     <div class="status">
       <span>presence registered</span>
-      <span>nothing required</span>
+      <span>oversight active</span>
 
 
     </div>
 
   </div>
+<script>
+  const delay = Math.random() * (3500 - 2500) + 2500;
 
-  <script>
-    // delayed transition into the main site
-    setTimeout(() => {
-      window.location.href = "index.html";
-    }, 6000);
-  </script>
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, delay);
+</script>
 </body>
 </html>
