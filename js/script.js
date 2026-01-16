@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentYear = now.getFullYear();
 
     const dripSequence = [
-      '',
       '//',
     ];
     let i = 0;
