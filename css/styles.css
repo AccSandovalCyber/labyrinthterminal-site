@@ -482,10 +482,9 @@ footer {
   display: block;
   object-fit: cover;
   filter:
-    saturate(0.82)
-    contrast(0.90)
-    brightness(0.88)
-    blur(0.08px);
+    saturate(0.90)
+    contrast(0.98)
+    brightness(0.96);
 }
 
 /* Camera label: stamped system metadata style */
@@ -582,15 +581,9 @@ footer {
   display: block;
   transition: filter 0.25s ease;
   filter:
-    saturate(0.82)
-    contrast(0.90)
-    brightness(0.88)
-    blur(0.08px);
-}
-.panel--cam,
-.panel--cam--preview,
-.monitor-item {
-  filter: saturate(0.85) contrast(0.92);
+    saturate(0.90)
+    contrast(0.98)
+    brightness(0.96);
 }
 .panel--cam::after,
 .monitor-item::after {
