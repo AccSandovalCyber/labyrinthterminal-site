@@ -75,18 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const now = new Date();
     const isDecember = now.getMonth() === 11;
 
-  // These stay at the top, always.
-    const pinnedLines = [
-      'labyrinth terminal / central',
-    ];
 
     // These appear once during boot, then we start cycling.
-const seedLines = [
-  'signal not localized',
-  'origin withheld',
-  'contact pending',
-  'stand by ...',
-  '',
+    const seedLines = [
+    'presence detected',
+   'tracking unresolved',
 ];
 
     const escapePool = [
@@ -135,7 +128,7 @@ const seedLines = [
     const seasonalPool = isDecember ? decemberPool : [];
 
     // ---- log writer ----
-    // number of *cycling* lines to keep (pinned lines don’t count)
+    // number of *cycling* lines to keep
     const maxDynamicLines = () => (window.innerWidth <= 600 ? 6 : 6);
     let lastLine = '';
     const recentLines = [];
@@ -146,12 +139,10 @@ const seedLines = [
       li.textContent = text;
       logEl.appendChild(li);
 
-      const pinnedCount = logEl.querySelectorAll('.log-pin').length;
-      const maxTotal = pinnedCount + maxDynamicLines();
-
+      const maxTotal = maxDynamicLines();
       while (logEl.children.length > maxTotal) {
-        // remove the oldest *non-pinned* line (directly after pinned block)
-        const candidate = logEl.children[pinnedCount];
+        // remove the oldest line
+        const candidate = logEl.children[0];
         if (!candidate) break;
         logEl.removeChild(candidate);
       }
@@ -183,25 +174,20 @@ const seedLines = [
     // ---- boot timing ----
     const rand = (min, max) => min + Math.random() * (max - min);
 
-    let p = 0; // pinned line index
+    // --- blink + drop helper ---
+    function blinkAndClear() {
+      logEl.style.visibility = 'hidden';
+      // one-frame drop (not an animation)
+      requestAnimationFrame(() => {
+        logEl.innerHTML = '';
+        logEl.style.visibility = 'visible';
+      });
+    }
+
     let s = 0; // seed line index
 
     function seed() {
-      // 1) Pinned line(s): land with intent
-      if (p < pinnedLines.length) {
-        const li = document.createElement('li');
-        li.textContent = pinnedLines[p];
-        li.className = 'log-pin';
-        logEl.appendChild(li);
-
-        // banner: quick wake, not a typewriter
-        const delay = rand(260, 520);
-        p++;
-        window.setTimeout(seed, delay);
-        return;
-      }
-
-      // 2) After banner, a short “system breath”
+      // 1) After (removed) banner, a short “system breath”
       if (s === 0) {
         window.setTimeout(() => seed(), rand(900, 1300));
         s = -1; // sentinel so we only do this pause once
@@ -211,38 +197,32 @@ const seedLines = [
       // restore seed index after the one-time pause
       if (s === -1) s = 0;
 
-      // 3) Boot sequence lines: rhythmic, slightly staggered
+      // 2) Boot sequence lines: procedural, brief
       if (s < seedLines.length) {
         const line = seedLines[s];
         appendLine(line);
         s++;
 
-        // base rhythm (slightly slower / heavier)
-        let delay = rand(320, 720);
-        // give "stand by" a longer hold
-        if (line === 'stand by') delay = rand(1800, 2600);
-
-        // after the first two lines, add a cold-start pause
-        if (s === 2) delay = rand(1300, 1750);
-
-        // after "environment loading" the system catches its footing faster
-        if (/environment loading/i.test(line)) delay = rand(420, 720);
-
-        // "stand by ..." should land with weight, but not drag
-        if (/stand by/i.test(line)) delay = rand(520, 860);
+        let delay = rand(420, 760);
 
         window.setTimeout(seed, delay);
         return;
       }
 
-      // 4) settle after boot (linger before first voice appears)
+      // 3) seed residue decay → system stabilizes
       window.setTimeout(() => {
-        const basePool =
-          PERSONALITY_POOLS[Math.floor(Math.random() * PERSONALITY_POOLS.length)];
-        const pool = basePool.concat(seasonalPool);
-        appendLine(pickNonRepeat(pool));
-        startTicker();
-      }, rand(4200, 6200));
+        // allow seed to exist briefly, then forget it
+        blinkAndClear();
+
+        // hesitation before first external signal
+        window.setTimeout(() => {
+          const basePool =
+            PERSONALITY_POOLS[Math.floor(Math.random() * PERSONALITY_POOLS.length)];
+          const pool = basePool.concat(seasonalPool);
+          appendLine(pickNonRepeat(pool));
+          startTicker();
+        }, rand(2600, 4200));
+      }, rand(2200, 3400));
     }
 
     // start almost immediately, like a system waking up
