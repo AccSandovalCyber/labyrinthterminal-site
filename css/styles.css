@@ -396,13 +396,29 @@ footer {
 }
 
 /* visual centering polish for grid id */
-.grid-id {
-  text-align: right;
-  min-width: 3ch;
-  opacity: 0.75;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.12em;
+#panel-map .grid-row .grid-id {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: lowercase;
+
+  color: rgba(233, 238, 245, 0.38);
   opacity: 0.55;
+
+  text-align: right;
+  min-width: 4ch;
+  font-variant-numeric: tabular-nums;
+
+  transform: translateY(0.4px);
+}
+
+#panel-map .grid-row:nth-child(3n) .grid-id {
+  transform: translateY(0.8px);
+}
+
+#panel-map .grid-row:nth-child(5n) .grid-id {
+  letter-spacing: 0.26em;
+  opacity: 0.45;
 }
 
 .grid-coord,
@@ -1241,7 +1257,7 @@ body.is-viewer-open footer {
   }
 }
 
-.grid-row:hover {
-  opacity: 0.9;
-  background: rgba(120,255,214,0.025);
+#panel-map .grid-row:hover {
+  opacity: 0.78;
+  background: rgba(120,255,214,0.018);
 }

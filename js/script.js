@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   // =========================
   const gridRecords = [
     {
-      id: 'A-001',
+      id: 'a-001',
       coordinate: '00.0000, -000.0000',
       hint: 'data pending...',
       status: 'active', // active | claimed
-      code: 'VOID-001'
+      code: 'ROID-001'
     }
     // NEW DROPS GO HERE
     , {
@@ -19,13 +19,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       coordinate: '00.00000, -000.0000',
       hint: 'data pending...',
       status: 'active',
-      code: 'VOID-002'
+      code: 'ROID-002'
     }, {
-      id: 'B-003',
+      id: 'A-003',
       coordinate: '00.0000, -0.0000',
       hint: 'data pending...',
       status: 'active',
-      code: 'VOID-003'
+      code: 'ROID-003'
     },
 
   ];
