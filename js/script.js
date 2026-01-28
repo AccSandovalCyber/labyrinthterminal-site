@@ -14,12 +14,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       code: 'VOID-001'
     }
     // NEW DROPS GO HERE
-    , { id: 'A-002', 
+    , {
+      id: 'A-002',
       coordinate: '34.0525, -118.2440',
       hint: 'beneath the watchful eyes of silence',
       status: 'active',
       code: 'VOID-002'
     }
+
+   , {
+      id: 'A-003',
+      coordinate: '34.0528, -118.2443',
+      hint: 'where shadows gather without form',
+      status: 'active',
+      code: 'VOID-003'
+    },
   ];
 
   function renderGrid() {
