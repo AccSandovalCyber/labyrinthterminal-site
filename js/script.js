@@ -3,6 +3,47 @@ document.addEventListener('DOMContentLoaded', () => {
     window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // =========================
+  // GRID: in-memory registry (prototype)
+  // =========================
+  const gridRecords = [
+    {
+      id: 'A-001',
+      coordinate: '34.0522, -118.2437',
+      hint: 'the signal reflects where light should not',
+      status: 'active', // active | claimed
+      code: 'VOID-001'
+    }
+    // NEW DROPS GO HERE
+    , { id: 'A-002', 
+      coordinate: '34.0525, -118.2440',
+      hint: 'beneath the watchful eyes of silence',
+      status: 'active',
+      code: 'VOID-002'
+    }
+  ];
+
+  function renderGrid() {
+    const gridList = document.getElementById('gridList');
+    if (!gridList) return;
+
+    gridList.innerHTML = '';
+
+    gridRecords.forEach(record => {
+      const li = document.createElement('li');
+      li.className = 'grid-row';
+      if (record.status === 'claimed') li.classList.add('claimed');
+
+      li.innerHTML = `
+        <span class="grid-id">${record.id}</span>
+        <span class="grid-coord">${record.coordinate}</span>
+        <span class="grid-hint">${record.hint}</span>
+      `;
+
+      gridList.appendChild(li);
+    });
+  }
+
+  // =========================
   // HEADER: boot flicker -> month/year
   // =========================
   const statusWord = document.querySelector('.status-word');
@@ -312,9 +353,34 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (button) {
-      button.addEventListener('click', (e) => {
+      button.addEventListener('click', async (e) => {
         e.preventDefault();
-        deny();
+
+        const value = input ? input.value.trim() : '';
+        if (!value) return;
+
+        try {
+          const res = await fetch('/.netlify/functions/claim', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: value })
+          });
+
+          const data = await res.json();
+
+          if (data && data.ok && data.id) {
+            const record = gridRecords.find(r => r.id === data.id);
+            if (record) record.status = 'claimed';
+
+            renderGrid();
+            if (input) input.value = '';
+            if (status) status.style.opacity = '0';
+          } else {
+            deny();
+          }
+        } catch (err) {
+          deny();
+        }
       });
     }
 
@@ -322,11 +388,29 @@ document.addEventListener('DOMContentLoaded', () => {
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
-          deny();
+          button && button.click();
         }
       });
     }
   }
+
+// Helper: hydrate claims from backend
+async function hydrateClaimsFromBackend() {
+  try {
+    const res = await fetch('/.netlify/functions/claims');
+    const data = await res.json();
+
+    if (Array.isArray(data.claimed)) {
+      gridRecords.forEach(record => {
+        if (data.claimed.includes(record.id)) {
+          record.status = 'claimed';
+        }
+      });
+    }
+  } catch {
+    // silent failure — grid falls back to local state
+  }
+}
 
   // =========================
   // TAB NAVIGATION (PIP)
@@ -566,4 +650,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const target = tabs.find((t) => '#' + t.id === location.hash);
     if (target) activate(target.id, false);
   });
+
+  // Initialize the grid after functions are defined
+  hydrateClaimsFromBackend().finally(renderGrid);
 });

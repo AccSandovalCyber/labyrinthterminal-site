@@ -290,6 +290,53 @@ footer {
 }
 
 /* ===== Section screens (Terminal / Grid) ===== */
+
+/* ===== GRID: registry viewport ===== */
+
+/* allow the grid panel to contain flowing data */
+#panel-map .panel {
+  display: flex;
+  flex-direction: column;
+}
+
+/* grid list becomes a quiet vertical registry */
+.grid-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 14px 16px 18px;
+  margin: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* individual registry rows */
+.grid-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.75rem;
+  row-gap: 0.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  opacity: 0.72;
+}
+
+.grid-id {
+  opacity: 0.85;
+}
+
+.grid-coord,
+.grid-hint {
+  grid-column: 1 / -1;
+  opacity: 0.55;
+}
+
+/* claimed entries quietly fall out of the system */
+.grid-row.claimed {
+  opacity: 0.28;
+  text-decoration: line-through;
+}
 #panel-data .panel--title,
 #panel-map .panel--title {
   font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
