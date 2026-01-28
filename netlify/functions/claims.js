@@ -4,11 +4,16 @@ export default async () => {
   const store = getStore('labyrinth-registry');
   const claimed = [];
 
-  for await (const key of store.list()) {
-    if (key.startsWith('grid:')) {
-      claimed.push(key.replace('grid:', ''));
+  let cursor;
+  do {
+    const result = await store.list({ cursor });
+    for (const key of result.keys) {
+      if (key.startsWith('grid:')) {
+        claimed.push(key.replace('grid:', ''));
+      }
     }
-  }
+    cursor = result.cursor;
+  } while (cursor);
 
   return new Response(
     JSON.stringify({ claimed }),
