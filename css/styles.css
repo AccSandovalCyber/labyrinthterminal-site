@@ -201,19 +201,20 @@ footer {
 /* ===== Layout ===== */
 .panel--title {
   grid-column: span 12;
-  min-height: 190px;
+  min-height: unset;
   display: grid;
   place-content: center;
   text-align: center;
   position: relative;
-  padding-top: 18px;
-  padding-bottom: 24px;
+  padding-top: 32px;
+  padding-bottom: 18px;
+  height: auto;
 }
 
 /* HUD clock inside the title panel */
 .hud-clock {
   position: absolute;
-  top: 22px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
 
@@ -252,37 +253,23 @@ footer {
   font-weight: 300;
   font-size: clamp(1.35rem, 3.6vw, 2.1rem);
   color: rgba(233,238,245,0.92);
-  margin-bottom: 0.45rem;
-  letter-spacing: 0.18em;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.16em;
   text-transform: lowercase;
 }
 
 .panel--title .subtitle {
   color: rgba(233,238,245,0.30);
   font-size: 0.72rem;
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.4rem;
   letter-spacing: 0.14em;
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
-/* ===== Micro desync: subsystems waking ===== */
-.panel--title h1,
-.panel--title .subtitle,
+/* ===== Micro desync: clock only ===== */
 .hud-clock {
   opacity: 0;
-  animation-fill-mode: forwards;
-}
-
-.hud-clock {
-  animation: appear 0.01s linear 0.2s forwards;
-}
-
-.panel--title h1 {
-  animation: appear 0.01s linear 0.7s forwards;
-}
-
-.panel--title .subtitle {
-  animation: appear 0.01s linear 1.2s forwards;
+  animation: appear 0.01s linear 0.25s forwards;
 }
 
 @keyframes appear {
@@ -293,55 +280,210 @@ footer {
 
 /* ===== GRID: registry viewport ===== */
 
-/* allow the grid panel to contain flowing data */
+/* Ensure Grid panel spans full deck width */
+#panel-map {
+  grid-column: span 12;
+}
+
+/* Prevent inner panel from collapsing */
+#panel-map .panel {
+  width: 100%;
+}
+
 #panel-map .panel {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  /* match other panels' spatial behavior */
+
+  overflow: hidden;
 }
 
-/* grid list becomes a quiet vertical registry */
+#panel-map .panel--grid {
+  min-height: 260px;
+  max-height: 420px;
+}
+
+#panel-map .panel--grid {
+  grid-column: span 12;
+  align-items: stretch;
+}
+
 .grid-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  padding: 14px 16px 18px;
-  margin: 0;
+  gap: 0.55rem;
+
+  /* center the registry visually */
+  margin: 0 auto;
+  padding: 14px 18px 18px;
+
+  width: 100%;
+  max-width: 720px;
+
+  /* contain scrolling INSIDE the panel */
+  flex: 1 1 auto;
   overflow-y: auto;
-  flex: 1;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(233,238,245,0.22) transparent;
+
+  writing-mode: horizontal-tb;
+  transform: none;
+  align-self: center;
+  opacity: 0.85;
+  font-size: 0.78rem;
+}
+
+#panel-map .panel {
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box;
+  justify-content: flex-start;
 }
 
 /* individual registry rows */
 .grid-row {
+  position: relative;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: min-content 1fr;
   column-gap: 0.75rem;
   row-gap: 0.25rem;
-  font-size: 0.72rem;
+  align-items: start;
+
+  font-size: 0.78rem;
   letter-spacing: 0.08em;
   opacity: 0.72;
+
+  padding: 6px 8px 6px 6px;
+  border-radius: 6px;
+
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+
+  transition:
+    opacity 0.2s ease,
+    background 0.2s ease;
+  box-sizing: border-box;
+  width: 100%;
+  white-space: normal;
+  writing-mode: horizontal-tb;
+  filter: saturate(0.92) contrast(0.96);
 }
 
+/* subtle system drift — non-interactive */
+.grid-row::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent 38%,
+      rgba(120,255,214,0.035),
+      transparent 62%
+    );
+
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+}
+
+/* visual centering polish for grid id */
 .grid-id {
-  opacity: 0.85;
+  text-align: right;
+  min-width: 3ch;
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
+  opacity: 0.55;
 }
 
 .grid-coord,
 .grid-hint {
   grid-column: 1 / -1;
   opacity: 0.55;
+  padding-left: 1.75rem;
+
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.35;
 }
 
 /* claimed entries quietly fall out of the system */
+/* claimed entries — system-marked */
 .grid-row.claimed {
-  opacity: 0.28;
+  opacity: 0.48;
+  color: rgba(255, 80, 90, 0.85);
+
   text-decoration: line-through;
+  text-decoration-thickness: 1.4px;
+  text-decoration-color: rgba(255, 80, 90, 0.65);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 80, 90, 0.06),
+      rgba(255, 80, 90, 0.025) 40%,
+      transparent 75%
+    );
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 80, 90, 0.14),
+    inset 0 0 18px rgba(255, 80, 90, 0.10);
+
+  filter: blur(0.15px);
+}
+
+/* claimed entries retain procedural scar */
+.grid-row.claimed::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 80, 90, 0.06) 0px,
+      rgba(255, 80, 90, 0.06) 1px,
+      transparent 2px,
+      transparent 6px
+    );
+
+  opacity: 0.22;
+}
+
+.grid-row.claimed .grid-id {
+  color: rgba(255, 80, 90, 0.65);
+}
+/* empty grid state — quiet, not instructional */
+.grid-empty {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+  color: rgba(233,238,245,0.35);
+  padding: 22px 12px;
+  text-align: center;
+  opacity: 0.55;
+  max-width: 420px;
+  margin: 0 auto;
 }
 #panel-data .panel--title,
 #panel-map .panel--title {
   font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   padding-top: 18px;
   padding-bottom: 22px;
+}
+
+#panel-map .panel--title {
+  padding-bottom: 14px;
 }
 
 #panel-data .panel--title h2,
@@ -351,7 +493,7 @@ footer {
   letter-spacing: 0.14em;
   text-transform: lowercase;
   font-size: clamp(0.85rem, 1.8vw, 1.05rem);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.75rem;
   opacity: 0.65;
 }
 
@@ -674,6 +816,7 @@ footer {
     border-color 0.18s ease,
     box-shadow 0.18s ease,
     transform 0.12s ease;
+  margin-top: 0.25rem;
 }
 
 .transmit-button:hover {
@@ -729,9 +872,15 @@ footer {
     flex-wrap: wrap;
   }
 
-  .hud-clock { top: 18px; left: 50%; right: auto; transform: translateX(-50%); }
-  .hud-clock-time { font-size: 0.82rem; }
-  .hud-clock-sub  { font-size: 0.70rem; }
+  .hud-clock { top: 10px; left: 50%; right: auto; transform: translateX(-50%); }
+  .hud-clock-time {
+    font-size: 0.74rem;
+    letter-spacing: 0.10em;
+  }
+  .hud-clock-sub {
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+  }
 
   .panel--log {
     grid-column: span 6;
@@ -751,16 +900,15 @@ footer {
 
   .panel--title {
     min-height: unset;
-    place-content: start center;
-    /* slightly tighter on top so the title panel doesn’t feel hollow */
-    padding-top: 34px;
+    place-content: center;
+    padding-top: 30px;
     padding-bottom: 14px;
     padding-left: 14px;
     padding-right: 14px;
   }
   .panel--title h1 {
-    font-size: clamp(1.05rem, 4.8vw, 1.55rem);
-    margin-bottom: 0.40rem;
+    font-size: clamp(1.05rem, 4.8vw, 1.45rem);
+    margin-bottom: 0.45rem;
     letter-spacing: 0.12em;
     opacity: 0.88;
   }
@@ -771,11 +919,11 @@ footer {
     opacity: 0.42;
   }
   .panel--title .transmit-button {
-    margin-top: 0.32rem;
+    margin-top: 0.45rem;
     font-size: 0.72rem;
     padding: 0.22rem 0.7rem;
     min-width: 88px;
-    opacity: 0.82;
+    opacity: 0.68;
   }
 
   /* mobile plane separation */
@@ -985,6 +1133,7 @@ body.is-viewer-open footer {
     0 20px 70px rgba(0,0,0,0.65);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  align-self: stretch;
 }
 
 .panel--baseline::before {
@@ -1012,7 +1161,7 @@ body.is-viewer-open footer {
   align-items: center;
   justify-content: center;
   gap: 14px;
-  margin-top: 28px;
+  margin-top: 1.2rem;
 }
 
 /* Input as scan slit */
@@ -1078,4 +1227,21 @@ body.is-viewer-open footer {
     font-size: 0.7rem;
     letter-spacing: 0.04em;
   }
+}
+
+@media (max-width: 600px) {
+  #panel-map .panel {
+    max-height: 360px;
+  }
+
+  .grid-list {
+    max-width: 100%;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+.grid-row:hover {
+  opacity: 0.9;
+  background: rgba(120,255,214,0.025);
 }

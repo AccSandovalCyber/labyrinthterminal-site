@@ -8,27 +8,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   const gridRecords = [
     {
       id: 'A-001',
-      coordinate: '34.0522, -118.2437',
-      hint: 'the signal reflects where light should not',
+      coordinate: '00.0000, -000.0000',
+      hint: 'data pending...',
       status: 'active', // active | claimed
       code: 'VOID-001'
     }
     // NEW DROPS GO HERE
     , {
       id: 'A-002',
-      coordinate: '34.0525, -118.2440',
-      hint: 'beneath the watchful eyes of silence',
+      coordinate: '00.00000, -000.0000',
+      hint: 'data pending...',
       status: 'active',
       code: 'VOID-002'
-    }
-
-   , {
+    }, {
       id: 'A-003',
-      coordinate: '34.0528, -118.2443',
-      hint: 'where shadows gather without form',
+      coordinate: '00.0000, -0.0000',
+      hint: 'data pending...',
       status: 'active',
       code: 'VOID-003'
     },
+
   ];
 
   function renderGrid() {
