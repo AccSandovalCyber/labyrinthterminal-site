@@ -31,10 +31,7 @@ export default async (request) => {
     const CODE_MAP = {
       'VOID-001': 'A-001',
       'VOID-002': 'A-002',
-      'VOID-003': 'A-003',
-      'VOID-004': 'A-004',
-      'VOID-005': 'A-005',
-      'VOID-006': 'A-006',
+      'VOID-003': 'B-003',
     };
 
     const id = CODE_MAP[code];

@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       status: 'active',
       code: 'VOID-002'
     }, {
-      id: 'A-003',
+      id: 'B-003',
       coordinate: '00.0000, -0.0000',
       hint: 'data pending...',
       status: 'active',
