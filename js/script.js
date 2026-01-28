@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const prefersReduce =
     window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -651,6 +651,7 @@ async function hydrateClaimsFromBackend() {
     if (target) activate(target.id, false);
   });
 
-  // Initialize the grid after functions are defined
-  hydrateClaimsFromBackend().finally(renderGrid);
+  // Initialize the grid from global backend truth, then render
+  await hydrateClaimsFromBackend();
+  renderGrid();
 });

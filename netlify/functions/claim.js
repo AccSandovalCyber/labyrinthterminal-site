@@ -1,50 +1,26 @@
 import { getStore } from '@netlify/blobs';
 
-export default async (request) => {
-  if (request.method !== 'POST') {
-    return new Response('Method Not Allowed', { status: 405 });
-  }
-
-  let body;
-  try {
-    body = await request.json();
-  } catch {
-    return new Response('Bad Request', { status: 400 });
-  }
-
-  const { code } = body || {};
-
-  // Authoritative mapping — YOU control drops here
-  const CODE_MAP = {
-    'VOID-001': 'A-001',
-    'VOID-002': 'A-002',
-  };
-
-  const id = CODE_MAP[code];
-  if (!id) {
-    return new Response(
-      JSON.stringify({ ok: false }),
-      { headers: { 'Content-Type': 'application/json' } }
-    );
-  }
-
+export default async () => {
   const store = getStore('labyrinth-registry');
-  const key = `grid:${id}`;
+  const claimed = [];
 
-  const existing = await store.get(key);
+  let cursor;
+  do {
+    const result = await store.list({ cursor });
 
-  if (existing === 'claimed') {
-    return new Response(
-      JSON.stringify({ ok: false, alreadyClaimed: true }),
-      { headers: { 'Content-Type': 'application/json' } }
-    );
-  }
+    if (Array.isArray(result.blobs)) {
+      for (const item of result.blobs) {
+        if (item.key && item.key.startsWith('grid:')) {
+          claimed.push(item.key.replace('grid:', ''));
+        }
+      }
+    }
 
-  // First successful claim creates permanent history
-  await store.set(key, 'claimed');
+    cursor = result.cursor;
+  } while (cursor);
 
   return new Response(
-    JSON.stringify({ ok: true, id }),
+    JSON.stringify({ claimed }),
     { headers: { 'Content-Type': 'application/json' } }
   );
 };
