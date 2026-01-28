@@ -45,7 +45,7 @@ export default async (request) => {
       );
     }
 
-    const store = getStore('labyrinth-registryv1');
+    const store = getStore('labyrinth-registry');
     const key = `grid:${id}`;
 
     const existing = await store.get(key);
