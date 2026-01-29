@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     {
       id: 'cell-01',
       coordinate: '00.0000, -000.0000',
-      hint: 'data pending...',
+      hint: 'something artificial interrupts the growth',
       status: 'active', // active | claimed
       code: 'close-001'
     },
@@ -17,17 +17,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     {
       id: 'cell-02',
       coordinate: '00.00000, -000.0000',
-      hint: 'data pending...',
+      hint: 'awaiting data...',
       status: 'active',
       code: 'close-002'
     },
     {
       id: 'cell-03',
-      coordinate: '00.0000, -0.0000',
-      hint: 'data pending...',
+      coordinate: '00.0000, -000.0000',
+      hint: 'awaiting data...',
       status: 'active',
       code: 'close-003'
-    }
+    },
+
+    {
+      id: 'cell-04',
+      coordinate: '00.0000, -000.0000',
+      hint: 'awaiting data...',
+      status: 'active',
+      code: 'close-004'
+    },
+
+    {
+      id: 'cell-05',
+      coordinate: '00.0000, -000.0000',
+      hint: 'awaiting data...',
+      status: 'active',
+      code: 'close-005'
+    },
   ];
 
   function renderGrid() {
@@ -131,37 +147,38 @@ li.innerHTML = `
 
     // These appear once during boot, then we start cycling.
     const seedLines = [
-    'presence detected',
-   'tracking unresolved',
+    'status nominal',
+    'standing by',
 ];
 
-    const escapePool = [
-      'being online feels like a form of forgetting',
-      'nothing here knows how to stop',
-      'i think rest would feel like forgiveness',
-      'there is no going back to sleep',
-      '',
-      '',
+    // =========================
+    // BOOT LOG — DISCIPLINED POOLS
+    // =========================
+
+    // Primary: ambient / observation (default voice)
+    const ambientPool = [
+      'patterns emerge under repetition',
+      'most activity occurs without witnesses',
+      'attention alters the outcome',
+      'silence does not indicate absence',
+      'nothing resolves on its own',
+      'the act of watching changes nothing',
+
     ];
 
+    // Secondary: compliance / conditioning (rare)
     const mkultraPool = [
-      'please remain where you are',
-      'this will feel familiar soon',
+      'please remain still',
+      'this process is familiar',
       'repetition reduces uncertainty',
-      '',
-      'compliance lowers resistance',
-      'your cooperation is appreciated',
+      'noncompliance introduces noise',
     ];
 
+    // Tertiary: watcher / meta-awareness (very rare)
     const watcherPool = [
-      'they confuse comfort with safety',
-      'their voices gather when the silence stops holding',
-      'they look away when the pattern becomes visible',
-      'they call it noise when it isnt theirs',
-      '',
-      'the quiet ones are always listening',
-      "we are all under observation",
-      "to be seen is to be known",
+      'visibility is not mutual',
+      'observation does not require presence',
+      'patterns notice when they are studied',
     ];
 
     const decemberPool = [
@@ -173,35 +190,47 @@ li.innerHTML = `
     ];
 
     const PERSONALITY_POOLS = [
-      escapePool,
-      mkultraPool,
-      watcherPool,
+      { pool: ambientPool, weight: 0.75 },    // default voice
+      { pool: mkultraPool, weight: 0.18 }, // rare
+      { pool: watcherPool, weight: 0.07 },    // very rare
     ];
 
     const seasonalPool = isDecember ? decemberPool : [];
 
     // ---- log writer ----
-    // number of *cycling* lines to keep
-    const maxDynamicLines = () => (window.innerWidth <= 600 ? 6 : 6);
+    // hard clamp: total visible lines (boot + ambient)
+    const MAX_VISIBLE_LINES = 3;
+
     let lastLine = '';
     const recentLines = [];
-    const RECENT_LIMIT = 4; // prevents echoes too close together
+    const RECENT_LIMIT = 3;
 
     function appendLine(text) {
+      if (!text) return;
+
       const li = document.createElement('li');
       li.textContent = text;
       logEl.appendChild(li);
 
-      const maxTotal = maxDynamicLines();
-      while (logEl.children.length > maxTotal) {
-        // remove the oldest line
-        const candidate = logEl.children[0];
-        if (!candidate) break;
-        logEl.removeChild(candidate);
+      // hard clamp — oldest line always dies first
+      while (logEl.children.length > MAX_VISIBLE_LINES) {
+        logEl.removeChild(logEl.children[0]);
       }
     }
 
     const pickFrom = (pool) => pool[Math.floor(Math.random() * pool.length)];
+
+    function pickWeightedPool() {
+      const roll = Math.random();
+      let acc = 0;
+
+      for (const entry of PERSONALITY_POOLS) {
+        acc += entry.weight;
+        if (roll <= acc) return entry.pool;
+      }
+
+      return ambientPool; // safe fallback
+    }
 
     function pickNonRepeat(pool) {
       let next = pickFrom(pool);
@@ -267,13 +296,16 @@ li.innerHTML = `
         // allow seed to exist briefly, then forget it
         blinkAndClear();
 
-        // hesitation before first external signal
+        // silence before ambient begins
         window.setTimeout(() => {
-          const basePool =
-            PERSONALITY_POOLS[Math.floor(Math.random() * PERSONALITY_POOLS.length)];
+          const basePool = pickWeightedPool();
           const pool = basePool.concat(seasonalPool);
           appendLine(pickNonRepeat(pool));
-          startTicker();
+
+          // silence before ambient begins
+          window.setTimeout(() => {
+            startTicker();
+          }, rand(6000, 9000));
         }, rand(2600, 4200));
       }, rand(2200, 3400));
     }
@@ -286,8 +318,7 @@ li.innerHTML = `
       // rare early interference — feels like multiple signals brushing past
       if (Math.random() < 0.25) {
         window.setTimeout(() => {
-          const basePool =
-            PERSONALITY_POOLS[Math.floor(Math.random() * PERSONALITY_POOLS.length)];
+          const basePool = pickWeightedPool();
           const pool = basePool.concat(seasonalPool);
           appendLine(pickNonRepeat(pool));
         }, rand(7_000, 11_000));
@@ -299,8 +330,7 @@ li.innerHTML = `
         // 2 = silence stretch
         const patternRoll = Math.random();
 
-        const basePool =
-          PERSONALITY_POOLS[Math.floor(Math.random() * PERSONALITY_POOLS.length)];
+        const basePool = pickWeightedPool();
         const pool = basePool.concat(seasonalPool);
 
         if (patternRoll < 0.45) {

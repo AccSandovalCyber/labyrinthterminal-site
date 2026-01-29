@@ -32,6 +32,8 @@ export default async (request) => {
       'close-001': 'cell-01',
       'close-002': 'cell-02',
       'close-003': 'cell-03',
+      'close-004': 'cell-04',
+      'close-005': 'cell-05',
     };
 
     const id = CODE_MAP[code];
