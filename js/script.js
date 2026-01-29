@@ -7,27 +7,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   // =========================
   const gridRecords = [
     {
-      id: 'a-001',
+      id: 'cell-01',
       coordinate: '00.0000, -000.0000',
       hint: 'data pending...',
       status: 'active', // active | claimed
-      code: 'ROID-001'
-    }
+      code: 'close-001'
+    },
     // NEW DROPS GO HERE
-    , {
-      id: 'A-002',
+    {
+      id: 'cell-02',
       coordinate: '00.00000, -000.0000',
       hint: 'data pending...',
       status: 'active',
-      code: 'ROID-002'
-    }, {
-      id: 'A-003',
+      code: 'close-002'
+    },
+    {
+      id: 'cell-03',
       coordinate: '00.0000, -0.0000',
       hint: 'data pending...',
       status: 'active',
-      code: 'ROID-003'
-    },
-
+      code: 'close-003'
+    }
   ];
 
   function renderGrid() {
@@ -40,12 +40,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       const li = document.createElement('li');
       li.className = 'grid-row';
       if (record.status === 'claimed') li.classList.add('claimed');
+const [label, index] = record.id.split('-');
 
-      li.innerHTML = `
-        <span class="grid-id">${record.id}</span>
-        <span class="grid-coord">${record.coordinate}</span>
-        <span class="grid-hint">${record.hint}</span>
-      `;
+li.innerHTML = `
+  <span class="grid-id">
+    <span class="grid-label">${label}</span>
+    <span class="grid-index">-${index}</span>
+  </span>
+  <span class="grid-coord">${record.coordinate}</span>
+  <span class="grid-hint">${record.hint}</span>
+`;
 
       gridList.appendChild(li);
     });

@@ -29,9 +29,9 @@ export default async (request) => {
 
     // AUTHORITATIVE CODE → GRID ID MAP
     const CODE_MAP = {
-      'VOID-001': 'A-001',
-      'VOID-002': 'A-002',
-      'VOID-003': 'B-003',
+      'close-001': 'cell-01',
+      'close-002': 'cell-02',
+      'close-003': 'cell-03',
     };
 
     const id = CODE_MAP[code];

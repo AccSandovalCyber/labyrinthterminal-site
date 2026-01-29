@@ -395,22 +395,43 @@ footer {
   mix-blend-mode: overlay;
 }
 
-/* visual centering polish for grid id */
 #panel-map .grid-row .grid-id {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 0.72rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.16em;
   text-transform: lowercase;
 
-  color: rgba(233, 238, 245, 0.38);
-  opacity: 0.55;
+  color: rgba(233, 238, 245, 0.40);
+  opacity: 0.6;
 
   text-align: right;
-  min-width: 4ch;
+  min-width: 5ch;
   font-variant-numeric: tabular-nums;
 
-  transform: translateY(0.4px);
+  line-height: 1.05;
 }
+
+#panel-map .grid-row .grid-label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+}
+
+#panel-map .grid-row .grid-index {
+  display: block;
+}
+
+#panel-map .grid-row .grid-index {
+  margin-top: 2px;
+  font-size: 0.68em;
+  letter-spacing: 0.28em;
+  opacity: 0.45;
+}
+
 
 #panel-map .grid-row:nth-child(3n) .grid-id {
   transform: translateY(0.8px);
