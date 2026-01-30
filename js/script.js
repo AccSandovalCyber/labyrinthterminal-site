@@ -157,7 +157,6 @@ li.innerHTML = `
 
     // Primary: ambient / observation (default voice)
     const ambientPool = [
-      'patterns emerge under repetition',
       'most activity occurs without witnesses',
       'attention alters the outcome',
       'silence does not indicate absence',

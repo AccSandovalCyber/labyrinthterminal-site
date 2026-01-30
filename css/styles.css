@@ -3,8 +3,8 @@
 
 :root {
   /* Core palette (monolith + fog + distant neon) */
-  --ink: #e9eef5;
-  --muted: rgba(233, 238, 245, 0.62);
+  --ink: rgba(235, 242, 248, 0.96);
+  --muted: rgba(210, 222, 232, 0.72);
 
   --bg: #07090c;
   --bg2: #05070a;
@@ -13,11 +13,11 @@
   --innerline: rgba(233, 238, 245, 0.06);
 
   /* Blade-runner hint (kept subtle) */
---accent: rgba(150, 185, 190, 0.55);   /* cold institutional cyan */
---accent-hot: rgba(190, 80, 90, 0.45); /* restrained warning */
+  --accent: rgba(140, 210, 220, 0.65);   /* cold institutional cyan */
+  --accent-hot: rgba(210, 90, 100, 0.55); /* restrained warning */
 
---glow: rgba(120, 160, 170, 0.14);
---glow2: rgba(100, 130, 150, 0.10);
+  --glow: rgba(140, 210, 220, 0.22);
+  --glow2: rgba(120, 180, 200, 0.16);
   --radius: 12px;
 }
 
@@ -25,16 +25,14 @@ html, body { height: 100%; }
 
 body {
   color: var(--ink);
-  font-family: "Courier New", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: 'Space Grotesk','IBM Plex Sans',system-ui,-apple-system,sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* Fog + distant neon (no obvious gradients, just atmosphere) */
   background:
-    radial-gradient(1200px 700px at 18% 12%, var(--glow), transparent 55%),
-    radial-gradient(900px 520px at 82% 18%, var(--glow2), transparent 60%),
-    radial-gradient(1100px 900px at 50% 90%, rgba(120, 255, 214, 0.06), transparent 60%),
-    linear-gradient(180deg, var(--bg), var(--bg2));
+    radial-gradient(1400px 900px at 20% 10%, rgba(150,220,235,0.28), transparent 58%),
+    radial-gradient(900px 600px at 80% 20%, rgba(120,140,160,0.14), transparent 62%),
+    radial-gradient(1200px 900px at 50% 85%, rgba(120,255,214,0.07), transparent 65%),
+    linear-gradient(180deg, #05070a, #030406);
 
   background-attachment: fixed;
 }
@@ -112,7 +110,20 @@ footer {
 }
 
 .status { display: flex; align-items: center; gap: 0.4rem; }
-.status-word { color: var(--muted); }
+.status-word {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: lowercase;
+
+  color: rgba(210, 225, 235, 0.45);
+  opacity: 0.55;
+
+  text-shadow:
+    0 0 6px rgba(120, 160, 190, 0.18),
+    0 0 18px rgba(80, 120, 150, 0.12);
+}
 
 /* Right cluster: nav + small LA clock */
 .header-right {
@@ -174,18 +185,21 @@ footer {
   position: relative;
   background: linear-gradient(
     180deg,
-    rgba(22, 28, 36, 0.62),
-    rgba(10, 14, 18, 0.72)
+    rgba(34, 48, 62, 0.62),
+    rgba(14, 20, 28, 0.82)
   );
-  border: 1px solid rgba(233, 238, 245, 0.08);
-box-shadow:
-  inset 0 0 0 1px rgba(233,238,245,0.025),
-  inset 0 16px 36px rgba(0,0,0,0.60),
-  0 24px 72px rgba(0,0,0,0.70);
+
+  border: 1px solid rgba(233, 238, 245, 0.06);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(233,238,245,0.02),
+    inset 0 18px 40px rgba(0,0,0,0.65),
+    0 30px 90px rgba(0,0,0,0.75);
+
   overflow: hidden;
   border-radius: var(--radius);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(14px) saturate(1.05);
+  -webkit-backdrop-filter: blur(14px) saturate(1.05);
 }
 
 /* internal “monolith edge” */
@@ -196,21 +210,21 @@ box-shadow:
   pointer-events: none;
   background:
     radial-gradient(
-      520px 320px at 50% 120%,
-      rgba(120,255,214,0.08),
+      600px 360px at 50% 120%,
+      rgba(120,255,214,0.10),
       transparent 70%
     ),
     radial-gradient(
-      900px 520px at 18% 16%,
-      rgba(120, 255, 214, 0.05),
-      transparent 60%
+      900px 520px at 18% 18%,
+      rgba(120,160,190,0.06),
+      transparent 62%
     ),
     linear-gradient(
       180deg,
-      rgba(233,238,245,0.06),
-      transparent 20%
+      rgba(233,238,245,0.05),
+      transparent 22%
     );
-  opacity: 0.82;
+  opacity: 0.95;
 }
 
 /* ===== Layout ===== */
@@ -266,20 +280,25 @@ box-shadow:
 .panel--title h1 {
   font-family: 'IBM Plex Mono','Space Grotesk', ui-monospace, monospace;
   font-weight: 300;
-  font-size: clamp(1.35rem, 3.6vw, 2.1rem);
-  color: rgba(245,248,252,0.96);
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.16em;
+  font-size: clamp(1.1rem, 2.6vw, 1.6rem);
+  letter-spacing: 0.38em;
   text-transform: lowercase;
+
+  color: rgba(225, 240, 250, 0.65);
+  margin-bottom: 0.4rem;
+
+  text-shadow:
+    0 0 18px rgba(130, 170, 200, 0.25),
+    0 0 42px rgba(90, 130, 160, 0.18);
 }
 
 .panel--title .subtitle {
   color: rgba(233,238,245,0.30);
   font-size: 0.72rem;
   margin-bottom: 0.4rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  opacity: 0.38;
+  opacity: 0.26;
 }
 
 /* ===== Micro desync: clock only ===== */
@@ -1177,15 +1196,15 @@ body.is-viewer-open footer {
 .panel--baseline {
   background: linear-gradient(
     180deg,
-    rgba(4, 6, 9, 0.86),
-    rgba(2, 3, 5, 0.96)
+    rgba(3, 5, 8, 0.92),
+    rgba(1, 2, 4, 0.98)
   );
   border: 1px solid rgba(233, 238, 245, 0.035);
   box-shadow:
     inset 0 0 0 1px rgba(233, 238, 245, 0.02),
     0 26px 80px rgba(0,0,0,0.78);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(26px) saturate(0.95);
+  -webkit-backdrop-filter: blur(26px) saturate(0.95);
   align-self: stretch;
 }
 
@@ -1247,35 +1266,30 @@ body.is-viewer-open footer {
 
 /* Directive button */
 .baseline-enter {
-  background: transparent;
-  border: 1px solid rgba(233,238,245,0.12);
-  padding: 2px 16px;
-
-  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.64rem;
-  letter-spacing: 0.26em;
-  font-weight: 400;
-
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
   text-transform: lowercase;
-  color: rgba(233,238,245,0.38);
 
-  cursor: pointer;
-  opacity: 0.62;
+  opacity: 0.35;
 
-  transition:
-    opacity 0.18s ease,
-    border-color 0.18s ease,
-    color 0.18s ease,
-    background 0.18s ease,
-    box-shadow 0.18s ease;
+  background: linear-gradient(
+    180deg,
+    rgba(40, 60, 75, 0.35),
+    rgba(20, 30, 38, 0.55)
+  );
+
+  border: 1px solid rgba(180, 210, 230, 0.15);
+
+  box-shadow:
+    inset 0 0 12px rgba(120, 160, 190, 0.15),
+    0 0 22px rgba(80, 120, 150, 0.12);
+
+  transition: opacity 0.18s ease;
 }
 
 .baseline-enter:hover {
-   opacity: 0.78;
-  border-color: rgba(120,255,214,0.18);
-  color: rgba(233,238,245,0.52);
-  background: rgba(255,255,255,0.008);
-  box-shadow: inset 0 0 0 1px rgba(233,238,245,0.02);
+  opacity: 0.55;
 }
 
 /* Access denied (hidden by default; JS can reveal later) */
