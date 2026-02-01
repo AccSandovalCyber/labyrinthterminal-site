@@ -1305,14 +1305,19 @@ body.is-viewer-open footer {
 }
 
 /* brief acknowledgement — power draw */
-.baseline-enter.is-fired {
-  pointer-events: none;
-  opacity: 0.28;
-  color: rgba(235,245,252,0.55);
-  text-shadow: none;
+ .baseline-enter.is-fired {
+   pointer-events: none;
+   opacity: 0.35;
+   color: rgba(235,245,252,0.55);
+   text-shadow: none;
+   transition: opacity 180ms ease-out;
+ }
+
+.baseline-enter {
   transition:
-    opacity 520ms ease-out,
-    color 520ms ease-out;
+    opacity 140ms ease-out,
+    color 140ms ease-out,
+    text-shadow 140ms ease-out;
 }
 
 /* Access denied (hidden by default; JS can reveal later) */
