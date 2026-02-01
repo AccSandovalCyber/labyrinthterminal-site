@@ -146,9 +146,9 @@ li.innerHTML = `
 
 
     // These appear once during boot, then we start cycling.
-    const seedLines = [
-    'status nominal',
-    'standing by',
+const seedLines = [
+  'structure intact',
+  'environment assimilated'
 ];
 
     // =========================

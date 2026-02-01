@@ -112,17 +112,17 @@ footer {
 .status { display: flex; align-items: center; gap: 0.4rem; }
 .status-word {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.65rem;
+  font-size: 0.64rem;
   font-weight: 400;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.32em;
   text-transform: lowercase;
 
-  color: rgba(210, 225, 235, 0.45);
-  opacity: 0.55;
+  color: rgba(235, 245, 252, 0.58);
+  opacity: 0.65;
 
   text-shadow:
-    0 0 6px rgba(120, 160, 190, 0.18),
-    0 0 18px rgba(80, 120, 150, 0.12);
+    0 0 8px rgba(140, 190, 220, 0.22),
+    0 0 18px rgba(90, 140, 170, 0.14);
 }
 
 /* Right cluster: nav + small LA clock */
@@ -1264,32 +1264,55 @@ body.is-viewer-open footer {
   box-shadow: 0 1px 0 rgba(120,255,214,0.28);
 }
 
-/* Directive button */
+/* Directive control — text-only, infrastructural */
 .baseline-enter {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.28em;
+  background: none;
+  border: none;
+  padding: 0;
+
+  font-family: 'IBM Plex Mono','Space Grotesk',ui-monospace,monospace;
+  font-size: 0.74rem;
+  font-weight: 300;
+  letter-spacing: 0.34em;
   text-transform: lowercase;
 
-  opacity: 0.35;
+  color: rgba(235,245,252,0.62);
 
-  background: linear-gradient(
-    180deg,
-    rgba(40, 60, 75, 0.35),
-    rgba(20, 30, 38, 0.55)
-  );
+  cursor: pointer;
+  opacity: 0.55;
 
-  border: 1px solid rgba(180, 210, 230, 0.15);
-
-  box-shadow:
-    inset 0 0 12px rgba(120, 160, 190, 0.15),
-    0 0 22px rgba(80, 120, 150, 0.12);
-
-  transition: opacity 0.18s ease;
+  transition:
+    opacity 220ms ease,
+    color 220ms ease,
+    text-shadow 220ms ease;
 }
 
+/* hover = attention, not invitation */
 .baseline-enter:hover {
-  opacity: 0.55;
+  opacity: 0.78;
+  color: rgba(235,245,252,0.78);
+  text-shadow:
+    0 0 12px rgba(120,255,214,0.18);
+}
+
+/* focus without shape */
+.baseline-enter:focus,
+.baseline-enter:focus-visible {
+  outline: none;
+  opacity: 0.85;
+  text-shadow:
+    0 0 14px rgba(120,255,214,0.22);
+}
+
+/* brief acknowledgement — power draw */
+.baseline-enter.is-fired {
+  pointer-events: none;
+  opacity: 0.28;
+  color: rgba(235,245,252,0.55);
+  text-shadow: none;
+  transition:
+    opacity 520ms ease-out,
+    color 520ms ease-out;
 }
 
 /* Access denied (hidden by default; JS can reveal later) */
@@ -1332,4 +1355,88 @@ body.is-viewer-open footer {
 #panel-map .grid-row:hover {
   opacity: 0.78;
   background: rgba(120,255,214,0.018);
+}
+
+# === TYPOGRAPHIC DAMPENING OVERRIDES ===
+
+/* global pressure */
+body {
+  letter-spacing: 0.02em;
+  color: rgba(235, 242, 248, 0.88);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-shadow: none;
+}
+
+/* date stamp (feb 2026) */
+.site-header .status-word {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.28em;
+  opacity: 0.42;
+  color: rgba(233,238,245,0.55);
+  text-shadow: none;
+}
+
+/* hud clock — informational only */
+.hud-clock-time {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.10em;
+  color: rgba(233,238,245,0.58);
+  text-shadow: none;
+}
+
+.hud-clock-sub {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: rgba(233,238,245,0.40);
+  opacity: 0.55;
+}
+
+/* panel titles = labels, not branding */
+.panel--title h1,
+#panel-data .panel--title h2,
+#panel-map .panel--title h2 {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-weight: 300;
+  letter-spacing: 0.26em;
+  text-transform: lowercase;
+  opacity: 0.62;
+  text-shadow: none;
+}
+
+/* grid registry — procedural */
+.grid-row {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.10em;
+  opacity: 0.68;
+}
+
+.grid-id,
+.grid-label,
+.grid-index,
+.grid-coord,
+.grid-hint {
+  text-shadow: none;
+  color: rgba(233,238,245,0.55);
+}
+
+/* claimed = quiet consequence */
+.grid-row.claimed {
+  opacity: 0.42;
+  filter: none;
+}
+
+/* kill idle glow everywhere */
+.status-word,
+.panel--title h1,
+.panel--title h2,
+.grid-row,
+.clock-time,
+.clock-sub {
+  text-shadow: none !important;
 }
