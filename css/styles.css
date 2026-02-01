@@ -28,6 +28,7 @@ body {
   font-family: 'Space Grotesk','IBM Plex Sans',system-ui,-apple-system,sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
   background:
     radial-gradient(1400px 900px at 20% 10%, rgba(150,220,235,0.28), transparent 58%),
     radial-gradient(900px 600px at 80% 20%, rgba(120,140,160,0.14), transparent 62%),
@@ -492,11 +493,11 @@ footer {
 /* claimed entries — system-marked */
 .grid-row.claimed {
   opacity: 0.48;
-  color: rgba(255, 80, 90, 0.85);
+  color: rgba(233, 238, 245, 0.45);
 
   text-decoration: line-through;
-  text-decoration-thickness: 1.4px;
-  text-decoration-color: rgba(255, 80, 90, 0.65);
+  text-decoration-thickness: 1.2px;
+  text-decoration-color: rgba(233, 238, 245, 0.35);
 
   background:
     linear-gradient(
@@ -533,7 +534,7 @@ footer {
 }
 
 .grid-row.claimed .grid-id {
-  color: rgba(255, 80, 90, 0.65);
+  color: rgba(233, 238, 245, 0.40);
 }
 /* empty grid state — quiet, not instructional */
 .grid-empty {
@@ -1362,7 +1363,7 @@ body.is-viewer-open footer {
   background: rgba(120,255,214,0.018);
 }
 
-# === TYPOGRAPHIC DAMPENING OVERRIDES ===
+/* === TYPOGRAPHIC DAMPENING OVERRIDES === */
 
 /* global pressure */
 body {
@@ -1444,4 +1445,10 @@ h1, h2, h3, h4, h5, h6 {
 .clock-time,
 .clock-sub {
   text-shadow: none !important;
+}
+
+@media (max-width: 700px) {
+  body {
+    background-attachment: scroll;
+  }
 }
