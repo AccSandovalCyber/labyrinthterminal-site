@@ -696,3 +696,4 @@ async function hydrateClaimsFromBackend() {
   await hydrateClaimsFromBackend();
   renderGrid();
 });
+

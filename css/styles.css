@@ -1452,3 +1452,97 @@ h1, h2, h3, h4, h5, h6 {
     background-attachment: scroll;
   }
 }
+
+/* ===== SYSTEM OVERRIDES — inevitability pass ===== */
+/* appended intentionally; do not refactor above */
+
+/* tabs behave like state toggles */
+[role=tablist] {
+  gap: 0.35rem;
+  opacity: 0.75;
+}
+
+[role=tab] {
+  padding: 0.08rem 0.22rem;
+  border-radius: 0;
+  letter-spacing: 0.12em;
+  color: rgba(233,238,245,0.55);
+  opacity: 0.65;
+}
+
+[role=tab][aria-selected=true] {
+  color: rgba(233,238,245,0.75);
+  opacity: 0.85;
+  text-shadow: none;
+}
+
+/* watch state reads as a system label */
+.panel--title h1 {
+  font-size: 0.78rem;
+  letter-spacing: 0.32em;
+  color: rgba(233,238,245,0.52);
+  text-shadow: none;
+  filter: blur(0.15px);
+}
+
+/* slight authority drift */
+.hud-clock {
+  transform: translateX(-48%);
+}
+/* start button = tolerated control */
+.transmit-button {
+  opacity: 0.62;
+  box-shadow: none;
+  border-color: rgba(233,238,245,0.10);
+}
+
+.transmit-button:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* subtitles behave like internal notes */
+.subtitle {
+  opacity: 0.22;
+  letter-spacing: 0.20em;
+}
+
+/* no idle glow anywhere */
+.panel,
+.panel::before {
+  box-shadow:
+    inset 0 0 0 1px rgba(233,238,245,0.02),
+    inset 0 14px 36px rgba(0,0,0,0.65),
+    0 22px 70px rgba(0,0,0,0.70);
+}
+
+/* ===== PHASE 3.1 — BASELINE HOSTILITY ===== */
+/* baseline exists elsewhere in the system */
+
+/* narrow the interaction */
+.panel--baseline {
+  padding-top: 28px;
+  padding-bottom: 22px;
+}
+
+/* input feels constrained, not welcoming */
+.baseline-input {
+  width: 180px;                 /* narrower = intentional friction */
+  opacity: 0.55;
+  letter-spacing: 0.18em;
+  text-align: center;
+}
+
+/* button is tolerated, not responsive */
+.baseline-enter {
+  opacity: 0.45;
+  pointer-events: auto;         /* system does not rush to respond */
+}
+
+/* feedback is indifferent */
+.baseline-status {
+  opacity: 0.35;
+  letter-spacing: 0.20em;
+}
+
+
