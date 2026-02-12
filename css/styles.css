@@ -1065,13 +1065,25 @@ footer {
 
   /* mobile archive tray breathing room — prevents arrows from touching images */
   .panel--monitors {
-    padding-bottom: 68px;   /* gives nav arrows a safe zone below last row */
+    position: relative;
+    padding-bottom: 84px;   /* larger safe zone so arrows never overlap last images */
   }
 
   .monitor-archive-nav {
-    bottom: 26px;           /* lifts arrows slightly off the edge */
-    left: clamp(18px, 6vw, 26px);
-    right: clamp(18px, 6vw, 26px);
+    bottom: 18px;           /* sits lower, fully outside image click zone */
+    left: clamp(22px, 7vw, 30px);
+    right: clamp(22px, 7vw, 30px);
+  }
+
+  /* create a real interaction zone so arrows don't share taps with images */
+  .monitor-archive-nav button {
+    padding: 10px 12px;
+    line-height: 1;
+  }
+
+  /* push the last image row up slightly so arrows live in empty space */
+  .monitors-grid {
+    margin-bottom: 18px;
   }
   .panel--title h1 {
     font-size: clamp(1.05rem, 4.8vw, 1.45rem);
