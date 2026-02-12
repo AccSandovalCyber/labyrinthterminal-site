@@ -1066,15 +1066,21 @@ footer {
   /* mobile archive tray breathing room — prevents arrows from touching images */
   .panel--monitors {
     position: relative;
-    padding-bottom: 28px;   /* no longer needs large buffer since arrows sit below */
+    /* increase bottom breathing room so images don’t feel clipped */
+    padding-bottom: 44px;
   }
 
   .monitor-archive-nav {
     position: static;       /* remove absolute overlay on mobile */
     margin-top: 10px;       /* creates a clean tray below images */
+
+    width: 100%;            /* ensure full tray width so arrows split cleanly */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     padding-left: clamp(22px, 7vw, 30px);
     padding-right: clamp(22px, 7vw, 30px);
-    justify-content: space-between;
   }
 
   /* create a real interaction zone so arrows don't share taps with images */
