@@ -796,7 +796,7 @@ footer {
 .panel--monitors {
   grid-column: span 12;
   padding: clamp(10px, 1.8vw, 16px);
-  height: calc(100vh - 260px);
+  min-height: auto;
 }
 
 .monitors-grid {
