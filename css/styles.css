@@ -116,7 +116,7 @@ footer {
   font-size: 0.64rem;
   font-weight: 400;
   letter-spacing: 0.32em;
-  text-transform: lowercase;
+  /* text-transform: lowercase; */
 
   color: rgba(235, 245, 252, 0.58);
   opacity: 0.65;
@@ -796,12 +796,14 @@ footer {
 .panel--monitors {
   grid-column: span 12;
   padding: clamp(10px, 1.8vw, 16px);
+  height: calc(100vh - 260px);
 }
 
 .monitors-grid {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 1fr);
   gap: clamp(10px, 1.6vw, 14px);
   margin: 0;
   padding: 0;
@@ -846,6 +848,55 @@ footer {
     saturate(0.90)
     contrast(0.98)
     brightness(0.96);
+}
+/* ===== MONITOR ARCHIVE NAV ( <  > ) ===== */
+
+.monitor-archive-nav {
+  position: absolute;
+  bottom: 20px;
+  left: clamp(22px, 4vw, 28px);
+  right: clamp(22px, 4vw, 28px);
+  z-index: 3;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+
+  opacity: 0.55;
+  pointer-events: auto;
+}
+
+.monitor-archive-nav button {
+  background: none;
+  border: none;
+  padding: 0;
+
+  color: rgba(233,238,245,0.72);
+  cursor: pointer;
+
+  font-family: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 0.18em;
+
+  transition: opacity 160ms ease, text-shadow 160ms ease;
+}
+
+.monitor-archive-nav button:hover {
+  opacity: 0.85;
+  text-shadow: 0 0 10px rgba(120,255,214,0.18);
+}
+
+.monitor-archive-nav button:active {
+  opacity: 0.6;
+}
+
+.monitor-archive-nav button:focus,
+.monitor-archive-nav button:focus-visible {
+  outline: none;
 }
 .panel--cam::after,
 .monitor-item::after {
@@ -926,8 +977,40 @@ footer {
 }
 
 /* ===== Responsive ===== */
+
 @media (max-width: 700px) {
   .monitors-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ===== DESKTOP ARCHIVE TRAY (4 × 2) ===== */
+@media (min-width: 701px) {
+
+  /* archive tray becomes shorter so the panel stops feeling empty */
+  .panel--monitors {
+    height: auto;
+    min-height: 360px;
+    padding-bottom: 45px; /* breathing room for arrows */
+  }
+
+  .monitors-grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    align-content: start; /* prevents vertical stretching */
+  }
+
+
+  /* slightly larger, calmer desktop controls */
+  .monitor-archive-nav button {
+    font-size: 1.50rem;
+    opacity: 0.75;
+  }
+
+  /* tighten desktop bracket spacing (does NOT affect mobile) */
+.monitor-archive-nav {
+  left: clamp(140px, 18vw, 320px);
+  right: clamp(140px, 18vw, 320px);
+}
+
 }
 
 @media (max-width: 600px) {
@@ -1544,5 +1627,3 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.35;
   letter-spacing: 0.20em;
 }
-
-

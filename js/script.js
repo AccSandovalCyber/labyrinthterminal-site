@@ -470,6 +470,9 @@ async function hydrateClaimsFromBackend() {
   const monitorsGrid = document.getElementById('monitorsGrid');
   let monitorsBuilt = false;
 
+  let archiveIndex = 0;
+  const PAGE_SIZE = 8;
+
   const MONITORS = [
     { src: 'assets/camera/001.jpg' },
     { src: 'assets/camera/002.jpg' },
@@ -494,18 +497,22 @@ async function hydrateClaimsFromBackend() {
   ];
 
   function buildMonitorsGrid() {
-    if (!monitorsGrid || monitorsBuilt) return;
-    monitorsBuilt = true;
+    if (!monitorsGrid) return;
+
+    monitorsGrid.innerHTML = '';
+
+    const start = archiveIndex * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    const visible = MONITORS.slice(start, end);
 
     const frag = document.createDocumentFragment();
 
-    MONITORS.forEach((item) => {
+    visible.forEach((item) => {
       const li = document.createElement('li');
       li.className = 'monitor-item';
 
       const a = document.createElement('a');
       a.href = item.src;
-      // IMPORTANT: no new tab (viewer handles it)
       a.setAttribute('aria-label', 'view image');
 
       const img = document.createElement('img');
@@ -522,6 +529,43 @@ async function hydrateClaimsFromBackend() {
     });
 
     monitorsGrid.appendChild(frag);
+  }
+
+  // =========================
+  // MONITOR ARCHIVE CONTROLS  <  >
+  // =========================
+  const monitorsPanel = document.getElementById('panel-inv');
+
+  if (monitorsPanel && monitorsGrid) {
+    // create controls only once
+    const nav = document.createElement('div');
+    nav.className = 'monitor-archive-nav';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'monitor-archive-prev';
+    prevBtn.setAttribute('aria-label', 'previous archive');
+    prevBtn.textContent = '<';
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'monitor-archive-next';
+    nextBtn.setAttribute('aria-label', 'next archive');
+    nextBtn.textContent = '>';
+
+    nav.appendChild(prevBtn);
+    nav.appendChild(nextBtn);
+    monitorsPanel.appendChild(nav);
+
+    const maxIndex = () => Math.max(0, Math.ceil(MONITORS.length / PAGE_SIZE) - 1);
+
+    prevBtn.addEventListener('click', () => {
+      archiveIndex = Math.max(0, archiveIndex - 1);
+      buildMonitorsGrid();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      archiveIndex = Math.min(maxIndex(), archiveIndex + 1);
+      buildMonitorsGrid();
+    });
   }
 
   // =========================
@@ -640,7 +684,10 @@ async function hydrateClaimsFromBackend() {
 
       panel.hidden = !selected;
 
-      if (selected && panel.id === 'panel-inv') buildMonitorsGrid();
+      if (selected && panel.id === 'panel-inv') {
+        archiveIndex = 0;
+        buildMonitorsGrid();
+      }
 
       // legacy hydration if any remain
       if (selected) {
