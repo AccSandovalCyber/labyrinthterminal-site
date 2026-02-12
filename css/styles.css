@@ -1062,6 +1062,17 @@ footer {
     padding-left: 14px;
     padding-right: 14px;
   }
+
+  /* mobile archive tray breathing room — prevents arrows from touching images */
+  .panel--monitors {
+    padding-bottom: 68px;   /* gives nav arrows a safe zone below last row */
+  }
+
+  .monitor-archive-nav {
+    bottom: 26px;           /* lifts arrows slightly off the edge */
+    left: clamp(18px, 6vw, 26px);
+    right: clamp(18px, 6vw, 26px);
+  }
   .panel--title h1 {
     font-size: clamp(1.05rem, 4.8vw, 1.45rem);
     margin-bottom: 0.45rem;
