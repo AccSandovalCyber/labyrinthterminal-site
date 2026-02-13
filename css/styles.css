@@ -1067,7 +1067,7 @@ footer {
   .panel--monitors {
     position: relative;
     /* increase bottom breathing room so images don’t feel clipped */
-    padding-bottom: 44px;
+    padding-bottom: clamp(12px, 3vw, 16px);
   }
 
   .monitor-archive-nav {
@@ -1079,8 +1079,8 @@ footer {
     justify-content: space-between;
     align-items: center;
 
-    padding-left: clamp(22px, 7vw, 30px);
-    padding-right: clamp(22px, 7vw, 30px);
+    padding-left: 0;
+    padding-right: 0;
   }
 
   /* create a real interaction zone so arrows don't share taps with images */
@@ -1089,9 +1089,32 @@ footer {
     line-height: 1;
   }
 
-  /* push the last image row up slightly so arrows live in empty space */
+  .monitor-archive-nav button:last-child {
+    margin-left: auto;
+  }
+
+  /* swipeable archive tray — replaces arrow-based layout on mobile */
   .monitors-grid {
-    margin-bottom: 8px;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: clamp(10px, 1.6vw, 14px);
+
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+
+    padding-bottom: 6px; /* small breathing room under tiles */
+  }
+
+  .monitor-item {
+    flex: 0 0 78%;
+    scroll-snap-align: center;
+  }
+
+  /* hide arrow nav on mobile — swipe becomes primary control */
+  .monitor-archive-nav {
+    display: none;
   }
   .panel--title h1 {
     font-size: clamp(1.05rem, 4.8vw, 1.45rem);
