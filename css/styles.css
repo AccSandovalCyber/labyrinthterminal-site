@@ -496,6 +496,7 @@ footer {
   line-height: 1.35;
   text-shadow: none;
   color: rgba(233,238,245,0.55);
+  text-decoration: none;
 }
 
 /* claimed entries quietly fall out of the system */
@@ -1709,6 +1710,7 @@ h1, h2, h3, h4, h5, h6 {
 .grid-hint {
   text-shadow: none;
   color: rgba(233,238,245,0.55);
+  text-decoration: none !important;
 }
 
 /* transmission signal — hints carry faint system color */
