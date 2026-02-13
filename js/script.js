@@ -148,8 +148,8 @@ li.innerHTML = `
 
     // These appear once during boot, then we start cycling.
 const seedLines = [
-  'structure intact',
-  'environment assimilated'
+  'signal present',
+  'environment listening'
 ];
 
     // =========================
@@ -199,16 +199,21 @@ const seedLines = [
 
     // ---- log writer ----
     // hard clamp: total visible lines (boot + ambient)
-    const MAX_VISIBLE_LINES = 3;
+    const MAX_VISIBLE_LINES = 2; 
 
     let lastLine = '';
+    let nextLineIsSignal = false; // marks first message after silence
     const recentLines = [];
-    const RECENT_LIMIT = 3;
+    const RECENT_LIMIT = 6;
 
     function appendLine(text) {
       if (!text) return;
 
       const li = document.createElement('li');
+      if (nextLineIsSignal) {
+        li.classList.add('bootlog-signal');
+        nextLineIsSignal = false;
+      }
       li.textContent = text;
       logEl.appendChild(li);
 
@@ -315,52 +320,44 @@ const seedLines = [
 
     // ---- fractured pulse ticker (coma / interference rhythm) ----
     function startTicker() {
-      // rare early interference — feels like multiple signals brushing past
-      if (Math.random() < 0.25) {
-        window.setTimeout(() => {
-          const basePool = pickWeightedPool();
-          const pool = basePool.concat(seasonalPool);
-          appendLine(pickNonRepeat(pool));
-        }, rand(7_000, 11_000));
-      }
+
       function pulse() {
-        // Decide a pulse pattern:
-        // 0 = single thought
-        // 1 = double burst
-        // 2 = silence stretch
-        const patternRoll = Math.random();
 
         const basePool = pickWeightedPool();
         const pool = basePool.concat(seasonalPool);
 
-        if (patternRoll < 0.45) {
-          // Single thought, then long quiet
-          appendLine(pickNonRepeat(pool));
-          window.setTimeout(pulse, rand(26_000, 38_000));
+        const roll = Math.random();
+
+        // --- 1) FULL SILENCE STATE (receiver hears nothing) ---
+        // clears log and waits before next signal
+        if (roll < 0.28) {
+          blinkAndClear();
+          nextLineIsSignal = true; // next message arrives with stronger presence
+
+          // long quiet — feels like antenna losing signal
+          window.setTimeout(pulse, rand(22_000, 32_000));
           return;
         }
 
-        if (patternRoll < 0.75) {
-          // Double intrusion: two lines close together
+        // --- 2) SINGLE MESSAGE ---
+        if (roll < 0.65) {
           appendLine(pickNonRepeat(pool));
-
-          window.setTimeout(() => {
-            appendLine(pickNonRepeat(pool));
-          }, rand(1400, 2600));
-
-          window.setTimeout(pulse, rand(34_000, 48_000));
+          window.setTimeout(pulse, rand(18_000, 25_000));
           return;
         }
 
-        // Silence stretch — nothing happens, then a thought
+        // --- 3) DOUBLE BURST (rare interference) ---
+        appendLine(pickNonRepeat(pool));
+
         window.setTimeout(() => {
           appendLine(pickNonRepeat(pool));
-          window.setTimeout(pulse, rand(28_000, 42_000));
-        }, rand(18_000, 28_000));
+        }, rand(1600, 2600));
+
+        window.setTimeout(pulse, rand(26_000, 36_000));
       }
 
-      // initial delay — quiet but not dead, like interference stabilizing
-      window.setTimeout(pulse, rand(15_000, 20_000));
+      // initial quiet stabilization — system waking but not speaking yet
+      window.setTimeout(pulse, rand(12_000, 18_000));
     }
   }
 
