@@ -10,7 +10,7 @@
   --bg2: #05070a;
 
   --hairline: rgba(233, 238, 245, 0.10);
-  --innerline: rgba(233, 238, 245, 0.06);
+  --innerline: rgba(140, 210, 220, 0.08);
 
   /* Blade-runner hint (kept subtle) */
   --accent: rgba(140, 210, 220, 0.65);   /* cold institutional cyan */
@@ -32,7 +32,7 @@ body {
   background:
     radial-gradient(1400px 900px at 20% 10%, rgba(150,220,235,0.28), transparent 58%),
     radial-gradient(900px 600px at 80% 20%, rgba(120,140,160,0.14), transparent 62%),
-    radial-gradient(1200px 900px at 50% 85%, rgba(120,255,214,0.07), transparent 65%),
+    radial-gradient(1200px 900px at 50% 85%, rgba(255,120,120,0.05), transparent 65%),
     linear-gradient(180deg, #05070a, #030406);
 
   background-attachment: fixed;
@@ -56,7 +56,7 @@ body::before {
       transparent 6px
     );
 
-  opacity: 0.07;
+  opacity: 0.04;
   mix-blend-mode: overlay;
 }
 
@@ -80,7 +80,7 @@ body::after {
     );
   background-size: 180px 180px;
 
-  opacity: 0.045;
+  opacity: 0.025;
   filter: blur(0.2px);
 }
 
@@ -186,7 +186,7 @@ footer {
   position: relative;
   background: linear-gradient(
     180deg,
-    rgba(34, 48, 62, 0.62),
+    rgba(34, 48, 62, 0.72),
     rgba(14, 20, 28, 0.82)
   );
 
@@ -461,11 +461,18 @@ footer {
   display: block;
 }
 
+
 #panel-map .grid-row .grid-index {
   margin-top: 2px;
   font-size: 0.68em;
   letter-spacing: 0.28em;
   opacity: 0.45;
+}
+
+/* subtle system index tone — quiet cyan electricity */
+.grid-index {
+  color: rgba(90, 200, 255, 0.82);
+  opacity: 0.9;
 }
 
 
@@ -487,6 +494,8 @@ footer {
   white-space: normal;
   word-break: break-word;
   line-height: 1.35;
+  text-shadow: none;
+  color: rgba(233,238,245,0.55);
 }
 
 /* claimed entries quietly fall out of the system */
@@ -502,14 +511,14 @@ footer {
   background:
     linear-gradient(
       90deg,
-      rgba(255, 80, 90, 0.06),
-      rgba(255, 80, 90, 0.025) 40%,
+      rgba(220,170,90,0.08),
+      rgba(220,170,90,0.03) 40%,
       transparent 75%
     );
 
   box-shadow:
-    inset 0 0 0 1px rgba(255, 80, 90, 0.14),
-    inset 0 0 18px rgba(255, 80, 90, 0.10);
+    inset 0 0 0 1px rgba(220,170,90,0.22),
+    inset 0 0 18px rgba(220,170,90,0.10);
 
   filter: blur(0.15px);
 }
@@ -524,8 +533,8 @@ footer {
   background:
     repeating-linear-gradient(
       to bottom,
-      rgba(255, 80, 90, 0.06) 0px,
-      rgba(255, 80, 90, 0.06) 1px,
+      rgba(220,170,90,0.08) 0px,
+      rgba(220,170,90,0.08) 1px,
       transparent 2px,
       transparent 6px
     );
@@ -593,6 +602,27 @@ footer {
 
 .panel--cam {
   grid-column: span 4;
+}
+
+/* subtle desktop “wet glass” energy layer */
+.panel--cam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      420px 260px at 30% 20%,
+      rgba(120,255,214,0.06),
+      transparent 70%
+    ),
+    radial-gradient(
+      520px 320px at 70% 80%,
+      rgba(255,120,120,0.04),
+      transparent 72%
+    );
+  opacity: 0.45;
+  mix-blend-mode: screen;
 }
 
 .panel--cam--preview {
@@ -746,9 +776,9 @@ footer {
   display: block;
   object-fit: cover;
   filter:
-    saturate(0.90)
-    contrast(0.98)
-    brightness(0.96);
+    saturate(0.96)
+    contrast(1.02)
+    brightness(1.04);
 }
 
 /* Camera label: stamped system metadata style */
@@ -797,6 +827,25 @@ footer {
   grid-column: span 12;
   padding: clamp(10px, 1.8vw, 16px);
   min-height: auto;
+}
+
+/* subtle terminal fade — desktop archive continuation */
+.panel--monitors::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(7,9,12,0) 72%,
+      rgba(7,9,12,0.35) 86%,
+      rgba(7,9,12,0.75) 100%
+    );
+
+  opacity: 0.35;
+  mix-blend-mode: normal;
 }
 
 .monitors-grid {
@@ -988,16 +1037,20 @@ footer {
   /* archive tray becomes shorter so the panel stops feeling empty */
   .panel--monitors {
     height: auto;
-    min-height: 360px;
-    padding-bottom: 45px; /* breathing room for arrows */
+    min-height: auto;      /* let archive define panel height */
+    padding-bottom: 18px;  /* balanced breathing space */
   }
 
   .monitors-grid {
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    align-content: start; /* prevents vertical stretching */
+    grid-auto-rows: 1fr;            /* allow infinite rows instead of fixed 2 */
+    align-content: start;           /* keeps archive anchored to top */
   }
 
+  /* desktop = passive surveillance wall (no arrow controls) */
+  .monitor-archive-nav {
+    display: none;
+  }
 
   /* slightly larger, calmer desktop controls */
   .monitor-archive-nav button {
@@ -1006,10 +1059,10 @@ footer {
   }
 
   /* tighten desktop bracket spacing (does NOT affect mobile) */
-.monitor-archive-nav {
-  left: clamp(140px, 18vw, 320px);
-  right: clamp(140px, 18vw, 320px);
-}
+  .monitor-archive-nav {
+    left: clamp(140px, 18vw, 320px);
+    right: clamp(140px, 18vw, 320px);
+  }
 
 }
 
@@ -1104,12 +1157,70 @@ footer {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
 
-    padding-bottom: 6px; /* small breathing room under tiles */
+    /* heavier, more deliberate motion */
+    scroll-behavior: smooth;
+
+    /* hide scrollbar for cinematic feel */
+    scrollbar-width: none;
+  }
+
+  .monitors-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* subtle edge fade so frames feel like they slide under glass */
+  .panel--monitors::after {
+    opacity: 0.35; /* mobile glass-edge fade remains primary */
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background:
+      linear-gradient(
+        to right,
+        rgba(7,9,12,0.85) 0%,
+        rgba(7,9,12,0) 8%,
+        rgba(7,9,12,0) 92%,
+        rgba(7,9,12,0.85) 100%
+      );
+
+    mix-blend-mode: normal;
+  }
+
+  /* ===== terminal end-state glow (activated by JS) ===== */
+  .panel--monitors.is-archive-end::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background:
+      radial-gradient(
+        520px 260px at 50% 92%,
+        rgba(120,255,214,0.12),
+        rgba(120,255,214,0.04) 38%,
+        transparent 70%
+      );
+
+    opacity: 0.35;
+    mix-blend-mode: screen;
+    transition: opacity 420ms ease;
+  }
+
+  /* default state — glow stays dormant */
+  .panel--monitors::before {
+    opacity: 0;
   }
 
   .monitor-item {
     flex: 0 0 78%;
     scroll-snap-align: center;
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+                filter 260ms cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* slight glass depth when moving */
+    will-change: transform;
   }
 
   /* hide arrow nav on mobile — swipe becomes primary control */
@@ -1559,13 +1670,19 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.68;
 }
 
+
 .grid-id,
 .grid-label,
-.grid-index,
 .grid-coord,
 .grid-hint {
   text-shadow: none;
   color: rgba(233,238,245,0.55);
+}
+
+/* transmission signal — hints carry faint system color */
+.grid-hint {
+  color: rgba(140,210,220,0.58);
+  opacity: 0.72;
 }
 
 /* claimed = quiet consequence */

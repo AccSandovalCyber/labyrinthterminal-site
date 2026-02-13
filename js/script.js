@@ -71,6 +71,7 @@ li.innerHTML = `
     });
   }
 
+
   // =========================
   // HEADER: boot flicker -> month/year
   // =========================
@@ -501,9 +502,7 @@ async function hydrateClaimsFromBackend() {
 
     monitorsGrid.innerHTML = '';
 
-    const start = archiveIndex * PAGE_SIZE;
-    const end = start + PAGE_SIZE;
-    const visible = MONITORS.slice(start, end);
+    const visible = MONITORS; // show entire archive sequence (no paging)
 
     const frag = document.createDocumentFragment();
 
@@ -566,6 +565,20 @@ async function hydrateClaimsFromBackend() {
       archiveIndex = Math.min(maxIndex(), archiveIndex + 1);
       buildMonitorsGrid();
     });
+  }
+
+  // =========================
+  // TERMINAL EDGE GLOW — mobile swipe end detection
+  // =========================
+  if (monitorsGrid && monitorsPanel) {
+    const updateArchiveEndState = () => {
+      const maxScroll = monitorsGrid.scrollWidth - monitorsGrid.clientWidth;
+      const atEnd = maxScroll > 0 && monitorsGrid.scrollLeft >= maxScroll - 2;
+
+      monitorsPanel.classList.toggle('is-archive-end', atEnd);
+    };
+
+    monitorsGrid.addEventListener('scroll', updateArchiveEndState, { passive: true });
   }
 
   // =========================
