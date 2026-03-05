@@ -77,7 +77,7 @@ li.innerHTML = `
   // =========================
   const statusWord = document.querySelector('.status-word');
 
-  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
 
   if (statusWord) {
     const now = new Date();
@@ -148,8 +148,10 @@ li.innerHTML = `
 
     // These appear once during boot, then we start cycling.
 const seedLines = [
-  'signal present',
-  'environment listening'
+  'initializing',
+  '(initializing)',
+  '(initializing)',
+  'aligned'
 ];
 
     // =========================
@@ -206,6 +208,8 @@ const seedLines = [
     const recentLines = [];
     const RECENT_LIMIT = 6;
 
+    let inSeedPhase = true;
+
     function appendLine(text) {
       if (!text) return;
 
@@ -218,7 +222,8 @@ const seedLines = [
       logEl.appendChild(li);
 
       // hard clamp — oldest line always dies first
-      while (logEl.children.length > MAX_VISIBLE_LINES) {
+      const limit = inSeedPhase ? 4 : MAX_VISIBLE_LINES;
+      while (logEl.children.length > limit) {
         logEl.removeChild(logEl.children[0]);
       }
     }
@@ -290,29 +295,35 @@ const seedLines = [
         appendLine(line);
         s++;
 
-        let delay = rand(420, 760);
+        // IV drip rhythm pattern:
+        // 1st drop → long pause
+        // 2nd + 3rd → close together
+        // then pause before final state
+        const dripPattern = [
+          2800,  // first initializing → long but slightly tighter
+          140,   // second initializing → quick
+          140,   // third initializing → quick (paired drop feel)
+          2600   // natural pause before "complete"
+        ];
+
+        const delay = dripPattern[s - 1] ?? 800;
 
         window.setTimeout(seed, delay);
         return;
       }
 
       // 3) seed residue decay → system stabilizes
+      // cold termination after "complete"
       window.setTimeout(() => {
-        // allow seed to exist briefly, then forget it
         blinkAndClear();
+        inSeedPhase = false;
 
-        // silence before ambient begins
+        // extended dead silence — receiver dormant
         window.setTimeout(() => {
-          const basePool = pickWeightedPool();
-          const pool = basePool.concat(seasonalPool);
-          appendLine(pickNonRepeat(pool));
+          startTicker();
+        }, rand(15000, 20000));
 
-          // silence before ambient begins
-          window.setTimeout(() => {
-            startTicker();
-          }, rand(6000, 9000));
-        }, rand(2600, 4200));
-      }, rand(2200, 3400));
+      }, 900);
     }
 
     // start almost immediately, like a system waking up
@@ -335,25 +346,32 @@ const seedLines = [
           nextLineIsSignal = true; // next message arrives with stronger presence
 
           // long quiet — feels like antenna losing signal
-          window.setTimeout(pulse, rand(22_000, 32_000));
+          window.setTimeout(pulse, rand(12_000, 18_000));
           return;
         }
 
         // --- 2) SINGLE MESSAGE ---
         if (roll < 0.65) {
           appendLine(pickNonRepeat(pool));
-          window.setTimeout(pulse, rand(18_000, 25_000));
+          window.setTimeout(pulse, rand(9_000, 14_000));
           return;
         }
 
         // --- 3) DOUBLE BURST (rare interference) ---
-        appendLine(pickNonRepeat(pool));
+        const firstPool = pickWeightedPool();
+        appendLine(pickNonRepeat(firstPool));
 
         window.setTimeout(() => {
-          appendLine(pickNonRepeat(pool));
-        }, rand(1600, 2600));
+          let secondPool = pickWeightedPool();
 
-        window.setTimeout(pulse, rand(26_000, 36_000));
+          while (secondPool === firstPool) {
+            secondPool = pickWeightedPool();
+          }
+
+          appendLine(pickNonRepeat(secondPool));
+        }, rand(600, 1200));
+
+        window.setTimeout(pulse, rand(16_000, 22_000));
       }
 
       // initial quiet stabilization — system waking but not speaking yet
@@ -469,7 +487,7 @@ async function hydrateClaimsFromBackend() {
   let monitorsBuilt = false;
 
   let archiveIndex = 0;
-  const PAGE_SIZE = 8;
+  const PAGE_SIZE = 6;
 
   const MONITORS = [
     { src: 'assets/camera/001.jpg' },
@@ -486,12 +504,12 @@ async function hydrateClaimsFromBackend() {
     { src: 'assets/camera/012.jpg' },
     { src: 'assets/camera/013.jpg' },
     { src: 'assets/camera/014.jpg' },
-    { src: 'assets/camera/015.jpg' },
-    { src: 'assets/camera/016.jpg' },
-    { src: 'assets/camera/017.jpg' },
-    { src: 'assets/camera/018.jpg' },
-    { src: 'assets/camera/019.jpg' },
-    { src: 'assets/camera/020.jpg' },
+    // { src: 'assets/camera/015.jpg' },
+    // { src: 'assets/camera/016.jpg' },
+    // { src: 'assets/camera/017.jpg' },
+    // { src: 'assets/camera/018.jpg' },
+    // { src: 'assets/camera/019.jpg' },
+    // { src: 'assets/camera/020.jpg' },
   ];
 
   function buildMonitorsGrid() {
@@ -499,7 +517,9 @@ async function hydrateClaimsFromBackend() {
 
     monitorsGrid.innerHTML = '';
 
-    const visible = MONITORS; // show entire archive sequence (no paging)
+    const start = archiveIndex * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    const visible = MONITORS.slice(start, end);
 
     const frag = document.createDocumentFragment();
 
@@ -525,58 +545,40 @@ async function hydrateClaimsFromBackend() {
     });
 
     monitorsGrid.appendChild(frag);
+    // update archive navigation state
+    if (archivePrevBtn) {
+      archivePrevBtn.disabled = archiveIndex <= 0;
+    }
+    if (archiveNextBtn) {
+      archiveNextBtn.disabled = archiveIndex >= maxArchiveIndex();
+    }
   }
 
   // =========================
-  // MONITOR ARCHIVE CONTROLS  <  >
+  // STATIC ARCHIVE CONTROLS (embedded arrows)
   // =========================
-  const monitorsPanel = document.getElementById('panel-inv');
+  const archivePrevBtn = document.getElementById('archivePrev');
+  const archiveNextBtn = document.getElementById('archiveNext');
 
-  if (monitorsPanel && monitorsGrid) {
-    // create controls only once
-    const nav = document.createElement('div');
-    nav.className = 'monitor-archive-nav';
+  function maxArchiveIndex() {
+    return Math.max(0, Math.ceil(MONITORS.length / PAGE_SIZE) - 1);
+  }
 
-    const prevBtn = document.createElement('button');
-    prevBtn.className = 'monitor-archive-prev';
-    prevBtn.setAttribute('aria-label', 'previous archive');
-    prevBtn.textContent = '<';
-
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'monitor-archive-next';
-    nextBtn.setAttribute('aria-label', 'next archive');
-    nextBtn.textContent = '>';
-
-    nav.appendChild(prevBtn);
-    nav.appendChild(nextBtn);
-    monitorsPanel.appendChild(nav);
-
-    const maxIndex = () => Math.max(0, Math.ceil(MONITORS.length / PAGE_SIZE) - 1);
-
-    prevBtn.addEventListener('click', () => {
+  if (archivePrevBtn) {
+    archivePrevBtn.addEventListener('click', () => {
       archiveIndex = Math.max(0, archiveIndex - 1);
       buildMonitorsGrid();
     });
+  }
 
-    nextBtn.addEventListener('click', () => {
-      archiveIndex = Math.min(maxIndex(), archiveIndex + 1);
+  if (archiveNextBtn) {
+    archiveNextBtn.addEventListener('click', () => {
+      archiveIndex = Math.min(maxArchiveIndex(), archiveIndex + 1);
       buildMonitorsGrid();
     });
   }
 
-  // =========================
-  // TERMINAL EDGE GLOW — mobile swipe end detection
-  // =========================
-  if (monitorsGrid && monitorsPanel) {
-    const updateArchiveEndState = () => {
-      const maxScroll = monitorsGrid.scrollWidth - monitorsGrid.clientWidth;
-      const atEnd = maxScroll > 0 && monitorsGrid.scrollLeft >= maxScroll - 2;
 
-      monitorsPanel.classList.toggle('is-archive-end', atEnd);
-    };
-
-    monitorsGrid.addEventListener('scroll', updateArchiveEndState, { passive: true });
-  }
 
   // =========================
   // SPECTATOR: ARCHIVE VIEWER (lightbox)

@@ -846,12 +846,12 @@ footer {
   background:
     linear-gradient(
       to bottom,
-      rgba(7,9,12,0) 72%,
-      rgba(7,9,12,0.35) 86%,
-      rgba(7,9,12,0.75) 100%
+      rgba(7,9,12,0) 82%,
+      rgba(7,9,12,0.18) 92%,
+      rgba(7,9,12,0.45) 100%
     );
 
-  opacity: 0.35;
+  opacity: 0.28;
   mix-blend-mode: normal;
 }
 
@@ -859,7 +859,6 @@ footer {
   list-style: none;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(4, 1fr);
   gap: clamp(10px, 1.6vw, 14px);
   margin: 0;
   padding: 0;
@@ -922,28 +921,44 @@ footer {
   font-size: 0.72rem;
   letter-spacing: 0.18em;
 
-  opacity: 0.55;
+  opacity: 0.85;
   pointer-events: auto;
 }
 
 .monitor-archive-nav button {
   background: none;
   border: none;
-  padding: 0;
+  padding: 4px 8px;
 
-  color: rgba(233,238,245,0.72);
+  color: rgba(233,238,245,0.78);
   cursor: pointer;
 
   font-family: inherit;
-  font-size: 0.9rem;
-  letter-spacing: 0.18em;
+  font-size: 1.15rem;
+  font-weight: 300;
+  letter-spacing: 0.12em;
 
-  transition: opacity 160ms ease, text-shadow 160ms ease;
+  opacity: 0.65;
+
+  text-shadow: 0 0 12px rgba(120,255,214,0.10);
+
+  transition:
+    opacity 160ms ease,
+    text-shadow 160ms ease,
+    transform 140ms ease;
 }
 
 .monitor-archive-nav button:hover {
   opacity: 0.85;
   text-shadow: 0 0 10px rgba(120,255,214,0.18);
+  transform: translateY(-1px);
+}
+
+.monitor-archive-nav button:disabled {
+  opacity: 0.22;
+  cursor: default;
+  text-shadow: none;
+  transform: none;
 }
 
 .monitor-archive-nav button:active {
@@ -1153,27 +1168,6 @@ footer {
     margin-left: auto;
   }
 
-  /* swipeable archive tray — replaces arrow-based layout on mobile */
-  .monitors-grid {
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    gap: clamp(10px, 1.6vw, 14px);
-
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-
-    /* heavier, more deliberate motion */
-    scroll-behavior: smooth;
-
-    /* hide scrollbar for cinematic feel */
-    scrollbar-width: none;
-  }
-
-  .monitors-grid::-webkit-scrollbar {
-    display: none;
-  }
 
   /* subtle edge fade so frames feel like they slide under glass */
   .panel--monitors::after {
@@ -1220,19 +1214,12 @@ footer {
     opacity: 0;
   }
 
-  .monitor-item {
-    flex: 0 0 78%;
-    scroll-snap-align: center;
-    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
-                filter 260ms cubic-bezier(0.22, 1, 0.36, 1);
 
-    /* slight glass depth when moving */
-    will-change: transform;
-  }
 
-  /* hide arrow nav on mobile — swipe becomes primary control */
-  .monitor-archive-nav {
-    display: none;
+  .monitors-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(10px, 1.6vw, 14px);
   }
   .panel--title h1 {
     font-size: clamp(1.05rem, 4.8vw, 1.45rem);
@@ -1669,18 +1656,20 @@ h1, h2, h3, h4, h5, h6 {
 /* hud clock — informational only */
 .hud-clock-time {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.78rem;
-  letter-spacing: 0.10em;
-  color: rgba(233,238,245,0.58);
+  font-weight: 300;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: rgba(233,238,245,0.52);
   text-shadow: none;
 }
 
 .hud-clock-sub {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  color: rgba(233,238,245,0.40);
-  opacity: 0.55;
+  font-weight: 300;
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  color: rgba(233,238,245,0.36);
+  opacity: 0.5;
 }
 
 /* panel titles = labels, not branding */
@@ -1785,14 +1774,65 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* start button = tolerated control */
 .transmit-button {
-  opacity: 0.62;
-  box-shadow: none;
-  border-color: rgba(233,238,245,0.10);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.42rem 1.1rem;
+  margin-top: 0.9rem;
+
+  border-radius: 999px;
+  border: 1px solid rgba(233,238,245,0.14);
+
+  background: linear-gradient(
+    180deg,
+    rgba(18,22,28,0.72),
+    rgba(10,12,16,0.82)
+  );
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  color: rgba(233,238,245,0.72);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: lowercase;
+
+  text-decoration: none;
+  min-width: 110px;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.02),
+    0 8px 28px rgba(0,0,0,0.45);
+
+  opacity: 0.85;
+  cursor: pointer;
+
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 120ms ease,
+    opacity 160ms ease;
 }
 
 .transmit-button:hover {
-  transform: none;
-  box-shadow: none;
+  background: linear-gradient(
+    180deg,
+    rgba(24,28,36,0.85),
+    rgba(14,18,24,0.92)
+  );
+
+  border-color: rgba(120,255,214,0.28);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.04),
+    0 12px 34px rgba(0,0,0,0.55),
+    0 0 22px rgba(120,255,214,0.12);
+
+  transform: translateY(-1px);
+  opacity: 1;
 }
 
 /* subtitles behave like internal notes */
