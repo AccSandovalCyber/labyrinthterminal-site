@@ -24,9 +24,9 @@
       <div class="header-right">
         <div role="tablist" class="nav" aria-label="terminal navigation">
           <button id="tab-stat" role="tab" aria-controls="panel-stat" aria-selected="true">terminal</button>
-          <button id="tab-inv" role="tab" aria-controls="panel-inv" aria-selected="false">monitor</button>
+          <button id="tab-inv" role="tab" aria-controls="panel-inv" aria-selected="false">intake</button>
           <button id="tab-baseline" role="tab" aria-controls="panel-baseline" aria-selected="false">baseline</button>
-          <button id="tab-map" role="tab" aria-controls="panel-map" aria-selected="false">grid</button>
+          <button id="tab-map" role="tab" aria-controls="panel-map" aria-selected="false">record</button>
         </div>
       </div>
     </header>
@@ -39,14 +39,14 @@
             <span class="hud-clock-time" id="clock">00:00</span>
             <span class="hud-clock-sub"> </span>
           </div>
-          <a href="https://www.youtube.com/@labyrinthterminal" class="transmit-button"> begin </a>
+          <a href="https://www.youtube.com/@labyrinthterminal" class="transmit-button"> run </a>
         </section>
 
         <!-- Cam preview (left) -->
         <section class="panel panel--cam panel--cam--preview panel--link">
           <a href="#tab-inv">
             <img src="assets/camera/007.jpg" loading="lazy" decoding="async" width="800" height="600" alt="camera still" />
-            <span class="cam-label">sentinel</span>
+            <span class="cam-label"> // </span>
           </a>
         </section>
 
@@ -100,7 +100,7 @@
       <section id="panel-map" role="tabpanel" hidden>
         <section class="panel panel--title">
           <h2>index</h2>
-          <p class="subtitle"> </p>
+          <p class="subtitle"> observation confirms participation </p>
         </section>
         <section class="panel panel--grid">
           <ul class="grid-list" id="gridList"></ul>

@@ -246,12 +246,12 @@ footer {
 /* HUD clock inside the title panel */
 .hud-clock {
   position: absolute;
-  top: 14px;
+  top: 22px;
   left: 50%;
   transform: translateX(-50%);
 
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: baseline;
   justify-content: center;
 
@@ -511,26 +511,28 @@ footer {
 
 /* claimed entries quietly fall out of the system */
 /* claimed entries — system-marked */
-.grid-row.claimed {
-  opacity: 0.62;
-  color: rgba(255, 210, 150, 0.78);
+ .grid-row.claimed {
+   opacity: 0.48;
+   color: rgba(210, 220, 225, 0.42);
 
-  text-decoration: line-through;
-  text-decoration-thickness: 1.4px;
-  text-decoration-color: rgba(255, 160, 90, 0.75);
+   /* colder, procedural strike — not playful */
+   text-decoration: line-through;
+   text-decoration-thickness: 1px;
+   text-decoration-color: rgba(190, 205, 210, 0.55);
 
-  background:
-    linear-gradient(
-      90deg,
-      rgba(255,150,90,0.14),
-      rgba(255,150,90,0.06) 42%,
-      transparent 78%
-    );
+   background:
+     linear-gradient(
+       90deg,
+       rgba(180, 200, 205, 0.06),
+       rgba(180, 200, 205, 0.02) 48%,
+       transparent 80%
+     );
 
-  box-shadow:
-    inset 0 0 0 1px rgba(255,150,90,0.32),
-    inset 0 0 22px rgba(255,120,80,0.18);
-}
+   box-shadow:
+     inset 0 0 0 1px rgba(180,200,205,0.12);
+
+   filter: saturate(0.6) contrast(0.96);
+ }
 
 /* claimed entries retain procedural scar */
 .grid-row.claimed::after {
@@ -539,16 +541,17 @@ footer {
   inset: 0;
   pointer-events: none;
 
+  /* faint institutional scan scar */
   background:
     repeating-linear-gradient(
       to bottom,
-      rgba(220,170,90,0.08) 0px,
-      rgba(220,170,90,0.08) 1px,
+      rgba(200,210,215,0.04) 0px,
+      rgba(200,210,215,0.04) 1px,
       transparent 2px,
       transparent 6px
     );
 
-  opacity: 0.22;
+  opacity: 0.18;
 }
 
 .grid-row.claimed .grid-id {
@@ -1769,15 +1772,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 [role=tab] {
-  padding: 0.02rem 0;
+  padding: 0.01rem 0;                /* tighter vertical containment */
   border-radius: 0;
-  letter-spacing: 0.22em;        /* slightly more institutional spacing */
+
+  font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 300;
 
-  color: rgba(233,238,245,0.40);
-  opacity: 0.5;
+  letter-spacing: 0.14em;            /* restrained, clinical spacing */
+
+  color: rgba(233,238,245,0.38);
+  opacity: 0.55;
 
   background: none;
+  text-shadow: none;
+  filter: blur(0.15px);              /* faint instability */
 }
 
 [role=tab][aria-selected=true] {
@@ -1788,18 +1796,28 @@ h1, h2, h3, h4, h5, h6 {
 
 /* watch state reads as a system label */
 .panel--title h1 {
-  font-size: 0.78rem;
-  letter-spacing: 0.32em;
-  color: rgba(233,238,245,0.52);
+  font-size: 0.68rem;            /* smaller, less declarative */
+  letter-spacing: 0.28em;        /* restrained clinical spacing */
+  color: rgba(233,238,245,0.44); /* quieter presence */
   text-shadow: none;
-  filter: blur(0.15px);
+  filter: blur(0.25px);          /* faint institutional softness */
+  opacity: 0.58;
+}
+
+#panel-map .panel--title h2 {
+  font-size: 0.72rem;              /* slightly larger — still restrained */
+  letter-spacing: 0.30em;
+  color: rgba(233,238,245,0.44);
+  opacity: 0.6;
+  text-transform: lowercase;
+  text-shadow: none;
+  filter: blur(0.2px);
 }
 
 /* slight authority drift */
 .hud-clock {
   transform: translateX(-48%);
 }
-/* start button = tolerated control */
 .transmit-button {
   display: inline-flex;
   align-items: center;
@@ -1820,10 +1838,10 @@ h1, h2, h3, h4, h5, h6 {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 
-  color: rgba(233,238,245,0.60);
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.66rem;
-  letter-spacing: 0.24em;
+  color: rgba(233,238,245,0.52);
+  font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.64rem;
+  letter-spacing: 0.18em;
   text-transform: lowercase;
 
   text-decoration: none;
@@ -1833,7 +1851,7 @@ h1, h2, h3, h4, h5, h6 {
     inset 0 0 0 1px rgba(255,255,255,0.015),
     0 6px 18px rgba(0,0,0,0.55);
 
-  opacity: 0.78;
+  opacity: 0.46;
   text-shadow: none;
   filter: brightness(0.96);
   cursor: pointer;
@@ -1845,13 +1863,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .transmit-button:hover {
   border-color: rgba(233,238,245,0.18);
-  opacity: 0.9;
+  opacity: 0.72;
 }
 
 /* subtitles behave like internal notes */
 .subtitle {
-  opacity: 0.22;
-  letter-spacing: 0.20em;
+  opacity: 0.32;                   /* slightly more legible */
+  letter-spacing: 0.16em;          /* less spaced than title */
+  font-size: 0.66rem;              /* sits just beneath h2 */
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
