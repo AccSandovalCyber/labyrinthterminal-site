@@ -85,8 +85,29 @@ li.innerHTML = `
     const currentYear = now.getFullYear();
 
     const dripSequence = [
-      '//',
+      '',
+      '.',
+      '..',
+      '...'
     ];
+
+    // micro-glitch flicker before drip
+    function microGlitch(callback) {
+      const glyphs = ['∎', '::', '¤', '‹›', '°', '•'];
+      let g = 0;
+
+      function flicker() {
+        if (g < 2) { // very brief — almost subliminal
+          statusWord.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+          g++;
+          window.setTimeout(flicker, 45 + Math.random() * 35);
+        } else {
+          callback();
+        }
+      }
+
+      flicker();
+    }
     let i = 0;
     function drip() {
       if (i < dripSequence.length) {
@@ -96,22 +117,24 @@ li.innerHTML = `
         return;
       }
 
-      // short hesitation before release
-      window.setTimeout(release, 200);
+      // subtle disturbance before month cascade
+      microGlitch(() => {
+        window.setTimeout(release, 120);
+      });
     }
 
     // Phase 2: rapid month cascade
     let m = 0;
     function release() {
       if (m < MONTHS.length) {
-        statusWord.textContent = `// ${MONTHS[m]}`;
+        statusWord.textContent = `${MONTHS[m]}`;
         m++;
         window.setTimeout(release, 60 + Math.random() * 40);
         return;
       }
 
       // Phase 3: settle on present
-      statusWord.textContent = `// ${currentMonth} ${currentYear}`;
+      statusWord.textContent = `${currentMonth} ${currentYear}`;
     }
 
     drip();
@@ -502,8 +525,8 @@ async function hydrateClaimsFromBackend() {
     { src: 'assets/camera/010.jpg' },
     { src: 'assets/camera/011.jpg' },
     { src: 'assets/camera/012.jpg' },
-    { src: 'assets/camera/013.jpg' },
-    { src: 'assets/camera/014.jpg' },
+    // { src: 'assets/camera/013.jpg' },
+    // { src: 'assets/camera/014.jpg' },
     // { src: 'assets/camera/015.jpg' },
     // { src: 'assets/camera/016.jpg' },
     // { src: 'assets/camera/017.jpg' },

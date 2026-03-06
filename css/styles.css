@@ -12,12 +12,13 @@
   --hairline: rgba(233, 238, 245, 0.10);
   --innerline: rgba(140, 210, 220, 0.08);
 
-  /* Blade-runner hint (kept subtle) */
-  --accent: rgba(140, 210, 220, 0.65);   /* cold institutional cyan */
-  --accent-hot: rgba(210, 90, 100, 0.55); /* restrained warning */
+  /* unified slate-teal (inspired by begin panel interior) */
+  --accent: rgba(110, 150, 165, 0.55);
+  --accent-soft: rgba(90, 125, 140, 0.38);
+  --accent-hot: rgba(170, 90, 95, 0.42);
 
-  --glow: rgba(140, 210, 220, 0.22);
-  --glow2: rgba(120, 180, 200, 0.16);
+  --glow: rgba(110, 150, 165, 0.18);
+  --glow2: rgba(80, 110, 125, 0.14);
   --radius: 12px;
 }
 
@@ -25,7 +26,7 @@ html, body { height: 100%; }
 
 body {
   color: var(--ink);
-  font-family: 'Space Grotesk','IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -193,14 +194,15 @@ footer {
   border: 1px solid rgba(233, 238, 245, 0.06);
 
   box-shadow:
-    inset 0 0 0 1px rgba(233,238,245,0.02),
-    inset 0 18px 40px rgba(0,0,0,0.65),
-    0 30px 90px rgba(0,0,0,0.75);
+    inset 0 0 0 1px rgba(233,238,245,0.015),
+    inset 0 14px 32px rgba(0,0,0,0.55),
+    0 22px 70px rgba(0,0,0,0.68);
 
   overflow: hidden;
   border-radius: var(--radius);
-  backdrop-filter: blur(14px) saturate(1.05);
-  -webkit-backdrop-filter: blur(14px) saturate(1.05);
+  backdrop-filter: blur(10px) saturate(1.02);
+  -webkit-backdrop-filter: blur(10px) saturate(1.02);
+  filter: contrast(0.98) saturate(0.96);
 }
 
 /* internal “monolith edge” */
@@ -225,7 +227,7 @@ footer {
       rgba(233,238,245,0.05),
       transparent 22%
     );
-  opacity: 0.95;
+  opacity: 0.82;
 }
 
 /* ===== Layout ===== */
@@ -282,7 +284,7 @@ footer {
   font-family: 'IBM Plex Mono','Space Grotesk', ui-monospace, monospace;
   font-weight: 300;
   font-size: clamp(1.1rem, 2.6vw, 1.6rem);
-  letter-spacing: 0.38em;
+  letter-spacing: 0.28em;
   text-transform: lowercase;
 
   color: rgba(225, 240, 250, 0.65);
@@ -396,7 +398,7 @@ footer {
   opacity: 0.72;
 
   padding: 6px 8px 6px 6px;
-  border-radius: 6px;
+  border-radius: 2px;
 
   max-width: 100%;
   overflow-wrap: anywhere;
@@ -409,7 +411,7 @@ footer {
   width: 100%;
   white-space: normal;
   writing-mode: horizontal-tb;
-  filter: saturate(0.92) contrast(0.96);
+  filter: saturate(0.82) contrast(1.02) brightness(0.92);
 }
 
 /* subtle system drift — non-interactive */
@@ -469,10 +471,18 @@ footer {
   opacity: 0.45;
 }
 
-/* subtle system index tone — quiet cyan electricity */
+
+/* system index — colder, procedural, less neon */
 .grid-index {
-  color: rgba(90, 200, 255, 0.82);
-  opacity: 0.9;
+  color: rgba(190, 215, 225, 0.42);   /* dimmer, more recessed */
+  opacity: 0.55;
+  letter-spacing: 0.30em;
+  font-size: 0.62em;                 /* slightly smaller = etched, not labeled */
+}
+
+/* faint unease on hover — almost imperceptible */
+#panel-map .grid-row:hover .grid-index {
+  color: rgba(210, 235, 245, 0.68);
 }
 
 
@@ -569,7 +579,7 @@ footer {
 
 #panel-data .panel--title h2,
 #panel-map .panel--title h2 {
-  font-family: 'Space Grotesk','Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-weight: 300;
   letter-spacing: 0.14em;
   text-transform: lowercase;
@@ -1513,17 +1523,17 @@ body.is-viewer-open footer {
 }
 
 /* Input as scan slit */
-.baseline-input {
+ .baseline-input {
   width: 190px;
   height: 26px;
-  background: transparent;
   border: none;
   border-bottom: 1px solid rgba(233,238,245,0.28);
 
   color: rgba(233,238,245,0.92);
 
-  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;  letter-spacing: 0.18em;
-  font-weight: 400;
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 300;
+  letter-spacing: 0.12em;
 
   text-align: center;
   outline: none;
@@ -1537,7 +1547,8 @@ body.is-viewer-open footer {
 
 .baseline-input:focus {
   border-bottom-color: rgba(120,255,214,0.45);
-  box-shadow: 0 1px 0 rgba(120,255,214,0.28);
+  box-shadow:
+    inset 0 -6px 12px rgba(0,0,0,0.6);
 }
 
 /* Directive control — text-only, infrastructural */
@@ -1546,10 +1557,10 @@ body.is-viewer-open footer {
   border: none;
   padding: 0;
 
-  font-family: 'IBM Plex Mono','Space Grotesk',ui-monospace,monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 0.74rem;
-  font-weight: 300;
-  letter-spacing: 0.34em;
+  font-weight: 200;
+  letter-spacing: 0.22em;
   text-transform: lowercase;
 
   color: rgba(235,245,252,0.62);
@@ -1600,10 +1611,10 @@ body.is-viewer-open footer {
 .baseline-status {
   margin-top: 18px;
 
-  font-family: 'IBM Plex Sans','Inter',system-ui,sans-serif;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 0.66rem;
-  letter-spacing: 0.12em;
-  font-weight: 500;
+  letter-spacing: 0.18em;
+  font-weight: 300;
 
   color: rgba(255,90,110,0.72);
   text-align: center;
@@ -1635,7 +1646,7 @@ body.is-viewer-open footer {
 
 #panel-map .grid-row:hover {
   opacity: 0.78;
-  background: rgba(120,255,214,0.018);
+  background: rgba(255,255,255,0.015);
 }
 
 
@@ -1643,13 +1654,21 @@ h1, h2, h3, h4, h5, h6 {
   text-shadow: none;
 }
 
-/* date stamp (feb 2026) */
+/* date stamp — clinical registry tag */
 .site-header .status-word {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.28em;
-  opacity: 0.42;
-  color: rgba(233,238,245,0.55);
+  font-size: 0.54rem;
+
+  /* tighter + colder = institutional */
+  letter-spacing: 0.42em;
+  text-transform: lowercase;
+
+  color: rgba(210, 225, 232, 0.48);
+  opacity: 0.38;
+
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+
   text-shadow: none;
 }
 
@@ -1657,19 +1676,22 @@ h1, h2, h3, h4, h5, h6 {
 .hud-clock-time {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-weight: 300;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  color: rgba(233,238,245,0.52);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  color: rgba(233,238,245,0.48);
+  opacity: 0.6;
   text-shadow: none;
+  font-variant-numeric: tabular-nums;
 }
 
 .hud-clock-sub {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-weight: 300;
-  font-size: 0.58rem;
-  letter-spacing: 0.22em;
-  color: rgba(233,238,245,0.36);
+  font-size: 0.54rem;
+  letter-spacing: 0.26em;
+  color: rgba(233,238,245,0.32);
   opacity: 0.5;
+  text-transform: lowercase;
 }
 
 /* panel titles = labels, not branding */
@@ -1741,20 +1763,25 @@ h1, h2, h3, h4, h5, h6 {
 
 /* tabs behave like state toggles */
 [role=tablist] {
-  gap: 0.35rem;
-  opacity: 0.75;
+  gap: 0.9rem;                 /* more air between tabs */
+  opacity: 0.6;
+  padding-top: 4px;
 }
 
 [role=tab] {
-  padding: 0.08rem 0.22rem;
+  padding: 0.02rem 0;
   border-radius: 0;
-  letter-spacing: 0.12em;
-  color: rgba(233,238,245,0.55);
-  opacity: 0.65;
+  letter-spacing: 0.22em;        /* slightly more institutional spacing */
+  font-weight: 300;
+
+  color: rgba(233,238,245,0.40);
+  opacity: 0.5;
+
+  background: none;
 }
 
 [role=tab][aria-selected=true] {
-  color: rgba(233,238,245,0.75);
+  color: rgba(233,238,245,0.70);
   opacity: 0.85;
   text-shadow: none;
 }
@@ -1778,67 +1805,54 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
 
-  padding: 0.42rem 1.1rem;
+  padding: 0.38rem 1rem;
   margin-top: 0.9rem;
 
   border-radius: 999px;
-  border: 1px solid rgba(233,238,245,0.14);
+  border: 1px solid rgba(233,238,245,0.10);
 
   background: linear-gradient(
     180deg,
-    rgba(18,22,28,0.72),
-    rgba(10,12,16,0.82)
+    rgba(14,18,22,0.78),
+    rgba(8,10,14,0.88)
   );
 
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
-  color: rgba(233,238,245,0.72);
+  color: rgba(233,238,245,0.60);
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.22em;
+  font-size: 0.66rem;
+  letter-spacing: 0.24em;
   text-transform: lowercase;
 
   text-decoration: none;
   min-width: 110px;
 
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.02),
-    0 8px 28px rgba(0,0,0,0.45);
+    inset 0 0 0 1px rgba(255,255,255,0.015),
+    0 6px 18px rgba(0,0,0,0.55);
 
-  opacity: 0.85;
+  opacity: 0.78;
+  text-shadow: none;
+  filter: brightness(0.96);
   cursor: pointer;
 
   transition:
-    background 180ms ease,
     border-color 180ms ease,
-    box-shadow 180ms ease,
-    transform 120ms ease,
     opacity 160ms ease;
 }
 
 .transmit-button:hover {
-  background: linear-gradient(
-    180deg,
-    rgba(24,28,36,0.85),
-    rgba(14,18,24,0.92)
-  );
-
-  border-color: rgba(120,255,214,0.28);
-
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.04),
-    0 12px 34px rgba(0,0,0,0.55),
-    0 0 22px rgba(120,255,214,0.12);
-
-  transform: translateY(-1px);
-  opacity: 1;
+  border-color: rgba(233,238,245,0.18);
+  opacity: 0.9;
 }
 
 /* subtitles behave like internal notes */
 .subtitle {
   opacity: 0.22;
   letter-spacing: 0.20em;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
 /* no idle glow anywhere */
@@ -1862,9 +1876,22 @@ h1, h2, h3, h4, h5, h6 {
 /* input feels constrained, not welcoming */
 .baseline-input {
   width: 180px;                 /* narrower = intentional friction */
+  background: transparent !important;
+  background-color: transparent !important;
+  -webkit-appearance: none;
+  appearance: none;
   opacity: 0.55;
   letter-spacing: 0.18em;
   text-align: center;
+}
+
+/* kill browser autofill white */
+.baseline-input:-webkit-autofill,
+.baseline-input:-webkit-autofill:hover,
+.baseline-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px rgba(0,0,0,0) inset !important;
+  -webkit-text-fill-color: rgba(233,238,245,0.92) !important;
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 /* button is tolerated, not responsive */
@@ -1877,4 +1904,151 @@ h1, h2, h3, h4, h5, h6 {
 .baseline-status {
   opacity: 0.35;
   letter-spacing: 0.20em;
+}
+  
+/* ===== CONSTRICTION PASS — walls closing in ===== */
+/* appended: spatial pressure + peripheral compression */
+
+body {
+  background:
+    /* colder, harsher overhead fluorescence */
+    radial-gradient(
+      920px 520px at 50% -6%,
+      rgba(210, 255, 245, 0.42),
+      rgba(120, 220, 255, 0.22) 28%,
+      rgba(40, 80, 110, 0.08) 54%,
+      transparent 74%
+    ),
+
+    /* narrow corridor pressure — darker + closer */
+    linear-gradient(
+      to right,
+      rgba(0,0,0,0.96) 0%,
+      rgba(0,0,0,0.82) 6%,
+      rgba(0,0,0,0.55) 14%,
+      transparent 32%,
+      transparent 68%,
+      rgba(0,0,0,0.55) 86%,
+      rgba(0,0,0,0.82) 94%,
+      rgba(0,0,0,0.96) 100%
+    ),
+
+    /* heavy floor compression */
+    linear-gradient(
+      to bottom,
+      transparent 42%,
+      rgba(3,6,10,0.78) 72%,
+      rgba(0,0,0,0.94) 100%
+    ),
+
+    linear-gradient(180deg, #010203, #000000);
+
+  background-attachment: fixed;
+}
+
+/* peripheral vignette intensifies */
+body::before {
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 46%,
+      rgba(0,0,0,0.82) 100%
+    );
+  opacity: 0.48;
+  filter: contrast(1.04);
+}
+
+/* slight inward optical distortion (very restrained) */
+@media (prefers-reduced-motion: no-preference) {
+  .deck {
+    animation: spatial-pressure 22s ease-in-out infinite alternate;
+  }
+
+  @keyframes spatial-pressure {
+    0%   { transform: scale(1); }
+    100% { transform: scale(0.995); }
+  }
+}
+
+
+/* ===== SUBCONSCIOUS BREATH PASS — fluorescent instability ===== */
+/* extremely slow, nearly imperceptible environmental drift */
+
+body::after {
+  animation: room-breath 38s ease-in-out infinite alternate;
+}
+
+/* faint vertical desaturation wash */
+body::before {
+  background:
+    linear-gradient(
+      to right,
+      rgba(255,255,255,0.02) 0%,
+      rgba(255,255,255,0.01) 18%,
+      transparent 42%,
+      transparent 58%,
+      rgba(255,255,255,0.01) 82%,
+      rgba(255,255,255,0.02) 100%
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 52%,
+      rgba(0,0,0,0.38) 100%
+    );
+  opacity: 0.22;
+}
+
+/* slow environmental compression — almost subconscious */
+@keyframes room-breath {
+  0% {
+    transform: scale(1);
+    opacity: 0.03;
+    filter: blur(0.25px) saturate(0.98);
+  }
+  100% {
+    transform: scale(1.006);
+    opacity: 0.05;
+    filter: blur(0.6px) saturate(0.94);
+  }
+}
+
+/* ===== GRID TONAL PASS — overhead fluorescent unease ===== */
+/* unified system tone: drained, top-lit, slightly sick */
+
+#panel-map .grid-row .grid-id {
+  color: rgba(210, 230, 235, 0.46);
+  opacity: 0.55;
+  letter-spacing: 0.22em;
+}
+
+#panel-map .grid-row .grid-label {
+  color: rgba(225, 240, 245, 0.58);
+  opacity: 0.62;
+}
+
+#panel-map .grid-row .grid-coord {
+  color: rgba(190, 215, 220, 0.52);
+  opacity: 0.58;
+}
+
+/* hints feel slightly contaminated — faint green hospital cast */
+#panel-map .grid-row .grid-hint {
+  color: rgba(170, 210, 195, 0.62);
+  opacity: 0.7;
+}
+
+/* subtle top-light illusion: upper rows slightly brighter */
+#panel-map .grid-row:nth-child(-n+4) {
+  filter: brightness(1.05);
+}
+
+/* deeper rows sink into shadow */
+#panel-map .grid-row:nth-child(n+10) {
+  filter: brightness(0.92);
+}
+
+/* hover = awareness, not highlight */
+#panel-map .grid-row:hover {
+  opacity: 0.78;
+  background: rgba(255,255,255,0.012);
 }
