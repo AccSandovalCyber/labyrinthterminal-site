@@ -545,13 +545,23 @@ footer {
 }
 
 /* claimed entries — only data is formally closed */
+/* claimed entries — clinical archive mark */
 .grid-row.claimed .grid-coord,
 .grid-row.claimed .grid-hint {
-  text-decoration: line-through;
-  text-decoration-thickness: 1px;
-  text-decoration-color: rgba(200, 215, 220, 0.55);
-
+  position: relative;
   opacity: 0.42;
+}
+
+.grid-row.claimed .grid-coord::after,
+.grid-row.claimed .grid-hint::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(210, 230, 235, 0.45);
+  pointer-events: none;
 }
 /* empty grid state — quiet, not instructional */
 .grid-empty {
