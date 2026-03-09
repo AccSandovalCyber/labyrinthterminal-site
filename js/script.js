@@ -171,10 +171,9 @@ li.innerHTML = `
 
     // These appear once during boot, then we start cycling.
 const seedLines = [
-  'initializing',
-  '(initializing)',
-  '(initializing)',
-  'aligned'
+  'there is no need to stay awake',
+  'everything is being handled',
+  'no need to remember anything',
 ];
 
     // =========================
@@ -188,6 +187,7 @@ const seedLines = [
       'silence does not indicate absence',
       'nothing resolves on its own',
       'the act of watching changes nothing',
+      'there is nothing further',
 
     ];
 
@@ -318,19 +318,28 @@ const seedLines = [
         appendLine(line);
         s++;
 
-        // IV drip rhythm pattern:
-        // 1st drop → long pause
-        // 2nd + 3rd → close together
-        // then pause before final state
-        const dripPattern = [
-          2800,  // first initializing → long but slightly tighter
-          140,   // second initializing → quick
-          140,   // third initializing → quick (paired drop feel)
-          2600   // natural pause before "complete"
-        ];
+        // IV drip rhythm (uneven / procedural)
+        let delay;
 
-        const delay = dripPattern[s - 1] ?? 800;
+       switch (s - 1) {
+  case 0:
+    // distant acknowledgment — slow wake
+    delay = rand(2200, 2600);
+    break;
 
+  case 1:
+    // soft reassurance overlap
+    delay = rand(2000, 2400);
+    break;
+
+  case 2:
+    // fading instruction
+    delay = rand(1200, 1400);
+    break;
+
+  default:
+    delay = 700;
+}
         window.setTimeout(seed, delay);
         return;
       }

@@ -513,30 +513,12 @@ footer {
   text-decoration: none;
 }
 
-/* claimed entries quietly fall out of the system */
-/* claimed entries — system-marked */
- .grid-row.claimed {
-   opacity: 0.48;
-   color: rgba(210, 220, 225, 0.42);
-
-   /* colder, procedural strike — not playful */
-   text-decoration: line-through;
-   text-decoration-thickness: 1px;
-   text-decoration-color: rgba(190, 205, 210, 0.55);
-
-   background:
-     linear-gradient(
-       90deg,
-       rgba(180, 200, 205, 0.06),
-       rgba(180, 200, 205, 0.02) 48%,
-       transparent 80%
-     );
-
-   box-shadow:
-     inset 0 0 0 1px rgba(180,200,205,0.12);
-
-   filter: saturate(0.6) contrast(0.96);
- }
+.grid-row.claimed {
+  opacity: 0.55;
+  background: none;
+  box-shadow: none;
+  filter: none;
+}
 
 /* claimed entries retain procedural scar */
 .grid-row.claimed::after {
@@ -560,6 +542,16 @@ footer {
 
 .grid-row.claimed .grid-id {
   color: rgba(233, 238, 245, 0.40);
+}
+
+/* claimed entries — only data is formally closed */
+.grid-row.claimed .grid-coord,
+.grid-row.claimed .grid-hint {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(200, 215, 220, 0.55);
+
+  opacity: 0.42;
 }
 /* empty grid state — quiet, not instructional */
 .grid-empty {
@@ -1568,33 +1560,49 @@ body.is-viewer-open footer {
 
 /* Directive control — text-only, infrastructural */
 .baseline-enter {
-  background: none;
-  border: none;
-  padding: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(18, 26, 34, 0.38),
+    rgba(10, 14, 20, 0.48)
+  );
+
+  backdrop-filter: blur(10px) saturate(1.02);
+  -webkit-backdrop-filter: blur(10px) saturate(1.02);
+
+  border: 1px solid rgba(233,238,245,0.12);
+  border-radius: 999px;
+
+  padding: 0.32rem 0.95rem;
 
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.74rem;
-  font-weight: 200;
+  font-size: 0.70rem;
+  font-weight: 300;
   letter-spacing: 0.22em;
   text-transform: lowercase;
 
-  color: rgba(235,245,252,0.62);
+  color: rgba(233,245,252,0.68);
+  opacity: 0.72;
 
   cursor: pointer;
-  opacity: 0.55;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.02),
+    0 8px 24px rgba(0,0,0,0.45);
 
   transition:
-    opacity 220ms ease,
-    color 220ms ease,
-    text-shadow 220ms ease;
+    opacity 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
 }
 
-/* hover = attention, not invitation */
 .baseline-enter:hover {
-  opacity: 0.78;
-  color: rgba(235,245,252,0.78);
-  text-shadow:
-    0 0 12px rgba(120,255,214,0.18);
+  opacity: 0.88;
+  border-color: rgba(120,255,214,0.28);
+  background: linear-gradient(
+    180deg,
+    rgba(22, 34, 44, 0.48),
+    rgba(12, 18, 26, 0.58)
+  );
 }
 
 /* focus without shape */
@@ -1672,19 +1680,20 @@ h1, h2, h3, h4, h5, h6 {
 /* date stamp — clinical registry tag */
 .site-header .status-word {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.54rem;
+  font-size: 0.58rem;
 
-  /* tighter + colder = institutional */
-  letter-spacing: 0.42em;
+  /* tighter + clearer = institutional but legible */
+  letter-spacing: 0.38em;
   text-transform: lowercase;
 
-  color: rgba(210, 225, 232, 0.48);
-  opacity: 0.38;
+  color: rgba(225, 240, 248, 0.62);   /* lifted but not glowing */
+  opacity: 0.72;
 
   font-weight: 300;
   font-variant-numeric: tabular-nums;
 
   text-shadow: none;
+  filter: none;
 }
 
 /* hud clock — informational only */
@@ -2263,4 +2272,22 @@ body::after {
 #panel-map .grid-row .grid-coord {
   color: rgba(210,230,235,0.72);
   opacity: 0.75;
+}
+#panel-map .grid-row .grid-coord {
+  color: rgba(210,230,235,0.72);
+  opacity: 0.75;
+}
+
+/* ===== ACTIVE REGISTRY DEPTH — vertical psychological gradient ===== */
+
+/* Top entries slightly more exposed to overhead fluorescence */
+#panel-map .grid-row:nth-child(-n+3) {
+  filter: brightness(1.06) saturate(1.02);
+}
+
+/* Mid field remains neutral (no override needed) */
+
+/* Deeper entries sink subtly into institutional shadow */
+#panel-map .grid-row:nth-child(n+12) {
+  filter: brightness(0.92) saturate(0.96);
 }
