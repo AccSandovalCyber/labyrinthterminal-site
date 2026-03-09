@@ -1560,49 +1560,36 @@ body.is-viewer-open footer {
 
 /* Directive control — text-only, infrastructural */
 .baseline-enter {
-  background: linear-gradient(
-    180deg,
-    rgba(18, 26, 34, 0.38),
-    rgba(10, 14, 20, 0.48)
-  );
-
-  backdrop-filter: blur(10px) saturate(1.02);
-  -webkit-backdrop-filter: blur(10px) saturate(1.02);
-
-  border: 1px solid rgba(233,238,245,0.12);
-  border-radius: 999px;
-
-  padding: 0.32rem 0.95rem;
+  background: none;
+  border: none;
+  padding: 0;
 
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.70rem;
+  font-size: 0.72rem;
   font-weight: 300;
-  letter-spacing: 0.22em;
+
+  letter-spacing: 0.26em; /* more stamped, clinical spacing */
   text-transform: lowercase;
 
-  color: rgba(233,245,252,0.68);
-  opacity: 0.72;
+  color: rgba(233,245,252,0.72); /* slightly brighter, colder */
+  opacity: 0.68; /* increased presence without warmth */
 
   cursor: pointer;
 
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.02),
-    0 8px 24px rgba(0,0,0,0.45);
+  text-shadow: none;
+  filter: none; /* remove any softness */
 
   transition:
     opacity 180ms ease,
-    border-color 180ms ease,
-    background 180ms ease;
+    color 180ms ease;
 }
 
+/* hover = attention, not invitation */
 .baseline-enter:hover {
-  opacity: 0.88;
-  border-color: rgba(120,255,214,0.28);
-  background: linear-gradient(
-    180deg,
-    rgba(22, 34, 44, 0.48),
-    rgba(12, 18, 26, 0.58)
-  );
+  opacity: 0.78;
+  color: rgba(235,245,252,0.78);
+  text-shadow:
+    0 0 12px rgba(120,255,214,0.18);
 }
 
 /* focus without shape */
