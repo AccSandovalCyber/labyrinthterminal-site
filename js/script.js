@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     {
       id: 'cell-01',
       coordinate: '00.0000, -000.0000',
-      hint: 'something artificial interrupts the growth',
+      hint: 'intake pending',
       status: 'active', // active | claimed
       code: 'close-001'
     },
@@ -17,33 +17,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     {
       id: 'cell-02',
       coordinate: '00.00000, -000.0000',
-      hint: 'awaiting data...',
+      hint: 'intake pending',
       status: 'active',
       code: 'close-002'
     },
     {
       id: 'cell-03',
       coordinate: '00.0000, -000.0000',
-      hint: 'awaiting data...',
+      hint: 'intake pending',
       status: 'active',
       code: 'close-003'
     },
 
-    {
-      id: 'cell-04',
-      coordinate: '00.0000, -000.0000',
-      hint: 'awaiting data...',
-      status: 'active',
-      code: 'close-004'
-    },
+    // {
+    //   id: 'cell-04',
+    //   coordinate: '00.0000, -000.0000',
+    //   hint: 'intake pending',
+    //   status: 'active',
+    //   code: 'close-004'
+    // },
 
-    {
-      id: 'cell-05',
-      coordinate: '00.0000, -000.0000',
-      hint: 'awaiting data...',
-      status: 'active',
-      code: 'close-005'
-    },
+    // {
+    //   id: 'cell-05',
+    //   coordinate: '00.0000, -000.0000',
+    //   hint: 'intake pending',
+    //   status: 'active',
+    //   code: 'close-005'
+    // },
   ];
 
   function renderGrid() {
