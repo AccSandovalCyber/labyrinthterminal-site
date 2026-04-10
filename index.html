@@ -17,9 +17,6 @@
   <body>
     <!-- Header / status -->
     <header class="site-header">
-      <span class="status" aria-live="polite" aria-atomic="true">
-        <span class="status-word"></span>
-      </span>
 
       <div class="header-right">
         <div role="tablist" class="nav" aria-label="terminal navigation">
@@ -35,11 +32,11 @@
       <!-- TERMINAL: Title + Preview + Boot Log -->
       <section id="panel-stat" role="tabpanel">
         <section class="panel panel--title">
-          <div class="hud-clock" aria-live="polite">
-            <span class="hud-clock-time" id="clock">00:00</span>
-            <span class="hud-clock-sub"> </span>
-          </div>
-          <a href="https://www.youtube.com/@labyrinthterminal" class="transmit-button"> proceed </a>
+   <div class="hud-clock">
+  <span class="hud-clock-time" id="clock-date">000000</span>
+  <span class="hud-clock-sub" id="clock-time">0000</span>
+</div>
+          <a href="#panel-inv" class="transmit-button"> access </a>
         </section>
 
         <!-- Cam preview (left) -->
@@ -50,10 +47,6 @@
           </a>
         </section>
 
-        <!-- Boot log (right) -->
-        <section class="panel panel--log">
-          <ul id="bootlog" class="log"></ul>
-        </section>
       </section>
 
       <!-- CAMERA: image-only feed -->

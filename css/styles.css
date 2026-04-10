@@ -250,7 +250,7 @@ footer {
 /* HUD clock inside the title panel */
 .hud-clock {
   position: absolute;
-  top: 22px;
+  top: 26px;
   left: 50%;
   transform: translateX(-50%);
 
@@ -269,18 +269,19 @@ footer {
   box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  opacity: 0.85;
 }
 
 .hud-clock-time {
-  color: rgba(233, 238, 245, 0.62);
+  color: rgba(233, 238, 245, 0.52);
   font-size: 0.88rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.18em;
 }
 
 .hud-clock-sub {
-  color: rgba(233, 238, 245, 0.40);
+  color: rgba(233, 238, 245, 0.30);
   font-size: 0.72rem;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.20em;
 }
 
 /* Title typography: cleaner + more “terminal signage” */
@@ -616,10 +617,24 @@ footer {
   min-height: 160px;
   display: grid;
   place-content: center;
+  border-radius: 6px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1px rgba(200, 240, 255, 0.08);
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(18, 28, 36, 0.72),
+      rgba(10, 18, 26, 0.82)
+    );
+  border: 1px solid rgba(200, 240, 255, 0.08);
 }
 
 .panel--cam {
   grid-column: span 4;
+  max-width: 92%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* subtle desktop “wet glass” energy layer */
@@ -1108,7 +1123,11 @@ footer {
 }
 
 @media (max-width: 600px) {
-  .deck { --gap: 12px; padding: var(--gap); }
+  .deck {
+    --gap: 12px;
+    padding: var(--gap);
+    padding-top: 64px; /* create more “sky” above landing object */
+  }
   .deck { padding-bottom: 8px; }
   .site-header { padding: 0.5rem 0.7rem; min-height: unset; }
 
@@ -1155,6 +1174,12 @@ footer {
     padding-bottom: 14px;
     padding-left: 14px;
     padding-right: 14px;
+  }
+
+  /* mobile landing isolation — architectural breathing space */
+  .panel--title + .panel--cam {
+    margin-top: 88px;
+    margin-bottom: 56px;
   }
 
   /* mobile archive tray breathing room — prevents arrows from touching images */
@@ -1582,9 +1607,9 @@ body.is-viewer-open footer {
   text-transform: lowercase;
 
   color: rgba(233,245,252,0.72); /* slightly brighter, colder */
-  opacity: 0.68; /* increased presence without warmth */
+  opacity: 0.52; /* increased presence without warmth */
 
-  cursor: pointer;
+  cursor: default;
 
   text-shadow: none;
   filter: none; /* remove any softness */
@@ -1596,10 +1621,9 @@ body.is-viewer-open footer {
 
 /* hover = attention, not invitation */
 .baseline-enter:hover {
-  opacity: 0.78;
-  color: rgba(235,245,252,0.78);
-  text-shadow:
-    0 0 12px rgba(120,255,214,0.18);
+  opacity: 0.58;
+  color: rgba(233,245,252,0.74);
+  text-shadow: none;
 }
 
 /* focus without shape */
@@ -1941,7 +1965,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* button is tolerated, not responsive */
 .baseline-enter {
-  opacity: 0.45;
+  opacity: 0.42;
   pointer-events: auto;         /* system does not rush to respond */
 }
 
@@ -2293,4 +2317,16 @@ body::after {
 /* Deeper entries sink subtly into institutional shadow */
 #panel-map .grid-row:nth-child(n+12) {
   filter: brightness(0.92) saturate(0.96);
+}
+.panel--clock button,
+.panel--clock .button {
+  border-radius: 4px;
+  background: transparent;
+  border: 1px solid rgba(200, 240, 255, 0.18);
+}
+
+.panel--clock button:hover,
+.panel--clock .button:hover {
+  border-color: rgba(200, 240, 255, 0.28);
+  background: rgba(200, 240, 255, 0.05);
 }

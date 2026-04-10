@@ -141,23 +141,43 @@ li.innerHTML = `
   }
 
   // =========================
-  // CLOCK: Los Angeles time (always)
+  // CLOCK: Recorded Timestamp (Los Angeles)
   // =========================
-  const clockEl = document.getElementById('clock');
-  if (clockEl) {
-    const fmt = new Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/Los_Angeles',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
+  const clockDateEl = document.getElementById('clock-date');
+  const clockTimeEl = document.getElementById('clock-time');
 
-    const tick = () => {
-      clockEl.textContent = fmt.format(new Date());
-    };
+  if (clockDateEl && clockTimeEl) {
 
-    tick();
-    window.setInterval(tick, 30_000);
+    function pad(n) {
+      return n.toString().padStart(2, '0');
+    }
+
+    function updateTimestamp() {
+      const now = new Date();
+
+      // Force Los Angeles time
+      const la = new Date(
+        now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })
+      );
+
+      const month = pad(la.getMonth() + 1);
+      const day = pad(la.getDate());
+      const year = la.getFullYear().toString().slice(-2);
+
+      const hours = pad(la.getHours());
+      const minutes = pad(la.getMinutes());
+
+      // Format:
+      // MMDDYY
+      // HHMM
+      clockDateEl.textContent = `${month}${day}${year}`;
+      clockTimeEl.textContent = `${hours}${minutes}`;
+    }
+
+    updateTimestamp();
+
+    // Update once per minute — feels recorded, not ticking
+    window.setInterval(updateTimestamp, 60_000);
   }
 
   // =========================
