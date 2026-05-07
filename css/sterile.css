@@ -1,0 +1,508 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: #000;
+  font-family: "IBM Plex Mono", monospace;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Ensure hidden panels truly disappear */
+[role="tabpanel"][hidden] {
+  display: none !important;
+}
+
+/* Mobile containment frame */
+.deck {
+  width: 390px;
+  max-width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Sterile lab background */
+.deck::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/assets/backgrounds/hq-mobile.jpg") center center / cover no-repeat;
+  z-index: -1;
+}
+
+.deck > * {
+  z-index: 1;
+}
+
+/* Top system metadata */
+.system-meta {
+  position: absolute;
+  top: 28px;
+  left: 24px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.system-status {
+  position: absolute;
+  top: 28px;
+  right: 24px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-align: right;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+/* Center navigation stack */
+[role="tablist"] {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 38px;
+  z-index: 2;
+}
+
+/* Nav labels */
+[role="tab"] {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  font-weight: 300;
+  text-transform: lowercase;
+  color: rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+  transition: opacity 0.25s ease;
+}
+
+[role="tab"]:hover {
+  opacity: 0.6;
+}
+
+/* Vertical separators */
+[role="tab"]::after {
+  content: "|";
+  display: block;
+  margin-top: 18px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+[role="tab"]:last-child::after {
+  content: "";
+}
+
+/* Bottom metadata */
+.system-footer-left {
+  position: absolute;
+  bottom: 28px;
+  left: 24px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.system-footer-right {
+  position: absolute;
+  bottom: 28px;
+  right: 24px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-align: right;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.system-footer-right a {
+  color: rgba(0, 0, 0, 0.55);
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-weight: 300;
+  text-transform: lowercase;
+  opacity: 0.75;
+  transition: opacity 0.25s ease;
+}
+
+.system-footer-right a:visited {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.system-footer-right a:hover {
+  opacity: 0.45;
+}
+
+body.mode-active .system-footer-right a {
+  color: rgba(255, 255, 255, 0.42);
+  opacity: 0.65;
+}
+
+body.mode-active .system-footer-right a:visited {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+body.mode-active .system-footer-right a:hover {
+  opacity: 0.85;
+}
+
+.system-footer-left {
+  position: absolute;
+  bottom: 32px;
+  left: 26px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.42);
+  line-height: 1.6;
+  opacity: 0.75;
+}
+
+/* ===============================
+   MODE SHIFT — ACTIVE STATE
+   =============================== */
+
+body.mode-active [role="tablist"] {
+  position: absolute;
+  top: 44px; /* lift slightly above ceiling light */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 28px;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  opacity: 0.8; /* less dim */
+  z-index: 3;
+}
+
+/* Remove vertical separators in active (horizontal) mode */
+body.mode-active [role="tab"]::after {
+  content: "";
+  display: none;
+}
+
+body.mode-active [role="tab"] {
+  font-weight: 300;
+  opacity: 0.55;
+  transition: opacity 0.25s ease;
+}
+
+body.mode-active [role="tab"][aria-selected="true"] {
+  opacity: 0.9;
+}
+
+/* Base panel reset (remove legacy styling) */
+.panel {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* ===============================
+   STERILE PANEL CONTAINMENT
+   =============================== */
+
+body.mode-active .panel {
+  position: relative;
+  margin: 110px auto 0 auto;
+  width: 88%;
+  max-width: 360px;
+  padding: 26px 22px 18px 22px;
+  background: rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(4px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.45),
+    0 0 0 1px rgba(255,255,255,0.04);
+}
+
+body.mode-active .panel--baseline {
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 16px;
+}
+
+body.mode-active .panel--baseline {
+  margin-top: 140px; /* lower slightly for more air */
+}
+
+/* ===============================
+   RECORDS — FLAT LOG STYLE
+   =============================== */
+
+body.mode-active .panel--records {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 12px 0 0 0;
+  margin: 120px auto 0 auto;
+  width: 88%;
+  max-width: 340px;
+  text-align: center;
+}
+
+body.mode-active .panel--records h2 {
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  font-weight: 300;
+  color: rgba(255,255,255,0.78);
+  margin: 0 0 10px 0;
+}
+
+body.mode-active .panel--records p {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: rgba(255,255,255,0.42);
+  margin: 0 0 22px 0;
+}
+
+body.mode-active .panel--records ul {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.62);
+  display: inline-block;
+  text-align: left;
+}
+
+body.mode-active .panel--records li {
+  margin-bottom: 12px;
+}
+
+body.mode-active .panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+/* ===============================
+   BASELINE — MINIMAL FIELD
+   =============================== */
+
+body.mode-active .panel form {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 10px;
+  width: 85%;
+  max-width: none;
+  margin: 0 auto;
+}
+
+body.mode-active .panel input {
+  flex: 1;
+  padding: 4px 0 2px 0;
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.32);
+  color: rgba(255,255,255,0.65);
+  outline: none;
+  transition: border 0.25s ease, opacity 0.25s ease;
+}
+
+body.mode-active .panel input::placeholder {
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.22em;
+}
+
+body.mode-active .panel input:focus {
+  border-bottom: 1px solid rgba(255,255,255,0.35);
+  opacity: 0.9;
+}
+
+body.mode-active .panel button {
+  padding: 0 0 2px 0;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: lowercase;
+  color: rgba(255,255,255,0.48);
+  cursor: pointer;
+  transition: opacity 0.25s ease;
+  align-self: flex-end;
+}
+
+body.mode-active .panel button:hover {
+  opacity: 0.85;
+}
+
+/* ===============================
+   INTAKE — MONITOR CONTAINMENT
+   =============================== */
+
+body.mode-active .panel--monitors {
+  padding: 18px 14px 22px 14px;
+}
+
+/* Grid for liminal archive */
+.monitors-grid {
+  list-style: none;
+  margin: 0 0 18px 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.monitors-grid li {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.25);
+}
+
+.monitors-grid img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  opacity: 0.92;
+  transition: opacity 0.25s ease, transform 0.35s ease;
+}
+
+.monitors-grid img:hover {
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+/* Archive navigation (bottom inside panel) */
+.monitor-archive-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  opacity: 0.55;
+}
+
+.monitor-archive-nav button {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+.monitor-archive-nav button:hover {
+  opacity: 0.9;
+}
+
+/* ===============================
+   HUD CLOCK — CLINICAL REFINEMENT
+   =============================== */
+
+/* Base clock (landing state) */
+.hud-clock {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.62);
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.hud-clock-time {
+  display: block;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.hud-clock-sub {
+  display: block;
+  font-size: 9px;
+  opacity: 0.45;
+  letter-spacing: 0.18em;
+  margin-top: -2px;
+}
+
+/* Active mode — move clock to subtle corner */
+body.mode-active .hud-clock {
+  top: 16px;   /* clock mounted above nav */
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  /* keep same color as landing state */
+}
+
+/* ===============================
+   IMAGE VIEWER — OVERLAY MODE
+   =============================== */
+
+.image-viewer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.image-viewer[hidden] {
+  display: none;
+}
+
+.image-viewer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(10px);
+}
+
+.image-viewer-img {
+  position: relative;
+  max-width: 88%;
+  max-height: 82vh;
+  object-fit: contain;
+  z-index: 2;
+  border-radius: 14px;
+  box-shadow:
+    0 25px 70px rgba(0,0,0,0.55),
+    0 0 0 1px rgba(255,255,255,0.06);
+}
+
+.image-viewer-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: rgba(255,255,255,0.65);
+  cursor: pointer;
+  z-index: 3;
+}
+
+.image-viewer-close:hover {
+  color: rgba(255,255,255,0.95);
+}
+
+body.viewer-open {
+  overflow: hidden;
+}

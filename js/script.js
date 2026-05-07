@@ -522,15 +522,60 @@ async function hydrateClaimsFromBackend() {
 }
 
   // =========================
-  // TAB NAVIGATION (PIP)
+  // TAB NAVIGATION (SIMPLIFIED / STABLE)
   // =========================
-  const tablist = document.querySelector('[role="tablist"]');
-  if (!tablist) return;
 
-  const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
-  const panels = tabs
-    .map((t) => document.getElementById(t.getAttribute('aria-controls')))
-    .filter(Boolean);
+  const tabs = document.querySelectorAll('[role="tab"]');
+  const panels = document.querySelectorAll('[role="tabpanel"]');
+
+  function activateTab(tab) {
+    const targetId = tab.getAttribute('aria-controls');
+
+    tabs.forEach(t => {
+      t.setAttribute('aria-selected', 'false');
+      t.tabIndex = -1;
+    });
+
+    panels.forEach(panel => {
+      panel.hidden = true;
+    });
+
+    tab.setAttribute('aria-selected', 'true');
+    tab.tabIndex = 0;
+
+    const targetPanel = document.getElementById(targetId);
+    if (targetPanel) {
+      targetPanel.hidden = false;
+
+      // rebuild archive grid only when needed
+      if (targetPanel.id === 'panel-inv') {
+        archiveIndex = 0;
+        buildMonitorsGrid();
+      }
+    }
+
+    // ---- layout mode switch (landing vs active) ----
+    if (tab.id === 'tab-terminal') {
+      document.body.classList.remove('mode-active');
+    } else {
+      document.body.classList.add('mode-active');
+    }
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      activateTab(tab);
+    });
+  });
+
+  // initial state: activate pre-selected tab (or fallback safely)
+  const initiallySelected = document.querySelector('[role="tab"][aria-selected="true"]');
+
+  if (initiallySelected) {
+    activateTab(initiallySelected);
+  } else if (tabs.length > 0) {
+    activateTab(tabs[0]);
+  }
 
   // =========================
   // CAMERA GRID
@@ -737,74 +782,8 @@ async function hydrateClaimsFromBackend() {
     });
   }
 
-  function activate(id, setHash = true) {
-    tabs.forEach((tab, idx) => {
-      const selected = tab.id === id;
-      tab.setAttribute('aria-selected', selected ? 'true' : 'false');
-      tab.tabIndex = selected ? 0 : -1;
-
-      const panel = panels[idx];
-      if (!panel) return;
-
-      panel.hidden = !selected;
-
-      if (selected && panel.id === 'panel-inv') {
-        archiveIndex = 0;
-        buildMonitorsGrid();
-      }
-
-      // legacy hydration if any remain
-      if (selected) {
-        panel.querySelectorAll('img[data-src]').forEach((img) => {
-          img.src = img.getAttribute('data-src');
-          img.removeAttribute('data-src');
-        });
-      }
-    });
-
-    if (setHash) {
-      try {
-        history.replaceState(null, '', '#' + id);
-      } catch {
-        location.hash = id;
-      }
-    }
-  }
-
-  tablist.addEventListener('click', (e) => {
-    const tab = e.target.closest('[role="tab"]');
-    if (!tab) return;
-    activate(tab.id);
-    tab.focus();
-  });
-
-  tablist.addEventListener('keydown', (e) => {
-    const i = tabs.indexOf(document.activeElement);
-    if (i === -1) return;
-
-    let next = null;
-    if (e.key === 'ArrowRight') next = (i + 1) % tabs.length;
-    else if (e.key === 'ArrowLeft') next = (i - 1 + tabs.length) % tabs.length;
-    else if (e.key === 'Home') next = 0;
-    else if (e.key === 'End') next = tabs.length - 1;
-
-    if (next === null) return;
-
-    e.preventDefault();
-    tabs[next].focus();
-    activate(tabs[next].id);
-  });
-
-  const initial = tabs.find((t) => '#' + t.id === location.hash) || tabs[0];
-  if (initial) activate(initial.id, false);
-
-  window.addEventListener('hashchange', () => {
-    const target = tabs.find((t) => '#' + t.id === location.hash);
-    if (target) activate(target.id, false);
-  });
 
   // Initialize the grid from global backend truth, then render
   await hydrateClaimsFromBackend();
   renderGrid();
 });
-

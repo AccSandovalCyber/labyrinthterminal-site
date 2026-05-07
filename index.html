@@ -10,51 +10,74 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/sterile.css" />
 
     <link rel="icon" type="image/png" href="assets/circle.png" />
   </head>
 
   <body>
-    <!-- Header / status -->
-    <header class="site-header">
-
-      <div class="header-right">
-        <div role="tablist" class="nav" aria-label="terminal navigation">
-          <button id="tab-stat" role="tab" aria-controls="panel-stat" aria-selected="true">terminal</button>
-          <button id="tab-inv" role="tab" aria-controls="panel-inv" aria-selected="false">intake</button>
-          <button id="tab-baseline" role="tab" aria-controls="panel-baseline" aria-selected="false">baseline</button>
-          <button id="tab-map" role="tab" aria-controls="panel-map" aria-selected="false">record</button>
-        </div>
-      </div>
-    </header>
 
     <main class="deck">
-      <!-- TERMINAL: Title + Preview + Boot Log -->
-      <section id="panel-stat" role="tabpanel">
-        <section class="panel panel--title">
-   <div class="hud-clock">
-  <span class="hud-clock-time" id="clock-date">000000</span>
-  <span class="hud-clock-sub" id="clock-time">0000</span>
-</div>
-          <a href="#panel-inv" class="transmit-button"> access </a>
-        </section>
+      <header class="site-header site-header--spine">
+        <nav role="tablist" class="nav nav--spine" aria-label="terminal navigation">
 
-        <!-- Cam preview (left) -->
-        <section class="panel panel--cam panel--cam--preview panel--link">
-          <a href="#tab-inv">
-            <img src="assets/camera/003.jpg" loading="lazy" decoding="async" width="800" height="600" alt="camera still" />
-            <span class="cam-label"> // </span>
-          </a>
-        </section>
+          <button
+            type="button"
+            role="tab"
+            id="tab-terminal"
+            aria-selected="true"
+            aria-controls="panel-stat"
+          >
+            terminal
+          </button>
 
+          <button
+            type="button"
+            role="tab"
+            id="tab-intake"
+            aria-selected="false"
+            aria-controls="panel-inv"
+          >
+            intake
+          </button>
+
+          <button
+            type="button"
+            role="tab"
+            id="tab-baseline"
+            aria-selected="false"
+            aria-controls="panel-baseline"
+          >
+            baseline
+          </button>
+
+          <button
+            type="button"
+            role="tab"
+            id="tab-record"
+            aria-selected="false"
+            aria-controls="panel-map"
+          >
+            record
+          </button>
+
+        </nav>
+
+      </header>
+
+      <div class="hud-clock hud-clock--fixed">
+        <span class="hud-clock-time" id="clock-date">000000</span>
+        <span class="hud-clock-sub" id="clock-time">0000</span>
+      </div>
+
+      <section id="panel-stat" role="tabpanel" aria-labelledby="tab-terminal" hidden>
+        <div class="panel panel--terminal"></div>
       </section>
 
-      <!-- CAMERA: image-only feed -->
-      <section id="panel-inv" role="tabpanel" hidden>
-        <section class="panel panel--monitors">
+      <section id="panel-inv" role="tabpanel" aria-labelledby="tab-intake" hidden>
+        <div class="panel panel--monitors">
           <ul id="monitorsGrid" class="monitors-grid" aria-label="camera feed"></ul>
 
-          <!-- archive navigation (embedded inside monitor panel) -->
           <div class="monitor-archive-nav" aria-label="archive navigation">
             <button type="button" id="archivePrev" aria-label="previous archive page">
               &lt;
@@ -63,13 +86,11 @@
               &gt;
             </button>
           </div>
-        </section>
+        </div>
       </section>
 
-      <!-- BASELINE (restricted access) -->
-      <section id="panel-baseline" role="tabpanel" hidden>
-        <section class="panel panel--title panel--baseline">
-          <h2> </h2>
+      <section id="panel-baseline" role="tabpanel" aria-labelledby="tab-baseline" hidden>
+        <div class="panel panel--baseline">
 
           <div class="baseline-gate" aria-hidden="true">
             <input
@@ -86,32 +107,30 @@
           </div>
 
           <p class="baseline-status" hidden> // denied </p>
-        </section>
+        </div>
       </section>
 
-      <!-- GRID -->
-      <section id="panel-map" role="tabpanel" hidden>
-        <section class="panel panel--title">
-          <h2>placement</h2>
-          <p class="subtitle"> observation confirms participation </p>
-        </section>
-        <section class="panel panel--grid">
-          <ul class="grid-list" id="gridList"></ul>
-        </section>
+      <section id="panel-map" role="tabpanel" aria-labelledby="tab-record" hidden>
+        <div class="panel panel--records">
+          <h2 class="records-title">placement</h2>
+          <p class="records-subtitle">observation confirms participation</p>
+          <ul class="records-list" id="gridList"></ul>
+        </div>
       </section>
+
+      <div class="system-footer-right">
+        <a href="https://www.youtube.com/@labyrinthterminal" target="_blank" rel="noopener">
+          carrier
+        </a>
+      </div>
     </main>
 
-    <footer>
-      <p></p>
-    </footer>
-
-    <!-- Image Viewer (global overlay) -->
     <div id="imageViewer" class="image-viewer" hidden>
       <div class="image-viewer-backdrop"></div>
       <button class="image-viewer-close" aria-label="Close">×</button>
       <img class="image-viewer-img" alt="" />
     </div>
 
-    <script src="js/script.js" defer></script>
+    <script src="js/script.js?v=2" defer></script>
   </body>
 </html>
