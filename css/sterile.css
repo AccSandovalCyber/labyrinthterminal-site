@@ -22,7 +22,7 @@ body {
   width: 390px;
   max-width: 100%;
   min-height: 100svh;
-  padding-top: env(safe-area-inset-top);
+  padding-top: calc(env(safe-area-inset-top) + 40px);
   position: relative;
   overflow: visible;
 }
@@ -173,17 +173,23 @@ body.mode-active .system-footer-right a:hover {
    =============================== */
 
 body.mode-active [role="tablist"] {
-  position: absolute;
-  top: 58px; /* lift slightly above ceiling light */
-  left: 50%;
-  transform: translateX(-50%);
+  position: static;
+  top: auto;
+  left: auto;
+  transform: none;
+  width: 100%;
   display: flex;
   flex-direction: row;
-  gap: 28px;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
   font-size: 11px;
-  letter-spacing: 0.22em;
-  opacity: 0.8; /* less dim */
-  z-index: 3;
+  letter-spacing: 0.18em;
+  margin-top: 44px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(180, 220, 210, 0.08);
+  flex-wrap: nowrap;
+  overflow-x: hidden;
 }
 
 /* Remove vertical separators in active (horizontal) mode */
@@ -193,13 +199,15 @@ body.mode-active [role="tab"]::after {
 }
 
 body.mode-active [role="tab"] {
-  font-weight: 300;
-  opacity: 0.55;
-  transition: opacity 0.25s ease;
+  font-weight: 400;
+  color: rgba(220, 240, 235, 0.72);
+  opacity: 0.75;
+  transition: opacity 0.25s ease, color 0.25s ease;
 }
 
 body.mode-active [role="tab"][aria-selected="true"] {
-  opacity: 0.9;
+  color: rgba(255, 255, 255, 0.95);
+  opacity: 1;
 }
 
 /* Base panel reset (remove legacy styling) */
@@ -215,10 +223,10 @@ body.mode-active [role="tab"][aria-selected="true"] {
 
 body.mode-active .panel {
   position: relative;
-  margin: 110px auto 0 auto;
-  width: 82%;
-  max-width: 320px;
-  padding: 26px 22px 18px 22px;
+  margin: 36px auto 0 auto;
+  width: 86%;
+  max-width: 360px;
+  padding: 22px 20px;
   background: rgba(0, 0, 0, 0.18);
   backdrop-filter: blur(4px);
   border-radius: 16px;
@@ -234,10 +242,6 @@ body.mode-active .panel--baseline {
   padding-bottom: 16px;
 }
 
-body.mode-active .panel--baseline {
-  margin-top: 140px; /* lower slightly for more air */
-}
-
 /* ===============================
    RECORDS — FLAT LOG STYLE
    =============================== */
@@ -250,9 +254,6 @@ body.mode-active .panel--records {
     0 18px 60px rgba(0,0,0,0.55),
     inset 0 0 0 1px rgba(120,160,150,0.04);
   padding: 18px 0 8px 0;
-  margin: 150px auto 0 auto;
-  width: 92%;
-  max-width: 420px;
   text-align: center;
 }
 
@@ -396,17 +397,25 @@ body.mode-active .panel button:hover {
    =============================== */
 
 body.mode-active .panel--monitors {
-  padding: 18px 14px 22px 14px;
+  position: relative;
+  padding: 22px 18px 22px 18px;
+  background: rgba(6, 8, 10, 0.55);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 16px;
+  box-shadow:
+    0 30px 90px rgba(0,0,0,0.75),
+    inset 0 0 40px rgba(0,0,0,0.35);
 }
 
 /* Grid for liminal archive */
 .monitors-grid {
   list-style: none;
-  margin: 0 0 18px 0;
+  margin: 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 14px;
 }
 
 .monitors-grid li {
@@ -414,6 +423,7 @@ body.mode-active .panel--monitors {
   overflow: hidden;
   border-radius: 6px;
   background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.04);
 }
 
 .monitors-grid img {
@@ -421,7 +431,7 @@ body.mode-active .panel--monitors {
   aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
-  opacity: 0.92;
+  opacity: 0.82;
   transition: opacity 0.25s ease, transform 0.35s ease;
 }
 
